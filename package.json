@@ -1,5 +1,5 @@
 {
-        "name": "Ai Hoshino",
+        "name": "CrowBot-Ai",
         "version": "6.0.0",
         "description": "Simple WhatsApp Bot Multi Device",
         "main": "system/index.js",
@@ -23,7 +23,7 @@
                 "MD",
                 "baileys-md"
         ],
-        "homepage": "https://github.com/StarlightsTeam/Ai-Hoshino",
+        "homepage": "https://github.com/WillZek/CrowBot-Ai",
         "author": {
                 "name": "おDaniel.xyz⁩"
         },

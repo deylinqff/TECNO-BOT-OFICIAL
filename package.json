@@ -32,7 +32,7 @@
                 "url": "git+https://github.com/WillZek/CrowBot-Ai.git"
         },
         "bugs": {
-                "url": "https://github.com/StarlightsTeam/Ai-Hoshino/issues"
+                "url": "https://github.com/WillZek/CrowBot-Ai/issues"
         },
         "license": "GPL-3.0-or-later",
         "dependencies": {

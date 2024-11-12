@@ -231,4 +231,3 @@ Object.freeze(global.reload)
 watch(pluginFolder, global.reload)
 
 await global.reloadHandler()
-//xd

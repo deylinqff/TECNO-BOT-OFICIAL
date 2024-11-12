@@ -14,7 +14,7 @@ let require = createRequire(__dirname)
 let { say } = cfonts
 let rl = createInterface(process.stdin, process.stdout)
 
-say('Naruto', {
+say('Crow', {
   font: 'chrome',
   align: 'center',
   gradient: ['red', 'magenta']

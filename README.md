@@ -1,8 +1,7 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=150&section=header&text=Bienvenidos%20-%20Crow%20Bot%20Ai🌠&fontSize=30&fontColor=FFFFFF&animation=fadeIn" width="100%"/> 
 
 > ⌛ Versión Actual: Fase Beta
-
-## 💛 **`C R O W - A I`**
+ ## 💛 **`C R O W - A I`**
 
 ![Menú Principal](https://telegra.ph/file/b346b44893d4613a72f98.jpg)
 

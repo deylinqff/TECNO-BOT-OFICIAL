@@ -12,8 +12,9 @@
 </p>
 
 > **Interludio**
+___
 
-  [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=FF0000&lines=Espero+Este+Repositorio+Sea𝐥+De;su;agrado+gracias+🫂;𝐂𝐫𝐞𝐚𝐝𝐨+𝐩𝐨𝐫+𝐈'𝐚𝐦|WillZek;🌠🚩!!!)](https://git.io/typing-svg)
+  [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=FF0000&lines=Espero+Este+Repositorio+Sea+De+su+agrado+gracias🫂;𝐂𝐫𝐞𝐚𝐝𝐨+𝐩𝐨𝐫+𝐈'𝐚𝐦|WillZek;🌠🚩!!!)](https://git.io/typing-svg)
 
 ### **`💛 𝘊𝘙𝘌𝘈𝘋𝘖𝘙`**
 <a

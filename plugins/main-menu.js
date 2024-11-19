@@ -195,10 +195,10 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let pp10 = 'https://telegra.ph/file/930b9fddde1034360fd86.mp4'
     let pp11 = 'https://telegra.ph/file/81da492e08bfdb4fda695.mp4'
     let pp12 = 'https://telegra.ph/file/ec8393df422d40f923e00.mp4'
-    let pp13 = 'https://telegra.ph/file/ba7c4a3eb7bf3d892b0c8.mp4'
-    let pp14 = 'https://i.ibb.co/2sd5Yqp/Sylph.jpg'
-    let pp15 = 'https://i.ibb.co/2sd5Yqp/Sylph.jpg'
-    let img = 'https://i.ibb.co/2sd5Yqp/Sylph.jpg'
+    let pp13 = 'https://i.ibb.co/Cs6Tt9V/Sylph.jpg'
+    let pp14 = 'https://i.ibb.co/JmcS3kv/Sylph.jpg'
+    let pp15 = 'https://i.ibb.co/Cs6Tt9V/Sylph.jpg'
+    let img = 'https://i.ibb.co/JmcS3kv/Sylph.jpg'
     await m.react('🔥')
    // await conn.sendMessage(m.chat, { video: { url: [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11, pp12, pp13, pp14, pp15].getRandom() }, gifPlayback: true, caption: text.trim(), mentions: [m.sender] }, { quoted: estilo })
     await conn.sendFile(m.chat, img, 'thumbnail.jpg', text.trim(), m, null, rcanal)

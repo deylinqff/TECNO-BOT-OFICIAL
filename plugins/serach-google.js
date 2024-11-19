@@ -1,24 +1,27 @@
-import {googleIt} from '@bochilteam/scraper';
-import google from 'google-it';
+/*
+ ✨ DERECHOS RESERVADOS DEL AUTOR ✨
+- WillZek (@NiñoPiña)
+*/
+
+import { googleIt } from '@bochilteam/scraper';
 import axios from 'axios';
-let handler = async (m, { conn, command, args, usedPrefix }) => {
+const handler = async (m, {conn, command, args}) => {
   const fetch = (await import('node-fetch')).default;
   const text = args.join` `;
-  if (!text) return conn.reply(m.chat, '🚩 Ingresa lo que deseas buscar junto al comando.', m)
-  await m.react('🕓')
-  let img = 'https://i.ibb.co/P5kZNFF/file.jpg'
-const url = 'https://google.com/search?q=' + encodeURIComponent(text);
-google({'query': text}).then(res => {
-let teks = `\t\t\t*乂  S E A R C H  -  G O O G L E*\n\n`
-for (let g of res) {
-teks += `*${g.title}*\n${g.link}\n${g.snippet}\n\n`
-} 
-conn.sendFile(m.chat, img, 'thumbnail.jpg', teks, m).then(_ => m.react('✅'))
-})
-}
-handler.help = ['google *<texto>*']
-handler.tags = ['tools', 'search']
-handler.command = /^googlef?$/i
-//handler.limit = 1
-handler.register = true 
+  if (!text) return conn.reply(m.chat, '*[🌠] Complementa tu petición con alguna frase para iniciar la búsqueda.*', m);
+  const url = 'https://google.com/search?q=' + encodeURIComponent(text);
+  const search = await googleIt(text);
+  const msg = search.articles.map(({title, url, description}) => {
+    return `*${title}*\n_${url}_\n_${description}_`;
+  }).join('\n\n');
+  try {
+    const ss = `https://image.thum.io/get/fullpage/${url}`;
+    await conn.sendFile(m.chat, ss, 'error.png', url + '\n\n' + msg, m);
+  } catch {
+    m.reply(msg);
+  }
+};
+handler.help = ['google', 'googlef'].map((v) => v + ' <pencarian>');
+handler.tags = ['tools', 'search'];
+handler.command = /^googlef?$/i;
 export default handler;

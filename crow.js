@@ -103,8 +103,8 @@ global.chatgpt.chain = lodash.chain(global.chatgpt.data);
 loadChatgptDB();
 
 global.creds = 'creds.json'
-global.authFile = 'YukiSession'
-global.authFileJB  = 'YukiJadiBot'
+global.authFile = 'CrowSession'
+global.authFileJB  = 'CrowJadiBot'
 /*global.rutaBot = join(__dirname, authFile)
 global.rutaJadiBot = join(__dirname, authFileJB)
 
@@ -154,7 +154,7 @@ opcion = await question(`╭${lineM}
 │ ${chalk.blueBright('┊')} ${chalk.italic.magenta("Escriba solo el numero de")}
 │ ${chalk.blueBright('┊')} ${chalk.italic.magenta("La opcion para conectarse")}
 │ ${chalk.blueBright('╰┄┈┅┈┄┈┅┈┄┅┈┄┈┅┄┈┅┈┄')} 
-│ ${chalk.italic.red(`𝒴𝓊𝓀𝒾_𝒮𝓊𝑜𝓊-𝐵𝑜𝓉 🌹`)}
+│ ${chalk.italic.red(`CrowBot-Ai 🌠`)}
 ╰${lineM}\n${chalk.bold.magentaBright('---> ')}`)
 if (!/^[1-2]$/.test(opcion)) {
 console.log(chalk.bold.redBright(`NO SE PERMITE NÚMEROS QUE NO SEAN ${chalk.bold.greenBright("1")} O ${chalk.bold.greenBright("2")}, TAMPOCO LETRAS O SÍMBOLOS ESPECIALES.\n${chalk.bold.yellowBright("CONSEJO: COPIE EL NÚMERO DE LA OPCIÓN Y PÉGUELO EN LA CONSOLA.")}`))
@@ -176,7 +176,7 @@ const connectionOptions = {
 logger: pino({ level: 'silent' }),
 printQRInTerminal: opcion == '1' ? true : methodCodeQR ? true : false,
 mobile: MethodMobile, 
-browser: opcion == '1' ? ['Yuki_Suou-Bot', 'Edge', '20.0.04'] : methodCodeQR ? ['Yuki_Suou-Bot', 'Edge', '20.0.04'] : ["Ubuntu", "Chrome", "20.0.04"],
+browser: opcion == '1' ? ['CrowBot-Ai', 'Edge', '20.0.04'] : methodCodeQR ? ['CrowBot-Ai', 'Edge', '20.0.04'] : ["Ubuntu", "Chrome", "20.0.04"],
 auth: {
 creds: state.creds,
 keys: makeCacheableSignalKeyStore(state.keys, Pino({ level: "fatal" }).child({ level: "fatal" })),
@@ -280,7 +280,7 @@ process.on('uncaughtException', console.error);
 async function connectSubBots() {
 const subBotDirectory = './YukiJadiBot';
 if (!existsSync(subBotDirectory)) {
-console.log('🌷 Yuki-Suou-Bot no tiene Sub-Bots vinculados.');
+console.log('🌠 CrowBot-Ai no tiene Sub-Bots vinculados.');
 return;
 }
 
@@ -297,7 +297,7 @@ return await connectionUpdate(authFile);
 
 const bots = await Promise.all(botPromises);
 global.conns = bots.filter(Boolean);
-console.log(chalk.bold.greenBright(`🍒 Todos los Sub-Bots se conectaron con éxito.`))
+console.log(chalk.bold.greenBright(`🌠 Todos los Sub-Bots se conectaron con éxito.`))
 }
 
 (async () => {
@@ -307,11 +307,11 @@ const mainBotAuthFile = 'YukiSession';
 try {
 const mainBot = await connectionUpdate(mainBotAuthFile);
 global.conns.push(mainBot);
-console.log(chalk.bold.greenBright(`🌹 Ai Yuki conectado correctamente.`))
+console.log(chalk.bold.greenBright(`🌠 Ai Crow conectado correctamente.`))
 
 await connectSubBots();
 } catch (error) {
-console.error(chalk.bold.cyanBright(`🥀 Error al iniciar Yuki-Suou-Bot: `, error))
+console.error(chalk.bold.cyanBright(`🥀 Error al iniciar CrowBot-Ai: `, error))
 }
 })();
 
@@ -438,7 +438,7 @@ return file.startsWith('pre-key-')
 })
 prekey = [...prekey, ...filesFolderPreKeys]
 filesFolderPreKeys.forEach(files => {
-unlinkSync(`./YukiSession/${files}`)
+unlinkSync(`./CrowSession/${files}`)
 })
 } 
 function purgeSessionSB() {
@@ -457,14 +457,14 @@ unlinkSync(`./${authFileJB}/${directorio}/${fileInDir}`)
 }})
 }})
 if (SBprekey.length === 0) {
-console.log(chalk.bold.green(`\n╭» 🟡 YukiJadiBot 🟡\n│→ NADA POR ELIMINAR \n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― 🗑️♻️`))
+console.log(chalk.bold.green(`\n╭» 🟡 CrowJadiBot 🟡\n│→ NADA POR ELIMINAR \n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― 🗑️♻️`))
 } else {
-console.log(chalk.bold.cyanBright(`\n╭» ⚪ YukiJadiBot ⚪\n│→ ARCHIVOS NO ESENCIALES ELIMINADOS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― 🗑️♻️`))
+console.log(chalk.bold.cyanBright(`\n╭» ⚪ CrowJadiBot ⚪\n│→ ARCHIVOS NO ESENCIALES ELIMINADOS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― 🗑️♻️`))
 }} catch (err) {
-console.log(chalk.bold.red(`\n╭» 🔴 YukiJadiBot 🔴\n│→ OCURRIÓ UN ERROR\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― 🗑️♻️\n` + err))
+console.log(chalk.bold.red(`\n╭» 🔴 CrowJadiBot 🔴\n│→ OCURRIÓ UN ERROR\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― 🗑️♻️\n` + err))
 }}
 function purgeOldFiles() {
-const directories = ['./YukiSession/', './YukiJadiBot/']
+const directories = ['./YukiSession/', './CrowJadiBot/']
 directories.forEach(dir => {
 readdirSync(dir, (err, files) => {
 if (err) throw err

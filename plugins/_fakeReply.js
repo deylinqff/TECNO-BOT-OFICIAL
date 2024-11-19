@@ -3,11 +3,11 @@ import fetch from 'node-fetch'
 export async function before(m, { conn }) {
 let name = '𝑪𝒓𝒐𝒘𝑩𝒐𝒕- 𝑴𝑫 - 𝑪𝒉𝒂𝒏𝒏𝒆𝒍'
 let imagenes = ["https://i.ibb.co/JmcS3kv/Sylph.jpg",
-"https://iili.io/dtLBx1I.md.jpg",
+"https://i.ibb.co/Cs6Tt9V/Sylph.jpg",
 "https://i.ibb.co/JmcS3kv/Sylph.jpg",
-"https://iili.io/dtLnzRn.md.jpg",
+"https://i.ibb.co/Cs6Tt9V/Sylph.jpg",
 "https://i.ibb.co/JmcS3kv/Sylph.jpg",
-"https://iili.io/dtLx2GR.md.jpg",
+"https://i.ibb.co/Cs6Tt9V/Sylph.jpg",
 "https://i.ibb.co/JmcS3kv/Sylph.jpg"]
 
 let icono = imagenes[Math.floor(Math.random() * imagenes.length)]

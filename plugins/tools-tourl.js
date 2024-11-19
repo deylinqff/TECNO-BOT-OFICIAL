@@ -1,69 +1,47 @@
-import fetch from "node-fetch";
-import crypto from "crypto";
-import { FormData, Blob } from "formdata-node";
-import { fileTypeFromBuffer } from "file-type";
+import fs from 'fs'
+import FormData from 'form-data'
+import axios from 'axios'
+import fetch from 'node-fetch'
 
-const handler = async (m, { conn }) => {
-let q = m.quoted ? m.quoted : m;
-  let mime = (q.msg || q).mimetype || "";
-  if (!mime) return m.reply("No media found", null, { quoted: fkontak });
-  let media = await q.download();
-let link = await catbox(media);
-  let caption = `📮 *L I N K :*
- \`\`\`• ${link}\`\`\`
-📊 *S I Z E :* ${formatBytes(media.length)}
-📛 *E x p i r e d :* "No Expiry Date" 
-`;
+let handler = async (m, { conn }) => {
 
-  await m.reply(caption);
-}
-handler.command = handler.help = ['tourl']
-handler.tags = ['tools']
-handler.diamond = true
-export default handler
+  let q = m.quoted ? m.quoted : m
+  let mime = (q.msg || q).mimetype || ''
 
-
-function formatBytes(bytes) {
-  if (bytes === 0) {
-    return "0 B";
+  await m.react('🕒')
+  if (!mime.startsWith('image/')) {
+    return m.reply('Responde a una *Imagen.*')
   }
-  const sizes = ["B", "KB", "MB", "GB", "TB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / 1024 ** i).toFixed(2)} ${sizes[i]}`;
-}
 
+  let media = await q.download()
+  let formData = new FormData()
+  formData.append('image', media, { filename: 'file' })
 
-/**
- * Upload image to catbox
- * Supported mimetype:
- * - `image/jpeg`
- * - `image/jpg`
- * - `image/png`s
- * - `image/webp`
- * - `video/mp4`
- * - `video/gif`
- * - `audio/mpeg`
- * - `audio/opus`
- * - `audio/mpa`
- * @param {Buffer} buffer Image Buffer
- * @return {Promise<string>}
- */
-async function catbox(content) {
-  const { ext, mime } = (await fileTypeFromBuffer(content)) || {};
-  const blob = new Blob([content.toArrayBuffer()], { type: mime });
-  const formData = new FormData();
-  const randomBytes = crypto.randomBytes(5).toString("hex");
-  formData.append("reqtype", "fileupload");
-  formData.append("fileToUpload", blob, randomBytes + "." + ext);
-
-  const response = await fetch("https://catbox.moe/user/api.php", {
-    method: "POST",
-    body: formData,
+  let api = await axios.post('https://api.imgbb.com/1/upload?key=10604ee79e478b08aba6de5005e6c798', formData, {
     headers: {
-      "User-Agent":
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36",
-    },
-  });
+      ...formData.getHeaders()
+    }
+  })
 
-  return await response.text();
+  await m.react('✅')
+  if (api.data.data) {
+    let txt = '`I B B  -  U P L O A D E R`\n\n'
+        txt += `*🔖 Titulo* : ${q.filename || 'x'}\n`
+        txt += `*🔖 Id* : ${api.data.data.id}\n`
+        txt += `*🔖 Enlace* : ${api.data.data.url}\n`
+        txt += `*🔖 Directo* : ${api.data.data.url_viewer}\n`
+        txt += `*🔖 Mime* : ${mime}\n`
+        txt += `*🔖 File* : ${q.filename || 'x.jpg'}\n`
+        txt += `*🔖 Extension* : ${api.data.data.image.extension}\n`
+        txt += `*🔖 Delete* : ${api.data.data.delete_url}\n\n`
+        txt += `© By: NarutoBot-Ai`
+    await conn.sendFile(m.chat, api.data.data.url, 'ibb.jpg', txt, m, null, fake)
+  } else {
+    await m.react('✅')
+  }
 }
+handler.tags = ['convertir']
+handler.help = ['toibb']
+handler.command = /^(tourl|toibb)$/i
+handler.register = true 
+export default handler

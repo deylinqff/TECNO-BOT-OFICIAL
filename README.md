@@ -24,6 +24,7 @@ ___
 - **StarCore:** [`Aquí`](https://whatsapp.com/channel/0029VankMyeBadmR9Ou0So3t)
 
 </details>
+
 ___
 
   [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=400&color=FF0000&lines=Espero+Este+Repositorio;Sea+De+Su+agrado+gracias🫂;Creado+por+Mr.|WillZek;🌠🚩)](https://git.io/typing-svg)

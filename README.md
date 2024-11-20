@@ -24,6 +24,4 @@ href="https://github.com/WillZek"><img src="https://github.com/WillZek.png" widt
 href="ninopina10@gmail.com" target="blue"><img
 src="https://img.shields.io/badge/PayPal-000000?style=for-the-badge&logo=paypal&logoColor=white" />
 
-> Copyright (c) 2024 **[WillZek](https://chat.whatsapp.com/F0MiFkIWaQtLrZez9Xt2uu)**.
-
-**`¡GRACIAS POR PREFERIR CROWBOT-AI!` 💛**
+### [© Powered By WillZek ⚡︎](https://whatsapp.com/channel/0029VakfOZfHFxP7rNrUQk2d)

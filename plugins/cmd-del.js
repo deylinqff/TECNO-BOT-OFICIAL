@@ -1,12 +1,12 @@
 let handler = async (m, { text }) => {
 let hash = text
 if (m.quoted && m.quoted.fileSha256) hash = m.quoted.fileSha256.toString('hex')
-if (!hash) return conn.reply(m.chat, `🚩 Ingresa el nombre del comamdo.`, m, rcanal)
+if (!hash) return conn.reply(m.chat, `🧑‍💻 INGRESE EL NOMBRE DEL COMANDO.`, m, rcanal)
 try {
 let sticker = global.db.data.sticker
-if (sticker[hash] && sticker[hash].locked) return conn.reply(m.chat, `🚩 No puedes borrar este comando.`, m, rcanal)
+if (sticker[hash] && sticker[hash].locked) return conn.reply(m.chat, `🧑‍💻 NO PUEDES ELIMINAR ESTE COMANDO`, m, rcanal)
 delete sticker[hash]
-await conn.reply(m.chat, `🚩 Comando eliminado con éxito.`, m, rcanal)
+await conn.reply(m.chat, `🧑‍💻 COMANDO ELIMINADO CON EXITO`, m, rcanal)
 await m.react('✅')
 } catch {
 await m.react('✖️')

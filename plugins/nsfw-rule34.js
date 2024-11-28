@@ -1,9 +1,9 @@
 import Starlights from "@StarlightsTeam/Scraper"
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-if (!global.db.data.chats[m.chat].nsfw) return conn.reply(m.chat, `🚩 El grupo no admite contenido *Nsfw.*\n\n> Para activarlo un *Administrador* debe usar el comando */nsfw on*`, m, rcanal)
-if (!text) return m.reply('🚩 Ingresa el nombre de la imágen que estas buscando.')
-await m.react('🕓')
+if (!global.db.data.chats[m.chat].nsfw) return conn.reply(m.chat, `[❗] 𝐋𝐨𝐬 𝐜𝐨𝐦𝐚𝐧𝐝𝐨𝐬 +𝟏𝟖 𝐞𝐬𝐭𝐚́𝐧 𝐝𝐞𝐬𝐚𝐜𝐭𝐢𝐯𝐚𝐝𝐨𝐬 𝐞𝐧 𝐞𝐬𝐭𝐞 𝐠𝐫𝐮𝐩𝐨.\n> 𝐬𝐢 𝐞𝐬 𝐚𝐝𝐦𝐢𝐧 𝐲 𝐝𝐞𝐬𝐞𝐚 𝐚𝐜𝐭𝐢𝐯𝐚𝐫𝐥𝐨𝐬 𝐮𝐬𝐞 .enable nsfw`, m, rcanal)
+if (!text) return m.reply('🧑‍💻 INGRESE EL NOMBRE DE LA IMAGEN QUE ESTA BUSCANDO.')
+await m.react('🔥')
 try {
 let { dl_url } = await Starlights.rule34(text)
 await conn.sendFile(m.chat, dl_url, 'thumbnail.jpg', `*» Resultado* : ${text}`, m, null, rcanal)

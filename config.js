@@ -23,10 +23,10 @@ global.prems = []
 global.packname = `[ Sticker Maker`
 global.author = '🌠 Crow Ai WhatsApp Bot ]'
 global.wait = '🚩 *Aɢᴜᴀʀᴅᴇ ᴜɴ ᴍᴏᴍᴇɴᴛᴏ, sᴏʏ ʟᴇɴᴛ𝙾... ฅ^•ﻌ•^ฅ*'
-global.botname = '[ Crow Ai WhatsApp Bot ]'
+global.botname = '[ 𝐂𝐫𝐨𝐰 𝐀𝐢 𝐖𝐡𝐚𝐬𝐀𝐩𝐩 𝐁𝐨𝐭 ]'
 global.textbot = `Powered By WillZek`
 global.listo = '*Aqui tiene ฅ^•ﻌ•^ฅ*'
-global.namechannel = 'TheCrowBot-Ai 🌠'
+global.namechannel = '𝐓𝐇𝐄 𝐂𝐑𝐎𝐖𝐁𝐎𝐓-𝐀𝐈 🌠'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 

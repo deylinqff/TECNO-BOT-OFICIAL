@@ -1,7 +1,7 @@
 import Starlights from '@StarlightsTeam/Scraper';
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-if (!args[0]) return conn.reply(m.chat,`🚩 Ingrese un enlace de Pinterest\n\nEjemplo:\n> *${usedPrefix + command}* https://ar.pinterest.com/pin/588142032613788991/`, m);
+if (!args[0]) return conn.reply(m.chat,`🧑‍💻 INGRESE EL LINK DE PINTEREST\n\nEjemplo:\n> *${usedPrefix + command}* https://ar.pinterest.com/pin/588142032613788991/`, m);
 
 await m.react('🕓');
 try {
@@ -12,7 +12,7 @@ txt += `  ✩   *Calidad* : ${quality}\n`;
 txt += `  ✩   *Tamaño* : ${size}\n`;
 txt += `  ✩   *Duracion* : ${duration}\n`;
 txt += `  ✩   *Url* : ${url}\n\n`
-txt += `> 🚩 *${textbot}*`
+txt += `> 🧑‍💻 *${textbot}*`
 
 
 await conn.sendMessage(m.chat, { video: { url: dl_url }, caption: txt, mimetype: 'video/mp4', fileName:  `pinterest.mp4`}, {quoted: m })

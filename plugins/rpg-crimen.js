@@ -8,7 +8,7 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
   let tiempoEspera = 5 * 60
   if (cooldowns[m.sender] && Date.now() - cooldowns[m.sender] < tiempoEspera * 1000) {
     let tiempoRestante = segundosAHMS(Math.ceil((cooldowns[m.sender] + tiempoEspera * 1000 - Date.now()) / 1000))
-    m.reply(`🚩 Ya has cometido un Crimen recientemente, espera *⏱ ${tiempoRestante}* para cometer tu próximo Crimen y evitar ser atrapado.`)
+    m.reply(`👻 YA HAS COMETIDO UN CRIMEN RECIENTEMENTE, ESPERA *⏱ ${tiempoRestante}* PARA COMETER OTRO CRIMEN Y EVITAR SER ATRAPADO.`)
     return
   }
   
@@ -36,7 +36,7 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
   users[senderId].limit += amountTaken
   users[randomUserId].limit -= amountTaken
   conn.sendMessage(m.chat, {
-        text: `🚩¡Lograste cometer tu crimen con exito!, acabas de robar *${amountTaken} ❇️ Eris* a @${randomUserId.split("@")[0]}\n\nSe suman *+${amountTaken} ❇️ Eris* a ${senderName}.`,
+        text: `🎉¡HAS COMETIDO UN CRIMEN CON EXITO!, ACABAS DE ROBAR *${amountTaken} 🌠 ESTRELLAS* a @${randomUserId.split("@")[0]}\n\nSe suman *+${amountTaken} 🌠 ESTRELLAS* a ${senderName}.`,
   contextInfo: { 
   mentionedJid: [randomUserId],
   }
@@ -46,7 +46,7 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
   case 1:
   let amountSubtracted = Math.min(Math.floor(Math.random() * (senderLimit - minAmount + 1)) + minAmount, maxAmount)
   users[senderId].limit -= amountSubtracted
-  conn.reply(m.chat, `🚩 No fuiste cuidadoso y te atraparon mientras cometias tu cirme, se restaron *-${amountSubtracted} ❇️ Eris* a ${senderName}.`, m)
+  conn.reply(m.chat, `💀TE HAN ATRAPADO DURANTE EL CRIMEN, SE TE RESTO *-${amountSubtracted} 🌠 ESTRELLAS* a ${senderName}.`, m)
   break
 
   case 2:

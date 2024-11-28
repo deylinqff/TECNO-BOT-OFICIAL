@@ -54,7 +54,7 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
   users[senderId].limit += smallAmountTaken
   users[randomUserId].limit -= smallAmountTaken
   conn.sendMessage(m.chat, {
-  text: `🚩 Lograste cometer tu crimen con exito, pero te descubrieron y solo lograste tomar *${smallAmountTaken} ❇️ Eris* de @${randomUserId.split("@")[0]}\n\nSe suman *+${smallAmountTaken} ❇️ Eris* a ${senderName}.`,
+  text: `👻 CRIMEN REALIZADO CON EXITO, PERO RE DESCUBRIERON Y SOLO ROBASTES *${smallAmountTaken} 🌠 ESTRELLAS* DE @${randomUserId.split("@")[0]}\n\nSE TE SUMADO*+${smallAmountTaken} 🌠 ESTRELLAS* A ${senderName}.`,
   contextInfo: { 
   mentionedJid: [randomUserId],
   }

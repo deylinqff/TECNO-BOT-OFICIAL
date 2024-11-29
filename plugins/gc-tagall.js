@@ -17,7 +17,7 @@ const oi = `⇢=͟͟͞͞🄰νίऽ૭ : ${pesan}`;
   conn.sendMessage(m.chat, {text: teks, mentions: participants.map((a) => a.id)} );
 };
 handler.help = ['todos <mesaje>'];
-handler.tags = ['grupo'];
+handler.tags = ['group'];
 handler.command = /^(tagall|invocar|marcar|todos|invocación)$/i;
 handler.admin = true;
 handler.group = true;

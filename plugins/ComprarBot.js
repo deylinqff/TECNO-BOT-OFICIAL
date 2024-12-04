@@ -6,7 +6,6 @@ export default handler;
 
 global.ComprarBot = `
 〔⛄ *CROW - BOT* ❄️〕
-.  *`Feliz Navidad`*
 
 *BOT PARA GRUPO* :
 > wa.me/50557865603

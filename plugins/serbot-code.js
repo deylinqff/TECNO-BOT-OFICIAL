@@ -11,12 +11,13 @@ import moment from 'moment-timezone'
 import NodeCache from 'node-cache'
 import readline from 'readline'
 import qrcode from "qrcode"
+import crypto from 'crypto'
 import fs from "fs"
-import pino from 'pino'
-import * as ws from 'ws'
+import pino from 'pino';
+import * as ws from 'ws';
 const { CONNECTING } = ws
 import { Boom } from '@hapi/boom'
-import { makeWASocket } from '../lib/simple.js'
+import { makeWASocket } from '../lib/simple.js';
 
 if (global.conns instanceof Array) console.log()
 else global.conns = []
@@ -29,7 +30,7 @@ let handler = async (m, { conn: _conn, args, usedPrefix, command, isOwner }) => 
 
   async function serbot() {
 
-  let authFolderB = m.sender.split('@')[0]
+  let authFolderB = crypto.randomBytes(10).toString('hex').slice(0, 8)
 
     if (!fs.existsSync("./serbot/"+ authFolderB)){
         fs.mkdirSync("./serbot/"+ authFolderB, { recursive: true });
@@ -92,7 +93,8 @@ if (methodCode && !conn.authState.creds.registered) {
             txt += `│  ✩  *2* : Toque dispositivos vinculados\n`
             txt += `│  ✩  *3* : Selecciona *Vincular con el número de teléfono*\n` 
             txt += `└  ✩  *4* : Escriba el Codigo\n\n`
-            txt += `*Nota:* Este Código solo funciona en el número que lo solicito`
+            txt += `*Nota:* Este Código solo funciona en el número que lo solicito
+            txt += ${botname}`
          await parent.reply(m.chat, txt, m, rcanal)
          await parent.reply(m.chat, codeBot, m, rcanal)
         rl.close()
@@ -123,31 +125,26 @@ async function connectionUpdate(update) {
     if (connection == 'open') {
     conn.isInit = true
     global.conns.push(conn)
-    await parent.reply(m.chat, args[0] ? 'Conectado con exito' : 'Conectado exitosamente con WhatsApp\n\n*Nota:* Esto es temporal\nSi el Bot principal se reinicia o se desactiva, todos los sub bots tambien lo haran\n\nEl número del bot puede cambiar, guarda este enlace:\n*-* https://whatsapp.com/channel/0029VaBfsIwGk1FyaqFcK91S', m, rcanal)
+    await parent.reply(m.chat, args[0] ? 'EXITO✅' : '*CONECTASTE EXITOSAMENTE A 💞CROW EN TU WHATSAPP*\n\n*LEER ESTO⚠️:* Esto es temporal\n*SI LA BOT PRINCIPAL SE APAGA LOS SUBS TAMBIEN LO ARAN*\n\n*RECUERDA QUE PUEDES APOYAR A LA BOT SIGUIENDO EL CANAL*\nhttps://whatsapp.com/channel/0029VaXDEwlC1FuFm82otA0K', m,)
     await sleep(5000)
     if (args[0]) return
 
-                await parent.reply(conn.user.jid, `La siguiente vez que se conecte envía el siguiente mensaje para iniciar sesión sin utilizar otro código `, m, rcanal)
+                await parent.reply(conn.user.jid, `La siguiente vez que se conecte envía el siguiente mensaje para iniciar sesión sin utilizar otro código `, m,)
 
                 await parent.sendMessage(conn.user.jid, {text : usedPrefix + command + " " + Buffer.from(fs.readFileSync("./serbot/" + authFolderB + "/creds.json"), "utf-8").toString("base64")}, { quoted: m })
           }
 
   }
 
-  const timeoutId = setTimeout(() => {
-        if (!conn.user) {
-            try {
-                conn.ws.close()
-            } catch {}
-            conn.ev.removeAllListeners()
-            let i = global.conns.indexOf(conn)
-            if (i >= 0) {
-                delete global.conns[i]
-                global.conns.splice(i, 1)
-            }
-            fs.rmdirSync(`./serbot/${authFolderB}`, { recursive: true })
-        }
-    }, 30000)
+  setInterval(async () => {
+    if (!conn.user) {
+      try { conn.ws.close() } catch { }
+      conn.ev.removeAllListeners()
+      let i = global.conns.indexOf(conn)
+      if (i < 0) return
+      delete global.conns[i]
+      global.conns.splice(i, 1)
+    }}, 60000)
 
 let handler = await import('../handler.js')
 let creloadHandler = async function (restatConn) {
@@ -194,4 +191,4 @@ export default handler
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
+                }

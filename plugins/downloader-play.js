@@ -8,7 +8,7 @@ const LimitAud = 725 * 1024 * 1024; //700MB
 const LimitVid = 425 * 1024 * 1024; //425MB
 const handler = async (m, {conn, command, args, text, usedPrefix}) => {
 
-if (command == 'play' || command == 'mp3') {
+if (command == 'play5' || command == 'mp3') {
 if (!text) return conn.reply(m.chat, `⛄ *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, ); 
 await m.react(rwait);
 conn.reply(m.chat, global.wait, m, {
@@ -185,8 +185,8 @@ await m.react(error);
 console.log(e);
 }}}}}}}}
 
-if (command == 'play3' || command == 'playdoc') {
-if (!text) return conn.reply(m.chat, `🌸 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, );
+if (command == 'play6' || command == 'playdoc') {
+if (!text) return conn.reply(m.chat, `⛄ *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, );
 await m.react(rwait);
 conn.reply(m.chat, global.wait, m, {
 contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, showAdAttribution: true,
@@ -196,9 +196,9 @@ previewType: 0, thumbnail: icons,
 sourceUrl: channel }}});
 const yt_play = await search(args.join(' '));
 const ytplay2 = await yts(text);
-const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐘𝐮𝐤𝐢 𝐒𝐮𝐨𝐮⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
+const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑Crow Bot⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
 
-> 📚 *Título:*
+> ⛄ *Título:*
 » ${yt_play[0].title}
 
 > 📆 *Subido:*
@@ -264,7 +264,7 @@ await m.react(error);
 console.log(e);
 }}}}}}}
 
-if (command == 'play4' || command == 'playdoc2') {
+if (command == 'play7' || command == 'playdoc2') {
 if (!text) return conn.reply(m.chat, `🌸 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, );
 await m.react(rwait);
 conn.reply(m.chat, global.wait, m, {
@@ -275,9 +275,9 @@ previewType: 0, thumbnail: icons,
 sourceUrl: channel }}});
 const yt_play = await search(args.join(' '));
 const ytplay2 = await yts(text);
-const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐘𝐮𝐤𝐢 𝐒𝐮𝐨𝐮⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
+const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑Crow Bot⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
 
-> 📚 *Título:*
+> ⛄ *Título:*
 » ${yt_play[0].title}
 
 > 📆 *Publicado:*
@@ -313,9 +313,9 @@ console.log(e2);
 }}}
 
 }
-handler.help = ['play', 'play2', 'play3', 'play4', 'playdoc'];
+handler.help = ['play5', 'play6', 'play7', 'play4', 'playdoc'];
 handler.tags = ['descargas'];
-handler.command = ['play', 'play2', 'play3', 'play4', 'mp3', 'mp4', 'playdoc', 'playdoc2']
+handler.command = ['play5', 'play6', 'play7', 'play4', 'mp3', 'mp4', 'playdoc', 'playdoc2']
 handler.group = true;
 export default handler;
 

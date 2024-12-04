@@ -14,6 +14,6 @@ await conn.sendMessage(m.chat, { video: { url: videoUrl }, caption: message }, {
 }
 handler.help = ['despertar'];
 handler.tags = ['group'];
-handler.command = ['despertar'];
+handler.command = ['despertar', 'desp', 'despierten', 'levantense'];
 handler.group = true;
 export default handler;

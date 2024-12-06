@@ -3,8 +3,8 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 
 const loadMarriages = () => {
-    if (fs.existsSync('./media/database/marry.json')) {
-        const data = JSON.parse(fs.readFileSync('./media/database/marry.json', 'utf-8'));
+    if (fs.existsSync('./storage/databases/marry.json')) {
+        const data = JSON.parse(fs.readFileSync('./storage/databases/marry.json', 'utf-8'));
         global.db.data.marriages = data;
     } else {
         global.db.data.marriages = {};

@@ -10,8 +10,8 @@ sourceUrl: channel }}})
 const res = await googleImage(text);
 const image = await res.getRandom();
 const link = image;
-const messages = [['Imagen 1', dev, await res.getRandom(),
-[[]], [[]], [[]], [[]]], ['Imagen 2', dev, await res.getRandom(), [[]], [[]], [[]], [[]]], ['Imagen 2', dev, await res.getRandom(), [[]], [[]], [[]], [[]]], ['Imagen 4', dev, await res.getRandom(), [[]], [[]], [[]], [[]]]]
+const messages = [['Imagen 1', textbot, await res.getRandom(),
+[[]], [[]], [[]], [[]]], ['Imagen 2', textbot, await res.getRandom(), [[]], [[]], [[]], [[]]], ['Imagen 2', textbot, await res.getRandom(), [[]], [[]], [[]], [[]]], ['Imagen 4', textbot, await res.getRandom(), [[]], [[]], [[]], [[]]]]
 await conn.sendCarousel(m.chat, `💛 Resultado de ${text}`, '🔎 Imagen - Descargas', null, messages, m);
 };
 handler.help = ['imagen <query>'];

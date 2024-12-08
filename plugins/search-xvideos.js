@@ -60,4 +60,4 @@ handler.command = ['xvideosearch', 'xvse'];
 handler.register = true;
 handler.group = true;
 
-export default handler
+export deafault handler

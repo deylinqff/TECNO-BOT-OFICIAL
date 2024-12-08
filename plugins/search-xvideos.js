@@ -55,8 +55,9 @@ async function xnxxSearch(query) {
     }
 }
 
-handler.help = ['xvideosearch']
-handler.tag = ['search']
+handler.tags = ['search']
 handler.command = ['xvideosearch', 'xvse'];
+handler.register = true;
+handler.group = true;
 
 export default handler

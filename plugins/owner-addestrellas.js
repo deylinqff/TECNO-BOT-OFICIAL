@@ -10,19 +10,19 @@ let handler = async (m, { conn, text }) => {
     let txt = text.replace('@' + who.split`@`[0], '').trim()
     if (!txt) return m.reply('⚠️️ Ingrese la cantidad de *Estrellas* que quiere añadir')
     if (isNaN(txt)) return m.reply('⚠️ *sólo números*')
-    let poin = parseInt(txt)
+    let limit = parseInt(txt)
     let estrellas = poin
-    let pjk = Math.ceil(poin * impts)
+    let pjk = Math.ceil(limit * impts)
     estrellas += pjk
     if (estrellas < 1) return m.reply('⚠️️ Mínimo es  *1*')
     let users = global.db.data.users
-   users[who].estrellas += poin
+   users[who].estrellas += limit
 
     await conn.reply(m.chat, `⊜ *🌟 AÑADIDO*
 ┏━━━━━━━━━━━⬣
-┃⋄ *Total:* ${poin}
+┃⋄ *Total:* ${limit}
 ┗━━━━━━━━━━━⬣`, m, rcanal)
-   conn.fakeReply(m.chat, `⊜ *_Recibiste_* \n\n *_+${poin} Estrellas 🌟_*`, who, m.text)
+   conn.fakeReply(m.chat, `⊜ *_Recibiste_* \n\n *_+${limit} Estrellas 🌟_*`, who, m.text)
 }
 
 handler.help = ['addestrellas *<@user>*']

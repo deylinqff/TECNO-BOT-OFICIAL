@@ -53,7 +53,7 @@ const defaultMenu = {
 ›   ╚──────¤◎¤──────╝
 ╭━─━─━─≪𖣘≫─━─━─━╮
 ┃❄️ ➬ *Cliente:* %name
-┃❄️ ➬ *Estrellas:* %poin
+┃❄️ ➬ *Estrellas:* ${poin}
 ┃❄️ ➬ *Nivel:* %level [ %xp4levelup Xp Para Subir De Nivel]
 ┃❄️ ➬ *Xp:* %exp / %maxexp
 ┃❄️ ➬ *TotalXp:* %totalexp

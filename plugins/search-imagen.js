@@ -6,7 +6,7 @@ contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, showAdAttributio
 title: packname,
 body: textbot,
 previewType: 0, thumbnail: icons,
-sourceUrl: channel }}})
+sourceUrl: canal }}})
 const res = await googleImage(text);
 const image = await res.getRandom();
 const link = image;

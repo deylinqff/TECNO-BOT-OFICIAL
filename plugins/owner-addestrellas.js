@@ -11,7 +11,7 @@ let handler = async (m, { conn, text }) => {
     if (!txt) return m.reply('⚠️️ Ingrese la cantidad de *Estrellas* que quiere añadir')
     if (isNaN(txt)) return m.reply('⚠️ *sólo números*')
     let limit = parseInt(txt)
-    let estrellas = poin
+    let estrellas = limit
     let pjk = Math.ceil(limit * impts)
     estrellas += pjk
     if (estrellas < 1) return m.reply('⚠️️ Mínimo es  *1*')

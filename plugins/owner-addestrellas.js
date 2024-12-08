@@ -10,7 +10,7 @@ let handler = async (m, { conn, text }) => {
     let txt = text.replace('@' + who.split`@`[0], '').trim()
     if (!txt) return m.reply('⚠️️ Ingrese la cantidad de *Estrellas* que quiere añadir')
     if (isNaN(txt)) return m.reply('⚠️ *sólo números*')
-    let len = parseInt(txt)
+    let poin = parseInt(txt)
     let estrellas = poin
     let pjk = Math.ceil(poin * impts)
     estrellas += pjk

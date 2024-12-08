@@ -112,6 +112,9 @@ break
 *Tipo :* document 
 *Descripción :* Des/Activa la *Descarga En Documentos* para el Usuario
 
+*Tipo :* autoaceptar
+*Descripción :* Des/Activa la *Autoaceptar* para aceptar Miembros a los grupos.
+
 *• Ejemplo:*
 *- ${usedPrefix + command}* welcome
 `.trim())

@@ -24,8 +24,8 @@ global.prems = []
 
 global.packname = `⏤͟͟͞͞⋆⬪࣪ꥈ🎅★ ׄ ꒱ 𝑪𝒓𝒐𝒘𝑩𝒐𝒕 - 𝑺.𝑪.𝑨 ୭`
 global.author = '❄️𝐁𝐲 𝐖𝐢𝐥𝐥𝐙𝐞𝐤🎅'
-global.stickerpack = '© CrowBot'
-global.stickerauth = 'By WillZek
+global.stickpack = '© CrowBot'
+global.stickauth = 'By WillZek
 global.wait = '🚩 *Aɢᴜᴀʀᴅᴇ ᴜɴ ᴍᴏᴍᴇɴᴛᴏ, sᴏʏ ʟᴇɴᴛ𝙾... ฅ^•ﻌ•^ฅ*'
 global.botname = '❄️FELIZ NAVIDAD❄️'
 global.textbot = `🌲𝐂𝐫𝐨𝐰𝐁𝐨𝐭 𝐁𝐲 𝐖𝐢𝐥𝐥𝐙𝐞𝐤⛄`

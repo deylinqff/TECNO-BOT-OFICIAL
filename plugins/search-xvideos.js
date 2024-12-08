@@ -54,3 +54,7 @@ async function xnxxSearch(query) {
         return { status: 503, result: error.message };
     }
 }
+
+handler.tag = ['search']
+handler.command = ['xvideosearch', 'xvse']
+handler.help = ['xvideosearch']

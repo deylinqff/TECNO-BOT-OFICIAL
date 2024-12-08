@@ -69,6 +69,15 @@ break
       }
       bot.antiPrivate = isEnable
       break
+
+case 'modoadmin': case 'soloadmin': case 'modeadmin':
+if (m.isGroup) {
+if (!(isAdmin || isOwner)) {
+global.dfail('admin', m, conn)
+throw false
+}}
+chat.modoadmin = isEnable          
+break    
       
       case 'nsfw':
       case 'modohorny':

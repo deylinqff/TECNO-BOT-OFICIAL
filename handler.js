@@ -297,7 +297,7 @@ conn: this,
                 else
                     m.exp += xp
                 if (!isPrems && plugin.limit && global.db.data.users[m.sender].limit < plugin.limit * 1) {
-                    conn.reply(m.chat, `Se agotaron tus *✳️ Eris*`, m, rcanal)
+                    conn.reply(m.chat, `Se agotaron tus *🌟 Estrellas*`, m, rcanal)
                     continue
                 }
                 let extra = {
@@ -345,7 +345,7 @@ conn: this,
                         }
                     }
                     if (m.limit)
-                        conn.reply(m.chat, `Utilizaste *${+m.limit}* ✳️`, m, rcanal)
+                        conn.reply(m.chat, `Utilizaste *${+m.limit}* 🌟`, m, rcanal)
                 }
                 break
             }

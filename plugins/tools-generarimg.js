@@ -6,7 +6,7 @@ if (!text) throw `*👻 ingrese un texto para generar poder generar su imagen*`;
 m.react('🕒');
 await conn.sendMessage(m.chat, {text: '*👻 Generando Imagen*'}, {quoted: m});
 try {
-const response = await fetch(`https://eliasar-yt-api.vercel.app/editar-imagen?texto=${encodeURIComponent(text)}`);
+const response = await fetch(`https://eliasar-yt-api.vercel.app/api/canvas/logo?texto=${encodeURIComponent(text)}&url=${encodeURIComponent(profilePicture)}`);
 if (!response.ok) throw new Error('Network response was not ok');
 const buffer = await response.buffer();
 m.react('✔️');
@@ -17,6 +17,6 @@ throw `*🚨 Lo Sentimos, ha ocurrido un error 😔*`;
 }
 }
 handler.tags = ['tools'];
-handler.help = ['genearimg'];
+handler.help = ['genearimg <nombre> <link de la imagen>'];
 handler.command = ['genearimg','imgg'];
 export default handler;

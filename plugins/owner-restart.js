@@ -1,16 +1,25 @@
 import { spawn } from 'child_process'
 let handler = async (m, { conn, isROwner, text }) => {
-    if (!process.send) return m.react('✖️')
-    if (conn.user.jid == conn.user.jid) {
-    await m.reply('*🧑‍💻 REINICIANDO CROWBOT-AI*')
-    process.send('reset')
-  } else return m.react('✖️')
+
+if (!process.send) throw '*『✦』Reiniciar: node start.js*\n*『✦』Reiniciar: node index.js*'
+
+if (conn.user.jid == conn.user.jid) {
+
+const { key } = await conn.sendMessage(m.chat, {text: `⚙️ iniciando reinicio de TECNO-BOT ...`}, {quoted: m})
+await delay(1000 * 1)
+await conn.sendMessage(m.chat, {text: `🔄 Cargando...`, edit: key})
+await delay(1000 * 1)
+await conn.sendMessage(m.chat, {text: `🌐 Cargando...`, edit: key})
+await conn.sendMessage(m.chat, {text: `*『🚀』Comenzar reinicio completo...*`, edit: key})
+
+process.send('reset')
+} else throw 'eh'
 }
 
 handler.help = ['restart']
 handler.tags = ['owner']
-handler.command = ['restart','reiniciar'] 
-
+handler.command = ['restart', 'reiniciar'] 
 handler.rowner = true
 
 export default handler
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))

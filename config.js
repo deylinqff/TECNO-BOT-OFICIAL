@@ -9,7 +9,7 @@ import axios from 'axios'
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
 global.owner = [
-  ['50557865603', 'WillZek', true],
+  ['50488198573', 'WillZek', true],
   ['50498409019', 'CrowBot-Ai', true],
   ['584241836217', 'Prak Harper', true],
   ['50498409019', 'WillZek-Soporte', true]
@@ -22,15 +22,15 @@ global.prems = []
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
-global.packname = `⏤͟͟͞͞⋆⬪࣪ꥈ🎅★ ׄ ꒱ 𝑪𝒓𝒐𝒘𝑩𝒐𝒕 - 𝑺.𝑪.𝑨 ୭`
-global.author = '❄️𝐁𝐲 𝐖𝐢𝐥𝐥𝐙𝐞𝐤🎅'
-global.stickpack = '© CrowBot'
-global.stickauth = 'By WillZek'
+global.packname = `⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕୭`
+global.author = '🚀𝐁𝐲 𝑫𝒆𝒚𝒍𝒊𝒏🚀'
+global.stickpack = '© 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕'
+global.stickauth = '𝑩𝒚 𝑫𝒆𝒚𝒍𝒊𝒏'
 global.wait = '🚩 *Aɢᴜᴀʀᴅᴇ ᴜɴ ᴍᴏᴍᴇɴᴛᴏ, sᴏʏ ʟᴇɴᴛ𝙾... ฅ^•ﻌ•^ฅ*'
-global.botname = '❄️FELIZ NAVIDAD❄️'
-global.textbot = `🌲𝐂𝐫𝐨𝐰𝐁𝐨𝐭 𝐁𝐲 𝐖𝐢𝐥𝐥𝐙𝐞𝐤⛄`
+global.botname = '〘𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕〙'
+global.textbot = `⌨𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 𝐁𝐲 𝑫𝒆𝒚𝒍𝒊𝒏🚀`
 global.listo = '*Aqui tiene ฅ^•ﻌ•^ฅ*'
-global.namechannel = '𝐓𝐇𝐄 𝐂𝐑𝐎𝐖𝐁𝐎𝐓-𝐀𝐈 🌠'
+global.namechannel = '𝐓𝐇𝐄 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 🌠'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 

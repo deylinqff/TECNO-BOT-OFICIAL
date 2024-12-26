@@ -1,5 +1,5 @@
 let handler = async (m, { conn, usedPrefix, isOwner }) => {  
-    let txt_owner = `   
+    let txt_owner = `  
 *╔══════❖•ೋ°🚀°ೋ•❖══════╗*  
 *╠*💌 Hola!*                   *║*
 *║                             *║*
@@ -12,12 +12,12 @@ let handler = async (m, { conn, usedPrefix, isOwner }) => {
 *║*                            *║*
 *╠*📞 *Deylin*:                *║*
 *╠*🌐 [Wa.me/50488198573]      *║*
-*╚══════❖•ೋ°🚀°ೋ•❖══════╝*
+*╚══════❖•ೋ°🚀°ೋ•❖══════╝*  
 `;  
 
     await conn.sendFile(  
         m.chat,  
-        "",  
+        "https://files.catbox.moe/pfndcv.jpg",  
         'thumbnail.jpg',  
         txt_owner,  
         m  

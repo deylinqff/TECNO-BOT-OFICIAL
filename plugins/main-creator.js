@@ -8,7 +8,7 @@ _Puedes contactarlo aquí:_
 *╚═══❖•ೋ°°ೋ•❖═══╝*  
 ●▬▬▬▬▬▬๑۩۩๑▬▬▬▬▬▬●  
 `
-await conn.sendFile(m.chat, "https://files.catbox.moe/ge77oy.jpg", 'thumbnail.jpg', txt_owner, m, null, rcanal)
+await conn.sendFile(m.chat, "https://files.catbox.moe/pfndcv.jpg", 'thumbnail.jpg', txt_owner, m, null, rcanal)
 }
 handler.help = ['owner']
 handler.tags = ['main']

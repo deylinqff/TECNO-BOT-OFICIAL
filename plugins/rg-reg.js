@@ -9,19 +9,19 @@ let handler = async function (m, { conn, text, args, usedPrefix, command }) {
     let name2 = conn.getName(m.sender)
 
     if (user.registered === true) {
-        return m.reply(`⚠️ *𝙎𝙞𝙨𝙩𝙚𝙢 𝘼𝙡𝙚𝙧𝙩:*\n\n💾 _Ya estás registrado en el sistema._\n\n🔄 ¿Deseas registrarte nuevamente?\n\n🛠️ Usa el comando:\n*${usedPrefix}unreg* para eliminar tu registro actual.`)
+        return m.reply(`🚀 𝗬𝗮 𝘁𝗲 𝗲𝗻𝗰𝘂𝗲𝗻𝘁𝗿𝗮𝘀 𝗿𝗲𝗴𝗶𝘀𝘁𝗿𝗮𝗱𝗼.\n\n¿𝗤𝘂𝗶𝗲𝗿𝗲 𝘃𝗼𝗹𝘃𝗲𝗿 𝗮 𝗿𝗲𝗴𝗶𝘀𝘁𝗿𝗮𝗿𝘀𝗲?\n\n𝗨𝘀𝗲 𝗲𝘀𝘁𝗲 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 𝗽𝗮𝗿𝗮 𝗲𝗹𝗶𝗺𝗶𝗻𝗮𝗿 𝘀𝘂 𝗿𝗲𝗴𝗶𝘀𝘁𝗿𝗼.\n*${usedPrefix}unreg*`)
     }
 
-    if (!Reg.test(text)) return m.reply(`⚙️ *𝙀𝙧𝙧𝙤𝙧 𝘿𝙚 𝙁𝙤𝙧𝙢𝙖𝙩𝙤:*\n\n📌 *Formato incorrecto.*\n💡 Usa el comando de esta forma:\n${usedPrefix + command} *𝙣𝙤𝙢𝙗𝙧𝙚.𝙚𝙙𝙖𝙙*\n📋 Ejemplo: *${usedPrefix + command} ${name2}.14*`)
+    if (!Reg.test(text)) return m.reply(`Eʟ ғᴏʀᴍᴀᴛᴏ ɪɴɢʀᴇsᴀᴅᴏ ᴇs ɪɴᴄᴏʀʀᴇᴄᴛᴏ\n\nUsᴏ ᴅᴇʟ ᴄᴏᴍᴀɴᴅᴏ: ${usedPrefix + command} 𝗻𝗼𝗺𝗯𝗿𝗲.𝗲𝗱𝗮𝗱\nEᴊᴇᴍᴘʟᴏ : *${usedPrefix + command} ${name2}.14*`)
 
     let [_, name, splitter, age] = text.match(Reg)
-    if (!name) return m.reply('❌ *𝙀𝙧𝙧𝙤𝙧:*\n📌 El campo *nombre* no puede estar vacío.')
-    if (!age) return m.reply('❌ *𝙀𝙧𝙧𝙤𝙧:*\n📌 El campo *edad* no puede estar vacío.')
-    if (name.length >= 100) return m.reply('❌ *𝙀𝙧𝙧𝙤𝙧:*\n📌 El nombre ingresado es demasiado largo.')
+    if (!name) return m.reply('🚀 Eʟ ɴᴏʍ𝗯𝗿𝗲 ɴᴏ ᴘᴜᴇᴅᴇ ᴇsᴛᴀʀ ᴠᴀᴄɪᴏ.')
+    if (!age) return m.reply('🚀 Lᴀ ᴇᴅᴀᴅ ɴᴏ ᴘᴜᴇᴅᴇ ᴇsᴛᴀʀ ᴠᴀᴄɪ́ᴀ.')
+    if (name.length >= 100) return m.reply('🚀 El nombre es demasiado largo.')
 
     age = parseInt(age)
-    if (age > 100) return m.reply('❌ *𝙀𝙧𝙧𝙤𝙧:*\n📌 La edad ingresada no es válida.')
-    if (age < 5) return m.reply('❌ *𝙀𝙧𝙧𝙤𝙧:*\n📌 La edad ingresada no es válida.')
+    if (age > 100) return m.reply('*ʟᴀ ᴇᴅᴀᴅ ɪɴɢʀᴇsᴀᴅᴀ ᴇs ɪɴᴄᴏʀʀᴇᴄᴛᴀ*')
+    if (age < 5) return m.reply('*ʟᴀ ᴇᴅᴀᴅ ɪɴɢʀᴇsᴀᴅᴀ ᴇs ɪɴᴄᴏʀʀᴇᴄᴛᴀ*')
 
     user.name = name.trim()
     user.age = age
@@ -40,39 +40,36 @@ let handler = async function (m, { conn, text, args, usedPrefix, command }) {
     }
 
     let api = await axios.get(`https://deliriussapi-oficial.vercel.app/tools/country?text=${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}`);
-    let userNationalityData = api.data.result;
-    let userNationality = userNationalityData ? `${userNationalityData.name} ${userNationalityData.emoji}` : '🌐 *Desconocido*';
+
+let userNationalityData = api.data.result;
+    let userNationality = userNationalityData ? `${userNationalityData.name} ${userNationalityData.emoji}` : 'Desconocido';
 
     let sn = createHash('md5').update(m.sender).digest('hex')
+    let regbot = `┏━━━━━━━━━━━━━━━━━━⬣
+┃⋄ *🚀 𝐑𝐄𝐆𝐈𝐒𝐓𝐑𝐎 - 𝐓𝐄𝐂𝐍𝐎*
+┗━━━━━━━━━━━━━━━━━━⬣\n`
+    regbot += `•┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄•\n`
+    regbot += `「🛸」𝐍𝐨𝐦𝐛𝐫𝐞: ${name}\n`
+    regbot += `「🚀」𝐄𝐝𝐚𝐝: ${age} años\n`
+    regbot += `「📡」𝐏𝐚𝐢𝐬: ${userNationality}\n`
+    regbot += `•┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄•\n`
+    regbot += `「🚀」𝐑𝐞𝐜𝐨𝐦𝐩𝐞𝐧𝐬𝐚𝐬:\n> `
+    regbot += `• 15 Estrellas 🌟\n> `
+    regbot += `• 5 CrowCoins 🪙\n> `
+    regbot += `• 245 Experiencia 💸\n> `
+    regbot += `• 12 Tokens 💰\n`
+    regbot += `꒷꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒷꒦꒷\n> `
+    regbot += `${publi}`
 
-    // Inicializa barra de progreso
-    let progressMsg = await conn.sendMessage(m.chat, { text: '□□□□□ 0% - *Inicializando registro...*' })
-    let progress = ['□□□□□ 0%', '■□□□□ 20%', '■■□□□ 40%', '■■■□□ 60%', '■■■■□ 80%', '■■■■■ 100%']
+    await m.react('📪')
+    await conn.sendLuffy(m.chat, '⊱『✅𝆺𝅥 𝐑𝐄𝐆𝐈𝐒𝐓𝐑𝐀𝐃𝐎(𝐀) 𝆹𝅥✅』⊰', textbot, regbot, imagen1, imagen1, channel, m, rcanal)
 
-    for (let i = 0; i < progress.length; i++) {
-        await new Promise(res => setTimeout(res, 1000)) // Pausa entre actualizaciones
-        await conn.updateMessage(m.chat, { id: progressMsg.key.id, remoteJid: m.chat }, { text: `${progress[i]} - *Procesando...*` })
-    }
+    let channelID = '120363381910502266@newsletter';
+    let messageContent = `◉ *Usuarios:* ${m.pushName || 'Anónimo'}\n◉ *País:* ${userNationality || 'Desconocido'}\n◉ *Verificación:* ${user.name}\n◉ *Edad:* ${age} años\n◉ *Número de serie:*\n⤷ ${sn}\n\n🚀 *Recompensa:* 600 crowcoins 🪙\n*¡Bienvenido/a al bot!*`;
 
-    // Elimina mensaje de progreso
-    await conn.deleteMessage(m.chat, { id: progressMsg.key.id, remoteJid: m.chat })
-
-    // Envía registro final
-    let regbot = `╔═══════════════════╗\n`
-    regbot += `  🔰 *CROWBOT REGISTRATION SYSTEM* 🔰\n`
-    regbot += `╚═══════════════════╝\n\n`
-    regbot += `💾 *Datos Registrados:*\n`
-    regbot += `🔹 *Nombre:* ${name}\n`
-    regbot += `🔹 *Edad:* ${age} años\n`
-    regbot += `🔹 *País:* ${userNationality}\n\n`
-    regbot += `🎁 *Recompensas Obtenidas:*\n`
-    regbot += `✨ 15 Estrellas\n`
-    regbot += `🪙 5 CrowCoins\n`
-    regbot += `📈 245 Puntos de Experiencia\n`
-    regbot += `🪙 12 Tokens\n\n`
-    regbot += `💠 *¡Gracias por registrarte!*\n\n`
-
-    await conn.sendMessage(m.chat, { text: regbot })
+    await conn.sendMessage(channelID, {
+        text: messageContent, ...rcanal
+    });
 }
 
 handler.help = ['reg']

@@ -25,6 +25,10 @@ let handler = async (m, { conn, isROwner, text }) => {
 
         // Mensaje final
         await conn.sendMessage(m.chat, { text: "*『✅』Proceso completado con éxito.*", edit: key });
+
+        // Reinicio del servidor
+        await delay(2000); // Espera 2 segundos antes de reiniciar
+        process.send('reset'); // Comando para reiniciar
     } else {
         throw 'No tienes permisos para ejecutar este comando.';
     }

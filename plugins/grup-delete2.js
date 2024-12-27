@@ -3,21 +3,21 @@ let handler = async (m, { conn, text, args, participants }) => {
     return conn.reply(m.chat, `🚩 Etiqueta a un usuario para eliminar sus últimos 10 mensajes.`, m);
   }
 
-  const target = m.mentionedJid[0]; // Usuario etiquetado
+  const target = m.mentionedJid[0].includes('@s.whatsapp.net') 
+    ? m.mentionedJid[0] 
+    : `${m.mentionedJid[0]}@s.whatsapp.net`;
   const chat = m.chat;
 
   try {
-    // Obtener mensajes del chat
-    const messages = await conn.fetchMessages(chat, 50); // Buscar los últimos 50 mensajes (máximo permitido por WhatsApp)
+    const messages = await conn.fetchMessages(chat, 50); // Carga los últimos 50 mensajes
     const targetMessages = messages
-      .filter((msg) => msg.key.participant === target)
-      .slice(0, 10); // Filtrar mensajes del usuario etiquetado y limitar a 10
+      .filter((msg) => msg.key.participant === target || msg.key.remoteJid === target)
+      .slice(0, 10); // Filtra los mensajes del usuario etiquetado y limita a 10
 
     if (targetMessages.length === 0) {
       return conn.reply(m.chat, `❌ No se encontraron mensajes recientes del usuario etiquetado.`, m);
     }
 
-    // Eliminar mensajes
     for (const msg of targetMessages) {
       await conn.sendMessage(chat, { delete: msg.key });
     }
@@ -25,7 +25,7 @@ let handler = async (m, { conn, text, args, participants }) => {
     conn.reply(m.chat, `✅ Se eliminaron ${targetMessages.length} mensajes de la persona etiquetada.`, m);
   } catch (e) {
     console.error(e);
-    conn.reply(m.chat, `❌ Hubo un error al intentar eliminar los mensajes.`, m);
+    conn.reply(m.chat, `❌ Hubo un error al intentar eliminar los mensajes: ${e.message}`, m);
   }
 };
 

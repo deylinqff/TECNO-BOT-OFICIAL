@@ -21,7 +21,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 
 handler.help = ['delete2']
 handler.tags = ['group']
-handler.command = /^del(ete)?$/i
+handler.command = /^delete2$/i // Cambiar el comando a "delete2"
 handler.group = false
 handler.admin = true
 handler.botAdmin = true

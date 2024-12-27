@@ -49,9 +49,9 @@ global.colab2 = 'Niño Piña'
 global.colab3 = 'Legendary'
 
 //Ids channel
-global.idchannel = '120363343811229130@newsletter'
-global.canalIdM = ["120363322713003916@newsletter", "120363343811229130@newsletter"]
-global.canalNombreM = ["♡⃝𝒞𝐻𝒜𝒩𝒩𝐸𝐿 𝒴𝒰𝒦𝐼 𝒮𝒰𝒪𝒰ᚐ҉ᚐ", "✧┊┋◟✿𝐘𝐮𝐤𝐢 𝐒𝐮𝐨𝐮 𝐓𝐞𝐬𝐭✿◞┊┋✧"]
+global.idchannel = '120363375378707428@newsletter'
+global.canalIdM = ["120363375378707428@newsletter", "120363375378707428@newsletter"]
+global.canalNombreM = ["♡⃝🚀𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕҉ᚐ", "✧┊┋◟🚀𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕🚀◞┊┋✧"]
 global.channelRD = await getRandomChannel()
 
 //Reacciones De Comandos.!

@@ -1,7 +1,7 @@
 import { createHash } from 'crypto';
 import PhoneNumber from 'awesome-phonenumber';
-import axios from 'axios'; // Asegúrate de tener axios instalado
-import moment from 'moment-timezone'; // Para manejar las fechas y horas
+import axios from 'axios';
+import moment from 'moment-timezone';
 
 let Reg = /\|?(.*)([.|] *?)([0-9]*)$/i;
 
@@ -9,7 +9,6 @@ let handler = async function (m, { conn, text }) {
   let user = global.db.data.users[m.sender];
   let name2 = conn.getName(m.sender);
 
-  // Validación de registro
   if (user.registered === true) throw `*『✦』Ya estás registrado. Usa #unreg para volver a registrarte.*`;
   if (!Reg.test(text)) throw `*『✦』El comando ingresado es incorrecto. Usa:\n#reg Nombre.edad*\n\nEjemplo:\n#reg ${name2}.25*`;
 
@@ -22,7 +21,6 @@ let handler = async function (m, { conn, text }) {
   if (age > 10000) throw '*『😏』Viejo/a Sabroso/a*';
   if (age < 5) throw '*『🍼』Ven aquí, te adoptaré!!*';
 
-  // Actualiza los datos del usuario
   user.name = name.trim();
   user.age = age;
   user.regTime = +new Date();
@@ -35,7 +33,7 @@ let handler = async function (m, { conn, text }) {
   let sn = createHash('md5').update(m.sender).digest('hex').slice(0, 20);
 
   // Barra de progreso
-  let progressStages = ['□□□□□ 0%', '■□□□□ 20%', '■■□□□ 40%', '■■■□□ 60%', '■■■■□ 80%', '■■■■■ 100%', '✅'];
+  let progressStages = ['□□□□□ 0%', '■□□□□ 20%', '■■□□□ 40%', '■■■□□ 60%', '■■■■□ 80%', '■■■■■ 100%'];
   let progressMessage = await conn.sendMessage(m.chat, { text: progressStages[0] }, { quoted: m });
 
   for (let i = 1; i < progressStages.length; i++) {
@@ -43,7 +41,7 @@ let handler = async function (m, { conn, text }) {
     await conn.sendMessage(m.chat, { edit: progressMessage.key, text: progressStages[i] });
   }
 
-  // Inserta el mensaje de registro en el mismo mensaje
+  // Mensaje de registro (se envía después de la barra de progreso)
   let regbot = `
 👤 𝗥 𝗘 𝗚 𝗜 𝗦 𝗧 𝗥 𝗢 👤
 •┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄•
@@ -59,7 +57,7 @@ let handler = async function (m, { conn, text }) {
 Número de registro: ${sn}
 `;
 
-  await conn.sendMessage(m.chat, { edit: progressMessage.key, text: `${progressStages[5]}\n\n${regbot}` });
+  await conn.sendMessage(m.chat, { text: regbot }, { quoted: m });
 };
 
 handler.help = ['reg'];

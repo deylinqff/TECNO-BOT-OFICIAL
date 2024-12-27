@@ -78,12 +78,12 @@ let handler = async function (m, { conn, text, args, usedPrefix, command }) {
     regbot += `📡 *Edad:* ${age} años\n`
     regbot += `🌐 *País:* ${userNationality}\n`
     regbot += `\n─── *RECOMPENSAS* ───\n`
-    regbot += `★ 600 CrowCoins\n`
+    regbot += `★ 600 TecnoCoins\n`
     regbot += `★ 10 Estrellas\n`
     regbot += `★ 245 XP\n`
     regbot += `★ 5 Tokens\n`
     regbot += `──────────────────────\n`
-    regbot += `🔒 *Número de serie:*\n⤷ ${sn}`
+    regbot += `> *creador:* Deyin`
 
     await conn.sendMessage(m.chat, { text: regbot })
 

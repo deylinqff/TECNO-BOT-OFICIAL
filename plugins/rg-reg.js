@@ -35,7 +35,7 @@ let handler = async function (m, { conn, text }) {
   let sn = createHash('md5').update(m.sender).digest('hex').slice(0, 20);
 
   // Barra de progreso
-  let progressStages = ['□□□□□ 0%', '■□□□□ 20%', '■■□□□ 40%', '■■■□□ 60%', '■■■■□ 80%', '■■■■■ 100%'];
+  let progressStages = ['□□□□□ 0%', '■□□□□ 20%', '■■□□□ 40%', '■■■□□ 60%', '■■■■□ 80%', '■■■■■ 100%', '✅'];
   let progressMessage = await conn.sendMessage(m.chat, { text: progressStages[0] }, { quoted: m });
 
   for (let i = 1; i < progressStages.length; i++) {

@@ -3,35 +3,39 @@ import fetch from 'node-fetch';
 export async function before(m, { conn, participants, groupMetadata }) {
     const fkontak = { 
         key: { fromMe: false, participant: '0@s.whatsapp.net' }, 
-        message: { conversation: '💻 Bienvenido/a al Futuro 💡' } 
+        message: { conversation: '🤖 Bienvenido/a a la tecnología del futuro 🌌' } 
     };
 
     if (!m.messageStubType || !m.isGroup) return true;
 
-    const chat = global.db.data.chats[m.chat];
     const userId = m.messageStubParameters[0];
-    const welcomeImage = 'https://files.catbox.moe/j2chet.jpg';
-    const goodbyeImage = 'https://files.catbox.moe/e5ua3q.jpg';
-
-    const futuristicIcon = "🛰️";
+    const chat = global.db.data.chats[m.chat];
+    const futuristicIcon = "🚀";
     const futuristicBorder = "⎯⎯⎯⎯⎯⎯⎯⎯⎯";
 
-    let pp;
+    // URLs de imágenes por defecto
+    const defaultWelcomeImage = 'https://files.catbox.moe/j2chet.jpg';
+    const defaultGoodbyeImage = 'https://files.catbox.moe/e5ua3q.jpg';
+
+    // Obtener imagen de perfil del usuario
+    let profilePic;
     try {
-        pp = await conn.profilePictureUrl(userId, 'image');
-    } catch (error) {
-        pp = null;
+        profilePic = await conn.profilePictureUrl(userId, 'image');
+    } catch {
+        profilePic = null;
     }
 
-    const fetchImage = async (url) => {
+    const fetchImage = async (url, fallback) => {
         try {
             return await (await fetch(url)).buffer();
         } catch {
-            return null;
+            return await (await fetch(fallback)).buffer();
         }
     };
 
-    let img = await fetchImage(pp || welcomeImage);
+    // Obtener la imagen correspondiente al evento
+    const welcomeImage = await fetchImage(profilePic || defaultWelcomeImage, defaultWelcomeImage);
+    const goodbyeImage = await fetchImage(defaultGoodbyeImage, defaultGoodbyeImage);
 
     // Bienvenida
     if (chat.welcome && m.messageStubType === 27) {
@@ -39,17 +43,17 @@ export async function before(m, { conn, participants, groupMetadata }) {
 ${futuristicIcon} *BIENVENIDO/A AL GRUPO TECNOLÓGICO* ${futuristicIcon}
 
 ${futuristicBorder}
-🌌 Usuario: *@${userId.split`@`[0]}*
-🤖 Grupo: *${groupMetadata.subject}*
+🌌 *Usuario:* *@${userId.split`@`[0]}*
+💻 *Grupo:* *${groupMetadata.subject}*
 
-🔧 Usa *#menu* para explorar comandos y herramientas.
-⎯⎯⎯⎯⎯⎯⎯⎯⎯`;
-
+🔧 Usa *#menu* para explorar todas las herramientas disponibles.
+⎯⎯⎯⎯⎯⎯⎯⎯⎯
+        `;
         try {
             await conn.sendMessage(m.chat, { 
-                image: img, 
+                image: welcomeImage, 
                 caption: welcomeMsg, 
-                mentions: [userId + '@s.whatsapp.net'] 
+                mentions: [`${userId}@s.whatsapp.net`] 
             });
         } catch (error) {
             console.error('Error enviando mensaje de bienvenida:', error);
@@ -59,20 +63,20 @@ ${futuristicBorder}
     // Despedida
     if (chat.welcome && m.messageStubType === 28) {
         const goodbyeMsg = `
-${futuristicIcon} *ADIOS, ASTRONAUTA DIGITAL* ${futuristicIcon}
+${futuristicIcon} *HASTA PRONTO, EXPLORADOR DIGITAL* ${futuristicIcon}
 
 ${futuristicBorder}
-🌠 Usuario: *@${userId.split`@`[0]}*
-📂 Razón: Ha salido del grupo.
+🌠 *Usuario:* *@${userId.split`@`[0]}*
+📂 *Razón:* Salida voluntaria del grupo.
 
-🌟 ¡Te deseamos éxitos en tu viaje!`;
-        img = await fetchImage(goodbyeImage);
-
+🌟 *Mensaje:* ¡Te deseamos éxito en tus futuros proyectos tecnológicos!
+⎯⎯⎯⎯⎯⎯⎯⎯⎯
+        `;
         try {
             await conn.sendMessage(m.chat, { 
-                image: img, 
+                image: goodbyeImage, 
                 caption: goodbyeMsg, 
-                mentions: [userId + '@s.whatsapp.net'] 
+                mentions: [`${userId}@s.whatsapp.net`] 
             });
         } catch (error) {
             console.error('Error enviando mensaje de despedida:', error);
@@ -82,27 +86,26 @@ ${futuristicBorder}
     // Expulsión
     if (chat.welcome && m.messageStubType === 32) {
         const kickMsg = `
-${futuristicIcon} *USUARIO EXPULSADO* ${futuristicIcon}
+${futuristicIcon} *USUARIO EXPULSADO DEL GRUPO* ${futuristicIcon}
 
 ${futuristicBorder}
-❌ Usuario: *@${userId.split`@`[0]}*
-📂 Razón: Expulsión forzada.
+❌ *Usuario:* *@${userId.split`@`[0]}*
+📂 *Razón:* Expulsión por incumplimiento de las normas.
 
-💾 *Consejo:* Respetar las normas asegura tu permanencia.`;
-        img = await fetchImage(goodbyeImage);
-
+🛠️ *Consejo:* Siempre respeta las reglas para evitar este tipo de situaciones.
+⎯⎯⎯⎯⎯⎯⎯⎯⎯
+        `;
         try {
             await conn.sendMessage(m.chat, { 
-                image: img, 
+                image: goodbyeImage, 
                 caption: kickMsg, 
-                mentions: [userId + '@s.whatsapp.net'] 
+                mentions: [`${userId}@s.whatsapp.net`] 
             });
         } catch (error) {
             console.error('Error enviando mensaje de expulsión:', error);
         }
     }
 }
-
 
 /*let WAMessageStubType = (await import('@whiskeysockets/baileys')).default;
 import fetch from 'node-fetch';

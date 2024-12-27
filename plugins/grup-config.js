@@ -9,15 +9,15 @@ let isClose = { // Switch Case Like :v
 'cerrar': 'announcement',
 }[(args[0] || '')]
 if (isClose === undefined)
-return conn.reply(m.chat, `⚙️ *OPCIÓN NO VÁLIDA DETECTADA* ⚙️\n\n┌───◉ Ejemplo de uso:\n│\n│   ➤ *○ !${command} abrir*\n│   ➤ *○ !${command} cerrar*\n│   ➤ *○ !${command} bloquear*\n│   ➤ *○ !${command} desbloquear*\n└───────•`, m, rcanal)
+return conn.reply(m.chat, `*🌸 Elija una opción para configurar el grupo*\n\nEjemplo:\n*○ !${command} abrir*\n*○ !${command} cerrar*\n*○ !${command} bloquear*\n*○ !${command} desbloquear*`, m, rcanal)
 await conn.groupSettingUpdate(m.chat, isClose)
 
 if (isClose === 'not_announcement'){
-m.reply(`🔓 *[GRUPO ABIERTO]* 🔓\n\n┌───◉ *Estado del grupo:* \n│\n│   ➤ *AHORA TODOS PUEDEN ESCRIBIR* 📝\n└───────•`)
+m.reply(`🔓 *YA PUEDEN ESCRIBIR EN ESTE GRUPO.*`)
 }
 
 if (isClose === 'announcement'){
-m.reply(`🔐 *[GRUPO CERRADO]* 🔐\n\n┌───◉ *Estado del grupo:* \n│\n│   ➤ *SÓLO LOS ADMINISTRADORES PUEDEN ESCRIBIR* 🛠️\n└───────•`)
+m.reply(`🔐 *SOLOS LOS ADMINS PUEDEN ESCRIBIR EN ESTE GRUPO.*`)
 }}
 handler.help = ['group open / close', 'grupo abrir / cerrar']
 handler.tags = ['grupo']

@@ -1,61 +1,29 @@
-let handler = async (m, { conn, text, args }) => {
-  if (!m.mentionedJid || m.mentionedJid.length === 0) {
-    return conn.reply(m.chat, `🚩 Debes etiquetar a un usuario para eliminar sus últimos 10 mensajes.`, m);
-  }
-
-  // Obtener el usuario etiquetado
-  const target = m.mentionedJid[0].includes('@s.whatsapp.net') 
-    ? m.mentionedJid[0] 
-    : `${m.mentionedJid[0]}@s.whatsapp.net`;
-  const chat = m.chat;
+let handler = async (m, { conn, usedPrefix, command }) => {
+  if (!m.quoted) return conn.reply(m.chat, `🚩 Responde al mensaje del usuario cuyo último contenido deseas eliminar.`, m);
 
   try {
-    // Cargar los últimos 50 mensajes del chat
-    const messages = await conn.fetchMessages(chat, 50);
-    if (!messages || messages.length === 0) {
-      return conn.reply(m.chat, `❌ No se encontraron mensajes en este chat.`, m);
-    }
+    const user = m.quoted.sender || m.quoted.participant; // Obtener el participante
+    const messages = await conn.loadMessage(m.chat, { limit: 50 }); // Cargar últimos 50 mensajes
+    const userMessages = messages.filter(msg => msg.sender === user).slice(-5); // Filtrar los 5 últimos mensajes del usuario
 
-    // Filtrar los mensajes del usuario etiquetado
-    const targetMessages = messages
-      .filter((msg) => 
-        (msg.key.participant === target || msg.key.remoteJid === target) && 
-        !msg.key.fromMe // Asegurarse de que no sean mensajes del bot
-      )
-      .slice(0, 10); // Limitar a 10 mensajes
+    if (userMessages.length === 0) return conn.reply(m.chat, `🚩 No se encontraron mensajes recientes de este usuario.`, m);
 
-    if (targetMessages.length === 0) {
-      return conn.reply(m.chat, `❌ No se encontraron mensajes recientes del usuario etiquetado.`, m);
+    // Eliminar los mensajes uno por uno
+    for (const msg of userMessages) {
+      await conn.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: msg.key.id, participant: msg.sender } });
     }
-
-    // Intentar eliminar cada mensaje del usuario
-    let deletedCount = 0;
-    for (const msg of targetMessages) {
-      try {
-        await conn.sendMessage(chat, { delete: msg.key });
-        deletedCount++;
-      } catch (err) {
-        console.error(`Error eliminando mensaje:`, err);
-      }
-    }
-
-    // Confirmar eliminación
-    if (deletedCount > 0) {
-      conn.reply(m.chat, `✅ Se eliminaron ${deletedCount} mensajes del usuario etiquetado.`, m);
-    } else {
-      conn.reply(m.chat, `❌ No se pudieron eliminar los mensajes del usuario etiquetado.`, m);
-    }
-  } catch (e) {
-    console.error(e);
-    conn.reply(m.chat, `❌ Ocurrió un error al intentar eliminar los mensajes: ${e.message}`, m);
+    conn.reply(m.chat, `✅ Se eliminaron los últimos ${userMessages.length} mensajes del usuario.`, m);
+  } catch (err) {
+    console.error(err);
+    conn.reply(m.chat, `❌ Ocurrió un error al intentar eliminar los mensajes.`, m);
   }
 };
 
-handler.help = ['delete2'];
-handler.tags = ['group'];
-handler.command = /^delete2$/i;
-handler.group = true; // Solo se puede usar en grupos
-handler.admin = true; // Solo administradores pueden usarlo
-handler.botAdmin = true; // El bot debe ser administrador para ejecutar el comando
+handler.help = ['delete2']
+handler.tags = ['group']
+handler.command = /^delete2$/i // Cambiado para que solo se active con .delete2
+handler.group = false
+handler.admin = true
+handler.botAdmin = true
 
 export default handler;

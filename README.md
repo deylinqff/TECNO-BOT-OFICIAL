@@ -12,7 +12,7 @@
 
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com/?lines= WillZek+lanzó ;Nueva+versión+beta ; By:+Niño Piña ; y+StarCore+Team;CrowBot+Ai-El+Mejor+Bot!&font=Fira%20Code&center=true&width=380&height=50&duration=2000&pause=600" alt="Example Usage - README Typing SVG">
+  <img src="https://readme-typing-svg.demolab.com/?lines= Deylin ;Nueva+versión+beta ; By:+admin ; y+StarCore+Team;TECNO-BOT-El+Mejor+Bot!&font=Fira%20Code&center=true&width=380&height=50&duration=2000&pause=600" alt="Example Usage - README Typing SVG">
 </p>
 
 <!-- RAINBOW LINE BOT -->

@@ -1,186 +1,224 @@
-import axios from 'axios';
-import cheerio from 'cheerio';
-import qs from 'qs';
+import fg from 'api-dylux'
+import { youtubedl, youtubedlv2 } from '@bochilteam/scraper'
+import yts from 'yt-search'
+import fetch from 'node-fetch' 
 
+let handler = async (m, { conn, args, usedPrefix, text, command }) => {
+let lister = ["mp3", "yta", "audio", "ytv", "video", "vídeo", "mp4", "mp3doc", "ytadoc", "audiodoc", "mp4doc", "ytvdoc", "videodoc", "vídeodoc"]
 
-let handler = async (m, { conn, text, usedPrefix, command }) => {
+let [feature, inputs, inputs_, inputs__, inputs___] = text.split(" ")
+if (!lister.includes(feature)) return conn.reply(m.chat, `🚀 _*Ingresa el formato en que deseas descargar más el titulo de un video o musica de YouTube.*_\n\nEjemplo : ${usedPrefix + command} *mp3* Enemy Tommoee Profitt\n\nFormatos disponibles :\n${usedPrefix + command} *mp3*\n${usedPrefix + command} *mp3doc*\n${usedPrefix + command} *mp4*\n${usedPrefix + command} *mp4doc*`, m, rcanal)
+if (lister.includes(feature)) {
+if (feature == "mp3" || feature == "yta" || feature == "audio") {
+if (!inputs) return conn.reply(m.chat, `⚙️ *Ingresa el título de un video o canción de YouTube.*\n\n*Ejemplo:*\n*${usedPrefix + command}* Enemy Tommoee Profitt`, m, rcanal)
+await m.react('🕓')
+let res = await yts(text)
+let vid = res.videos[0]
+let q = '128kbps'
+let txt = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*\n\n`
+        txt += `        » 📚   *Título* : ${vid.title}\n`
+        txt += `        » 🕒   *Duración* : ${vid.timestamp}\n`
+        txt += `        » 👀   *Visitas* : ${vid.views}\n`
+        txt += `        » 👤   *Autor* : ${vid.author.name}\n`
+        txt += `        » 📆   *Publicado* : ${eYear(vid.ago)}\n`
+        txt += `        » 🔗   *Url* : ${'https://youtu.be/' + vid.videoId}\n\n`
+        txt += `> 🔊 *Su audio se está enviando, espere un momento...*`
+await conn.sendFile(m.chat, vid.thumbnail, 'thumbnail.jpg', txt, m, null, rcanal)
+try {
+let yt = await fg.yta(vid.url, q)
+let { title, dl_url, size } = yt
+let limit = 300
 
-  if (!text) throw m.reply(`Ejemplo de uso: ${usedPrefix + command} Joji - Ew`);
+if (size.split('MB')[0] >= limit) return conn.reply(m.chat,`El archivo pesa mas de ${limit} MB, se canceló la Descarga.`, m, rcanal).then(_ => m.react('✖️'))
 
+await conn.sendMessage(m.chat, { audio: { url: dl_url }, fileName: title + '.mp3', mimetype: 'audio/mp4' }, { quoted: m })
+await m.react('✅')
+} catch {
+try {
+let yt = await fg.ytmp3(vid.url, q)
+let { title, dl_url, size } = yt
+let limit = 100
 
-const appleMusic = {
-  search: async (query) => {
-    const url = `https://music.apple.com/us/search?term=${query}`;
-    try {
-        const { data } = await axios.get(url);
-        const $ = cheerio.load(data);
-        const results = [];
-        $('.desktop-search-page .section[data-testid="section-container"] .grid-item').each((index, element) => {
-            const title = $(element).find('.top-search-lockup__primary__title').text().trim();
-            const subtitle = $(element).find('.top-search-lockup__secondary').text().trim();
-            const link = $(element).find('.click-action').attr('href');
+if (size.split('MB')[0] >= limit) return conn.reply(m.chat,`El archivo pesa mas de ${limit} MB, se canceló la Descarga.`, m, rcanal).then(_ => m.react('✖️'))
 
-            results.push({
-                title,
-                subtitle,
-                link
-            });
-        });
+await conn.sendMessage(m.chat, { audio: { url: dl_url }, fileName: title + '.mp3', mimetype: 'audio/mp4' }, { quoted: m })
+await m.react('✅')
+} catch {
+await m.react('✖️')
+}}}
 
-        return results;
-    } catch (error) {
-        console.error("Error:", error.response ? error.response.data : error.message);
-        return { success: false, message: error.message };
+if (feature == "mp4" || feature == "ytv" || feature == "video" || feature == "video") {
+if (!inputs) return conn.reply(m.chat, `🚀 *Ingresa el título de un video o canción de YouTube.*\n\n*Ejemplo:*\n*${usedPrefix + command}* Enemy Tommoee Profitt`, m, rcanal)
+await m.react('🕓')
+let res = await yts(text)
+let vid = res.videos[0]
+let q = '360p'
+let txt = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*\n\n`
+        txt += `        » 📚   *Título* : ${vid.title}\n`
+        txt += `        » 🕒   *Duración* : ${vid.timestamp}\n`
+        txt += `        » 👀   *Visitas* : ${vid.views}\n`
+        txt += `        » 👤   *Autor* : ${vid.author.name}\n`
+        txt += `        » 📆   *Publicado* : ${eYear(vid.ago)}\n`
+        txt += `        » 🔗   *Url* : ${'https://youtu.be/' + vid.videoId}\n\n`
+        txt += `> 📽️ *Su video se está enviando, espere un momento...*`
+await conn.sendFile(m.chat, vid.thumbnail, 'thumbnail.jpg', txt, m, rcanal)
+try {
+let yt = await fg.ytv(vid.url, q)
+let { title, dl_url, size } = yt
+let limit = 100
+
+if (size.split('MB')[0] >= limit) return conn.reply(m.chat,`El archivo pesa mas de ${limit} MB, se canceló la Descarga.`, m, rcanal).then(_ => m.react('✖️'))
+
+await conn.sendFile(m.chat, dl_url, 'yt.jpg', `${vid.title}\n⇆ㅤㅤ◁ㅤㅤ❚❚ㅤㅤ▷ㅤㅤ↻\n00:15 ━━━━●────── ${vid.timestamp}`, m, null, rcanal)
+await m.react('✅')
+} catch {
+try {
+let yt = await fg.ytmp4(vid.url, q)
+let { title, dl_url, size } = yt
+let limit = 100
+
+if (size.split('MB')[0] >= limit) return conn.reply(m.chat,`El archivo pesa mas de ${limit} MB, se canceló la Descarga.`, m, rcanal).then(_ => m.react('✖️'))
+
+await conn.sendFile(m.chat, dl_url, 'yt.jpg', `${vid.title}\n⇆ㅤㅤ◁ㅤㅤ❚❚ㅤㅤ▷ㅤㅤ↻\n00:15 ━━━━●────── ${vid.timestamp}`, m, null, rcanal)
+await m.react('✅')
+} catch {
+await m.react('✖️')
+}}}
+
+if (feature == "mp3doc" || feature == "ytadoc" || feature == "audiodoc") {
+if (!inputs) return conn.reply(m.chat, `🚀 *Ingresa el título de un video o canción de YouTube.*\n\n*Ejemplo:*\n*${usedPrefix + command}* Enemy Tommoee Profitt`, m, rcanal)
+await m.react('🕓')
+let res = await yts(text)
+let vid = res.videos[0]
+let q = '128kbps'
+let txt = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*\n\n`
+        txt += `        » 📚   *Título* : ${vid.title}\n`
+        txt += `        » 🕒   *Duración* : ${vid.timestamp}\n`
+        txt += `        » 👀   *Visitas* : ${vid.views}\n`
+        txt += `        » 👤   *Autor* : ${vid.author.name}\n`
+        txt += `        » 📆   *Publicado* : ${eYear(vid.ago)}\n`
+        txt += `        » 🔗   *Url* : ${'https://youtu.be/' + vid.videoId}\n\n`
+        txt += `> 🔊 *Su audio en documento se está enviando, espere un momento...*`
+await conn.sendFile(m.chat, vid.thumbnail, 'thumbnail.jpg', txt, m, null, rcanal)
+try {
+let yt = await fg.yta(vid.url, q)
+let { title, dl_url, size } = yt
+let limit = 300
+
+if (size.split('MB')[0] >= limit) return conn.reply(m.chat,`El archivo pesa mas de ${limit} MB, se canceló la Descarga.`, m, rcanal).then(_ => m.react('✖️'))
+
+await conn.sendMessage(m.chat, { document: { url: dl_url }, caption: '', mimetype: 'audio/mpeg', fileName: `${vid.title}.mp3`}, { quoted: m })
+await m.react('✅')
+} catch {
+try {
+let yt = await fg.ytmp3(vid.url, q)
+let { title, dl_url, size } = yt
+let limit = 100
+
+if (size.split('MB')[0] >= limit) return conn.reply(m.chat,`El archivo pesa mas de ${limit} MB, se canceló la Descarga.`, m, rcanal).then(_ => m.react('✖️'))
+
+await conn.sendMessage(m.chat, { document: { url: dl_url }, caption: '', mimetype: 'audio/mpeg', fileName: `${vid.title}.mp3`}, { quoted: m })
+} catch {
+await m.react('✖️')
+    }}}
+
+if (feature == "mp4doc" || feature == "ytvdoc" || feature == "videodoc" || feature == "videodoc") {
+if (!inputs) return conn.reply(m.chat, `🚀 *Ingresa el título de un video o canción de YouTube.*\n\n*Ejemplo:*\n*${usedPrefix + command}* Enemy Tommoee Profitt`, m, rcanal)
+await m.react('🕓')
+let res = await yts(text)
+let vid = res.videos[0]
+let q = '360p'
+let txt = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*\n\n`
+        txt += `        » 📚   *Título* : ${vid.title}\n`
+        txt += `        » 🕒   *Duración* : ${vid.timestamp}\n`
+        txt += `        » 👀   *Visitas* : ${vid.views}\n`
+        txt += `        » 👤   *Autor* : ${vid.author.name}\n`
+        txt += `        » 📆   *Publicado* : ${eYear(vid.ago)}\n`
+        txt += `        » 🔗   *Url* : ${'https://youtu.be/' + vid.videoId}\n\n`
+        txt += `> 📽️ *Su video en documento se está enviando, espere un momento...*`
+await conn.sendFile(m.chat, vid.thumbnail, 'thumbnail.jpg', txt, m, null, rcanal)
+try {
+let yt = await fg.ytv(vid.url, q)
+let { title, dl_url, size } = yt
+let limit = 300
+
+if (size.split('MB')[0] >= limit) return conn.reply(m.chat,`El archivo pesa mas de ${limit} MB, se canceló la Descarga.`, m, rcanal).then(_ => m.react('✖️'))
+
+await conn.sendMessage(m.chat, { document: { url: dl_url }, caption: '', mimetype: 'video/mp4', fileName: `${vid.title}` + `.mp4`}, {quoted: m })
+await m.react('✅')
+} catch {
+try {
+let yt = await fg.ytmp4(vid.url, q)
+let { title, dl_url, size } = yt
+let limit = 300
+
+if (size.split('MB')[0] >= limit) return conn.reply(m.chat,`El archivo pesa mas de ${limit} MB, se canceló la Descarga.`, m, rcanal).then(_ => m.react('✖️'))
+
+await conn.sendMessage(m.chat, { document: { url: dl_url }, caption: '', mimetype: 'video/mp4', fileName: `${vid.title}` + `.mp4`}, {quoted: m })
+await m.react('✅')
+} catch {
+await m.react('✖️')
+}}}}}
+handler.help = ['play2'].map(v => v + " *<formato> <búsqueda>*")
+handler.tags = ['descargas']
+handler.command = ['play', 'play2', 'mp3', 'yta', 'audio', 'mp4', 'ytv', 'video', 'mp3doc', 'ytadoc', 'audiodoc', 'mp4doc', 'ytvdoc', 'videodoc']
+handler.register = true 
+//handler.limit = 1
+export default handler
+
+function eYear(txt) {
+    if (!txt) {
+        return '×'
     }
-  },
-  detail: async (url) => {
-    try {
-        const { data } = await axios.get(url);
-        const $ = cheerio.load(data);
-        const albumTitle = $('h1[data-testid="non-editable-product-title"]').text().trim();
-        const artistName = $('a[data-testid="click-action"]').first().text().trim();
-        const releaseInfo = $('div.headings__metadata-bottom').text().trim();
-        const description = $('div[data-testid="description"]').text().trim();
-
-        const result = {
-            albumTitle,
-            artistName,
-            releaseInfo,
-            description
-        };
-
-        return result;
-    } catch (error) {
-      console.error("Error:", error.response ? error.response.data : error.message);
-      return { success: false, message: error.message };
+    if (txt.includes('month ago')) {
+        var T = txt.replace("month ago", "").trim()
+        var L = 'hace '  + T + ' mes'
+        return L
     }
-  }
+    if (txt.includes('months ago')) {
+        var T = txt.replace("months ago", "").trim()
+        var L = 'hace ' + T + ' meses'
+        return L
+    }
+    if (txt.includes('year ago')) {
+        var T = txt.replace("year ago", "").trim()
+        var L = 'hace ' + T + ' año'
+        return L
+    }
+    if (txt.includes('years ago')) {
+        var T = txt.replace("years ago", "").trim()
+        var L = 'hace ' + T + ' años'
+        return L
+    }
+    if (txt.includes('hour ago')) {
+        var T = txt.replace("hour ago", "").trim()
+        var L = 'hace ' + T + ' hora'
+        return L
+    }
+    if (txt.includes('hours ago')) {
+        var T = txt.replace("hours ago", "").trim()
+        var L = 'hace ' + T + ' horas'
+        return L
+    }
+    if (txt.includes('minute ago')) {
+        var T = txt.replace("minute ago", "").trim()
+        var L = 'hace ' + T + ' minuto'
+        return L
+    }
+    if (txt.includes('minutes ago')) {
+        var T = txt.replace("minutes ago", "").trim()
+        var L = 'hace ' + T + ' minutos'
+        return L
+    }
+    if (txt.includes('day ago')) {
+        var T = txt.replace("day ago", "").trim()
+        var L = 'hace ' + T + ' dia'
+        return L
+    }
+    if (txt.includes('days ago')) {
+        var T = txt.replace("days ago", "").trim()
+        var L = 'hace ' + T + ' dias'
+        return L
+    }
+    return txt
 }
-
-const appledown = {
-  getData: async (urls) => {
-    const url = `https://aaplmusicdownloader.com/api/applesearch.php?url=${urls}`;
-    try {
-        const response = await axios.get(url, {
-            headers: {
-                'Accept': 'application/json, text/javascript, */*; q=0.01',
-                'X-Requested-With': 'XMLHttpRequest',
-                'User-Agent': 'MyApp/1.0',
-                'Referer': 'https://aaplmusicdownloader.com/'
-            }
-        });
-        return response.data;
-    } catch (error) {
-      return { success: false, message: error.message };
-      console.error("Error:", error.response ? error.response.data : error.message);
-    }
-  },
-  getAudio: async (trackName, artist, urlMusic, token) => {
-    const url = 'https://aaplmusicdownloader.com/api/composer/swd.php';
-    const data = {
-        song_name: trackName,
-        artist_name: artist,
-        url: urlMusic,
-        token: token
-    };
-    const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Accept': 'application/json, text/javascript, */*; q=0.01',
-        'X-Requested-With': 'XMLHttpRequest',
-        'User-Agent': 'MyApp/1.0',
-        'Referer': 'https://aaplmusicdownloader.com/song.php#'
-    };
-    try {
-        const response = await axios.post(url, qs.stringify(data), { headers });
-        const downloadLink = response.data.dlink;
-        return downloadLink;
-    } catch (error) {
-      return { success: false, message: error.message };
-      console.error("Error:", error.response ? error.response.data : error.message);
-    }
-  },
-  download: async (urls) => {
-    const musicData = await appledown.getData(urls);
-    if (musicData) {
-        const encodedData = encodeURIComponent(JSON.stringify([
-            musicData.name,
-            musicData.albumname,
-            musicData.artist,
-            musicData.thumb,
-            musicData.duration,
-            musicData.url
-        ]));
-        const url = 'https://aaplmusicdownloader.com/song.php';
-        const headers = {
-            'authority': 'aaplmusicdownloader.com',
-            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-            'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
-            'cache-control': 'max-age=0',
-            'content-type': 'application/x-www-form-urlencoded',
-            'origin': 'https://aaplmusicdownloader.com',
-            'referer': 'https://aaplmusicdownloader.com/',
-            'user-agent': 'MyApp/1.0'
-        };
-        const data = `data=${encodedData}`;
-        try {
-            const response = await axios.post(url, data, { headers });
-            const htmlData = response.data;
-            const $ = cheerio.load(htmlData);
-            const trackName = $('td:contains("Track Name:")').next().text();
-            const albumName = $('td:contains("Album:")').next().text();
-            const duration = $('td:contains("Duration:")').next().text();
-            const artist = $('td:contains("Artist:")').next().text();
-            const thumb = $('figure.image img').attr('src');
-            const urlMusic = urls;
-            const token = $('a#download_btn').attr('token');
-            const downloadLink = await appledown.getAudio(trackName, artist, urlMusic, token);
-
-            const extractedData = {
-                name: trackName,
-                albumname: albumName,
-                artist: artist,
-                url: urlMusic,
-                thumb: thumb,
-                duration: duration,
-                token: token,
-                download: downloadLink
-            };
-            return extractedData;
-        } catch (error) {
-          return { success: false, message: error.message };
-          console.error("Error:", error.response ? error.response.data : error.message);      
-        }
-    }
-  }
-}
-
-conn.sendMessage(m.chat, { react: { text: "🕒", key: m.key } });
-
-let dataos = await appleMusic.search(text)
-let dataos2 = await appledown.download(dataos[0].link);
-let { name, albumname, artist, url, thumb, duration, token, download } = dataos2;
-
-m.reply(`_✧ Enviando ${name} (${artist}/${duration})_\n\n> ${url}`);
-      const doc = {
-      audio: { url: download },
-      mimetype: 'audio/mp4',
-      fileName: `${name}.mp3`,
-      contextInfo: {
-        externalAdReply: {
-          showAdAttribution: true,
-          mediaType: 2,
-          mediaUrl: url,
-          title: name,
-          sourceUrl: url,
-          thumbnail: await (await conn.getFile(thumb)).data
-        }
-      }
-    };
-    await conn.sendMessage(m.chat, doc, { quoted: m });
-    await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key }})
-}
-handler.help = ['applemusicplay'];
-handler.tags = ['downloader'];
-handler.command = /^(applemusicplay|play8|song2)$/i;
-
-export default handler;

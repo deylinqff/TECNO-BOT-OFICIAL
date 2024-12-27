@@ -1,10 +1,10 @@
 let handler = async (m, { conn, usedPrefix, command }) => {
-  if (!m.quoted) return conn.reply(m.chat, `🚩 Responde al mensaje del usuario cuyo último contenido deseas eliminar.`, m);
+  if (!m.quoted) return conn.reply(m.chat, `🚩 Responde al mensaje del usuario cuyos últimos mensajes deseas eliminar.`, m);
 
   try {
     const user = m.quoted.sender || m.quoted.participant; // Obtener el participante
     const messages = await conn.loadMessage(m.chat, { limit: 50 }); // Cargar últimos 50 mensajes
-    const userMessages = messages.filter(msg => msg.sender === user).slice(-5); // Filtrar los 5 últimos mensajes del usuario
+    const userMessages = messages.filter(msg => msg.sender === user).slice(-5); // Filtrar los últimos 5 mensajes del usuario
 
     if (userMessages.length === 0) return conn.reply(m.chat, `🚩 No se encontraron mensajes recientes de este usuario.`, m);
 
@@ -19,9 +19,9 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   }
 };
 
-handler.help = ['delete2']
+handler.help = ['delete']
 handler.tags = ['group']
-handler.command = /^delete2$/i // Cambiado para que solo se active con .delete2
+handler.command = /^del(ete)?$/i
 handler.group = false
 handler.admin = true
 handler.botAdmin = true

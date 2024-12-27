@@ -19,7 +19,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   }
 };
 
-handler.help = ['delete']
+handler.help = ['delete2']
 handler.tags = ['group']
 handler.command = /^del(ete)?$/i
 handler.group = false

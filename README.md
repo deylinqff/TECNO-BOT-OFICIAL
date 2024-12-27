@@ -40,14 +40,14 @@
 <img src="https://github.com/AnderMendoza/AnderMendoza/raw/main/assets/line-neon.gif" width="100%">
 
 
-  [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=400&color=FF0000&lines=Espero+Este+Repositorio;Sea+De+Su+agrado+gracias🫂;Creado+por+Mr.|WillZek;🌠🚩)](https://git.io/typing-svg)
+  [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=400&color=FF0000&lines=Espero+Este+Repositorio;Sea+De+Su+agrado+gracias🫂;Creado+por+Mr.|Deyin;🌠🚩)](https://git.io/typing-svg)
 
 ### **`💛 𝘊𝘙𝘌𝘈𝘋𝘖𝘙`**
 <a
-href="https://github.com/WillZek"><img src="https://github.com/WillZek.png" width="130" height="130" alt="WillZek"/></a>
+href="https://github.com/Deylinel"><img src="https://github.com/Deylinel.png" width="130" height="130" alt="deylin"/></a>
 
 <a
 href="ninopina10@gmail.com" target="blue"><img
 src="https://img.shields.io/badge/PayPal-000000?style=for-the-badge&logo=paypal&logoColor=white" />
 
-### [© Powered By WillZek ⚡︎](https://whatsapp.com/channel/0029VakfOZfHFxP7rNrUQk2d)
+### [© Powered By Deyin⚡︎](https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m)

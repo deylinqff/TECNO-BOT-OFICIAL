@@ -6,6 +6,7 @@ let handler = async (m, { conn, isROwner, text }) => {
     if (conn.user.jid === conn.user.jid) {
         // Mensajes de progreso
         const progreso = [
+      "♻️iniciando proceso de reinicio de TECNO-BOT",
             "□□□□□ 0%",
             "■□□□□ 20%",
             "■■□□□ 40%",
@@ -24,7 +25,7 @@ let handler = async (m, { conn, isROwner, text }) => {
         }
 
         // Mensaje final
-        await conn.sendMessage(m.chat, { text: "*『✅』Proceso completado con éxito.*", edit: key });
+        await conn.sendMessage(m.chat, { text: "*『✅』*Tecno-Bot* reiniciado cin éxito espera unos segundos asta que el proceso termine.*", edit: key });
 
         // Reinicio del servidor
         await delay(2000); // Espera 2 segundos antes de reiniciar

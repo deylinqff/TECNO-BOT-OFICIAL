@@ -22,7 +22,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   user.regTime = + new Date
   user.registered = true
   let sn = createHash('md5').update(m.sender).digest('hex')
-  let img = await (await fetch(`https://i.ibb.co/V3Hsgcy/file.jpg`)).buffer()
+  let img = await (await fetch(`https://files.catbox.moe/j2chet.jpg`)).buffer()
 
   // Mensaje inicial de carga
   let loadingMessage = await m.reply(`🔄 *Cargando Registro...*\n\n⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%`);

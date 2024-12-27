@@ -32,6 +32,14 @@ let handler = async function (m, { conn, text }) {
 
   let sn = createHash('md5').update(m.sender).digest('hex').slice(0, 20);
 
+  // Obtener la foto de perfil del usuario
+  let profilePicture;
+  try {
+    profilePicture = await conn.getProfilePicture(m.sender); // Intenta obtener la imagen de perfil del usuario
+  } catch (e) {
+    profilePicture = 'https://via.placeholder.com/200?text=No+Image'; // Imagen predeterminada si no tiene
+  }
+
   // Barra de progreso
   let progressStages = ['□□□□□ 0%', '■□□□□ 20%', '■■□□□ 40%', '■■■□□ 60%', '■■■■□ 80%', '■■■■■ 100%'];
   let progressMessage = await conn.sendMessage(m.chat, { text: progressStages[0] }, { quoted: m });
@@ -41,23 +49,31 @@ let handler = async function (m, { conn, text }) {
     await conn.sendMessage(m.chat, { edit: progressMessage.key, text: progressStages[i] });
   }
 
+  // Elimina el mensaje de la barra de progreso después de llegar al 100%
+  await conn.deleteMessage(m.chat, progressMessage.key);
+
   // Mensaje de registro (se envía después de la barra de progreso)
   let regbot = `
-👤 𝗥 𝗘 𝗚 𝗜 𝗦 𝗧 𝗥 𝗢 👤
-•┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄•
-「🌸」𝗡𝗼𝗺𝗯𝗿𝗲: ${name}
-「⭐」𝗘𝗱𝗮𝗱: ${age} años
-•┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄•
+🚀 𝐑𝐄𝐆𝐈𝐒𝐓𝐑𝐎 𝐓𝐄𝐂𝐍𝐎-𝐁𝐎𝐓 🚀
+*╔═══❖•ೋ°⚙️°ೋ•❖═══╗*
+「🌐」𝗡𝗼𝗺𝗯𝗿𝗲: ${name}
+「🚀」𝗘𝗱𝗮𝗱: ${age} años
+*╚═══❖•ೋ°🚀°ೋ•❖═══╝*
+╔═════ ▓▓ ࿇ ▓▓ ═════╗
 「🎁」𝗥𝗲𝗰𝗼𝗺𝗽𝗲𝗻𝘀𝗮𝘀:
 • 15 Yenes 💴
 • 5 Coins 🪙
 • 245 Experiencia ✨
 • 12 Tokens ⚜️
-•┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄•
+╚═════ ▓▓ ࿇ ▓▓ ═════╝
 Número de registro: ${sn}
 `;
 
-  await conn.sendMessage(m.chat, { text: regbot }, { quoted: m });
+  // Enviar el mensaje de registro con imagen
+  await conn.sendMessage(m.chat, { 
+    image: { url: profilePicture }, 
+    caption: regbot 
+  }, { quoted: m });
 };
 
 handler.help = ['reg'];

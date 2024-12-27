@@ -1,40 +1,37 @@
-// Detecta si se escribe ".XD" en el chat y edita el mensaje con una animación de progreso.
-function enviarProgreso() {
-    const textarea = document.querySelector("div[contenteditable='true']");
-    if (!textarea) {
-        console.error("No se encontró el área de texto. Asegúrate de estar en un chat de WhatsApp.");
-        return;
-    }
+const qrcode = require("qrcode-terminal");
+const { Client, MessageMedia } = require("whatsapp-web.js");
 
-    // Escribe el mensaje inicial.
-    textarea.innerHTML = ".XD";
-    textarea.dispatchEvent(new InputEvent('input', { bubbles: true }));
+// Inicializa el cliente de WhatsApp
+const client = new Client();
 
-    // Simula presionar la tecla Enter para enviar el mensaje.
-    setTimeout(() => {
-        const sendButton = document.querySelector("span[data-icon='send']");
-        if (sendButton) sendButton.click();
-    }, 500);
+client.on("qr", (qr) => {
+    // Muestra el código QR en la terminal para escanear con WhatsApp
+    qrcode.generate(qr, { small: true });
+});
 
-    // Define los estados del progreso.
-    const progreso = ["□□□□□ 0%", "■□□□□ 20%", "■■□□□ 40%", "■■■□□ 60%", "■■■■□ 80%", "■■■■■ 100%"];
-    let index = 0;
+client.on("ready", () => {
+    console.log("✅ Bot conectado y listo para usar.");
+});
 
-    // Edita el mensaje enviado.
-    const editarMensaje = setInterval(() => {
-        const mensajes = document.querySelectorAll(".message-out");
-        if (mensajes.length > 0) {
-            const ultimoMensaje = mensajes[mensajes.length - 1];
-            const textoMensaje = ultimoMensaje.querySelector("span.selectable-text");
+client.on("message", async (message) => {
+    if (message.body === ".XD") {
+        const progreso = ["□□□□□ 0%", "■□□□□ 20%", "■■□□□ 40%", "■■■□□ 60%", "■■■■□ 80%", "■■■■■ 100%"];
+        let index = 0;
 
-            if (textoMensaje) {
-                textoMensaje.textContent = progreso[index];
-                index++;
-                if (index === progreso.length) clearInterval(editarMensaje); // Detiene la edición al llegar al 100%.
+        // Envía el mensaje inicial
+        const mensaje = await message.reply(progreso[index]);
+
+        // Edita el mensaje cada 1 segundo
+        const intervalo = setInterval(() => {
+            index++;
+            if (index < progreso.length) {
+                client.sendMessage(message.from, progreso[index], { quotedMessageId: mensaje.id._serialized });
+            } else {
+                clearInterval(intervalo);
             }
-        }
-    }, 1000);
-}
+        }, 1000);
+    }
+});
 
-// Ejecuta la función.
-enviarProgreso();
+// Inicia el cliente
+client.initialize();

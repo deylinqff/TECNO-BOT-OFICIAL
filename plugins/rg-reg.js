@@ -1,3 +1,7 @@
+import { createHash } from 'crypto'
+import fs from 'fs'
+import fetch from 'node-fetch'
+
 let Reg = /\|?(.*)([.|] *?)([0-9]*)$/i
 let handler = async function (m, { conn, text, usedPrefix, command }) {
   let user = global.db.data.users[m.sender]
@@ -26,7 +30,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
     let emptyBlocks = '⬜'.repeat(7 - progress / 10)
     progressBar = filledBlocks + emptyBlocks
 
-    // Solo actualizamos el mensaje original
+    // Actualizamos el mensaje de carga con el progreso actual
     await conn.sendMessage(m.chat, {
       text: `🔄 Cargando el registro... ${progressBar}\nProgreso: ${progress}%`
     }, { quoted: loadingMessage })

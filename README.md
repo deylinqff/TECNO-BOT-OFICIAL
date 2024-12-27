@@ -19,8 +19,7 @@
 <img src="https://github.com/AnderMendoza/AnderMendoza/raw/main/assets/line-neon.gif" width="100%">
 
 
-<a href="https://github.com/WillZek"><img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&duration=4000&pause=1000&color=C88EFF&width=435&lines=CLONA+EL+REPOSITORIO+
-MODIFICA+ATU+GUSTO" alt="Typing SVG" /></a> 
+<a href="https://github.com/WillZek"><img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&duration=4000&pause=1000&color=C88EFF&width=435&lines=CLONA+EL+REPOSITORIO+MODIFICALO" alt="Typing SVG" /></a> 
 **`PORFAVOR DEJAR CREDITOS`** 
 [**Aqui**](https://github.com/WillZek/CrowBot-Ai/fork)
 
@@ -52,3 +51,6 @@ href="ninopina10@gmail.com" target="blue"><img
 src="https://img.shields.io/badge/PayPal-000000?style=for-the-badge&logo=paypal&logoColor=white" />
 
 ### [© Powered By Deyin⚡︎](https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m)
+
+<!-- RAINBOW LINE BOT -->
+<img src="https://github.com/AnderMendoza/AnderMendoza/raw/main/assets/line-neon.gif" width="100%">

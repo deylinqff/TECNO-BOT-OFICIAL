@@ -9,23 +9,23 @@ let handler = async function (m, { conn, text, args, usedPrefix, command }) {
     let name2 = conn.getName(m.sender)
 
     if (user.registered === true) {
-        return m.reply(`💛 𝗬𝗮 𝘁𝗲 𝗲𝗻𝗰𝘂𝗲𝗻𝘁𝗿𝗮𝘀 𝗿𝗲𝗴𝗶𝘀𝘁𝗿𝗮𝗱𝗼.\n\n¿𝗤𝘂𝗶𝗲𝗿𝗲 𝘃𝗼𝗹𝘃𝗲𝗿 𝗮 𝗿𝗲𝗴𝗶𝘀𝘁𝗿𝗮𝗿𝘀𝗲?\n\n𝗨𝘀𝗲 𝗲𝘀𝘁𝗲 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 𝗽𝗮𝗿𝗮 𝗲𝗹𝗶𝗺𝗶𝗻𝗮𝗿 𝘀𝘂 𝗿𝗲𝗴𝗶𝘀𝘁𝗿𝗼.\n*${usedPrefix}unreg*`)
+        return m.reply(`⚙️ Ya estás registrado.\n\n¿Deseas volver a registrarte?\n\nUsa este comando para eliminar tu registro:\n*${usedPrefix}unreg*`)
     }
 
-    if (!Reg.test(text)) return m.reply(`Eʟ ғᴏʀᴍᴀᴛᴏ ɪɴɢʀᴇsᴀᴅᴏ ᴇs ɪɴᴄᴏʀʀᴇᴄᴛᴏ\n\nUsᴏ ᴅᴇʟ ᴄᴏᴍᴀɴᴅᴏ: ${usedPrefix + command} 𝗻𝗼𝗺𝗯𝗿𝗲.𝗲𝗱𝗮𝗱\nEᴊᴇᴍᴘʟᴏ : *${usedPrefix + command} ${name2}.14*`)
+    if (!Reg.test(text)) return m.reply(`⚠️ Formato incorrecto.\n\nUso del comando:\n${usedPrefix + command} <nombre>.<edad>\nEjemplo: *${usedPrefix + command} ${name2}.14*`)
 
     let [_, name, splitter, age] = text.match(Reg)
-    if (!name) return m.reply('💛 Eʟ ɴᴏʍ𝗯𝗿𝗲 ɴᴏ ᴘᴜᴇᴅᴇ ᴇsᴛᴀʀ ᴠᴀᴄɪᴏ.')
-    if (!age) return m.reply('💛 Lᴀ ᴇᴅᴀᴅ ɴᴏ ᴘᴜᴇᴅᴇ ᴇsᴛᴀʀ ᴠᴀᴄɪ́ᴀ.')
-    if (name.length >= 100) return m.reply('💛 El nombre es demasiado largo.')
+    if (!name) return m.reply('⚙️ El nombre no puede estar vacío.')
+    if (!age) return m.reply('⚙️ La edad no puede estar vacía.')
+    if (name.length >= 100) return m.reply('⚙️ El nombre es demasiado largo.')
 
     age = parseInt(age)
-    if (age > 100) return m.reply('*ʟᴀ ᴇᴅᴀᴅ ɪɴɢʀᴇsᴀᴅᴀ ᴇs ɪɴᴄᴏʀʀᴇᴄᴛᴀ*')
-    if (age < 5) return m.reply('*ʟᴀ ᴇᴅᴀᴅ ɪɴɢʀᴇsᴀᴅᴀ ᴇs ɪɴᴄᴏʀʀᴇᴄᴛᴀ*')
+    if (age > 100) return m.reply('⚠️ La edad ingresada es incorrecta.')
+    if (age < 5) return m.reply('⚠️ La edad ingresada es incorrecta.')
 
     user.name = name.trim()
     user.age = age
-    user.regTime = +new Date
+    user.regTime = +new Date()
     user.registered = true
     global.db.data.users[m.sender].money += 600
     global.db.data.users[m.sender].estrellas += 10
@@ -41,35 +41,56 @@ let handler = async function (m, { conn, text, args, usedPrefix, command }) {
 
     let api = await axios.get(`https://deliriussapi-oficial.vercel.app/tools/country?text=${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}`);
 
-let userNationalityData = api.data.result;
-    let userNationality = userNationalityData ? `${userNationalityData.name} ${userNationalityData.emoji}` : 'Desconocido';
+    let userNationalityData = api.data.result;
+    let userNationality = userNationalityData ? `${userNationalityData.name} (${userNationalityData.emoji})` : 'Desconocido';
 
     let sn = createHash('md5').update(m.sender).digest('hex')
-    let regbot = `┏━━━━━━━━━━━━━━━━━━⬣
-┃⋄ *🎄 𝐑𝐄𝐆𝐈𝐒𝐓𝐑𝐎 - 𝐂𝐑𝐎𝐖𝐁𝐎𝐓*
-┗━━━━━━━━━━━━━━━━━━⬣\n`
-    regbot += `•┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄•\n`
-    regbot += `「💛」𝐍𝐨𝐦𝐛𝐫𝐞: ${name}\n`
-    regbot += `「💛」𝐄𝐝𝐚𝐝: ${age} años\n`
-    regbot += `「💛」𝐏𝐚𝐢𝐬: ${userNationality}\n`
-    regbot += `•┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄•\n`
-    regbot += `「💝」𝐑𝐞𝐜𝐨𝐦𝐩𝐞𝐧𝐬𝐚𝐬:\n> `
-    regbot += `• 15 Estrellas 🌟\n> `
-    regbot += `• 5 CrowCoins 🪙\n> `
-    regbot += `• 245 Experiencia 💸\n> `
-    regbot += `• 12 Tokens 💰\n`
-    regbot += `꒷꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒷꒦꒷\n> `
-    regbot += `${publi}`
 
-    await m.react('📪')
-    await conn.sendLuffy(m.chat, '⊱『✅𝆺𝅥 𝐑𝐄𝐆𝐈𝐒𝐓𝐑𝐀𝐃𝐎(𝐀) 𝆹𝅥✅』⊰', textbot, regbot, imagen1, imagen1, channel, m, rcanal)
+    // Barra de carga
+    let loadingBar = '⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜';
+    let progress = 0;
+
+    let loadingMessage = await conn.sendMessage(m.chat, { text: `Cargando registro...\n[${loadingBar}] 0%` });
+
+    const updateBar = (step) => {
+        progress += step;
+        let filled = Math.floor(progress / 10);
+        loadingBar = '🟩'.repeat(filled) + '⬜'.repeat(10 - filled);
+        return `Cargando registro...\n[${loadingBar}] ${progress}%`;
+    };
+
+    for (let i = 10; i <= 100; i += 20) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await conn.sendMessage(m.chat, { 
+            edit: loadingMessage.key, 
+            text: updateBar(20) 
+        });
+    }
+
+    // Eliminar mensaje de barra de carga
+    await conn.sendMessage(m.chat, { delete: loadingMessage.key });
+
+    // Mensaje de registro
+    let regbot = `╭─━─━─━─━─━─━─━─━─━─━─╮\n`
+    regbot += `┃ 🎲 *REGISTRO EXITOSO* 🎲\n`
+    regbot += `╰─━─━─━─━─━─━─━─━─━─━─╯\n`
+    regbot += `🖥️ *Usuario:* ${name}\n`
+    regbot += `📡 *Edad:* ${age} años\n`
+    regbot += `🌐 *País:* ${userNationality}\n`
+    regbot += `\n─── *RECOMPENSAS* ───\n`
+    regbot += `★ 600 CrowCoins\n`
+    regbot += `★ 10 Estrellas\n`
+    regbot += `★ 245 XP\n`
+    regbot += `★ 5 Tokens\n`
+    regbot += `──────────────────────\n`
+    regbot += `🔒 *Número de serie:*\n⤷ ${sn}`
+
+    await conn.sendMessage(m.chat, { text: regbot })
 
     let channelID = '120363381910502266@newsletter';
-    let messageContent = `◉ *Usuarios:* ${m.pushName || 'Anónimo'}\n◉ *País:* ${userNationality || 'Desconocido'}\n◉ *Verificación:* ${user.name}\n◉ *Edad:* ${age} años\n◉ *Número de serie:*\n⤷ ${sn}\n\n🎁 *Recompensa:* 600 crowcoins 🪙\n*¡Bienvenido/a al bot!*`;
+    let messageContent = `🌌 *NUEVO REGISTRO*\n\n🔷 *Usuario:* ${name}\n🔷 *País:* ${userNationality}\n🔷 *Edad:* ${age} años\n🔷 *N° de serie:*\n⤷ ${sn}\n\n💰 *Recompensa:* 600 CrowCoins.\n¡Bienvenido/a!`
 
-    await conn.sendMessage(channelID, {
-        text: messageContent, ...rcanal
-    });
+    await conn.sendMessage(channelID, { text: messageContent })
 }
 
 handler.help = ['reg']

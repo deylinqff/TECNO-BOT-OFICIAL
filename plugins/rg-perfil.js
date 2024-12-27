@@ -1,36 +1,18 @@
-import axios from 'axios'
-import { createHash } from 'crypto'
-import PhoneNumber from 'awesome-phonenumber'
-import moment from 'moment-timezone'
+import PhoneNumber from 'awesome-phonenumber';
+import fetch from 'node-fetch';
+import fs from 'fs';
 
-let Reg = /\|?(.*)([.|] *?)([0-9]*)$/i
-let handler = async function (m, { conn, text, args, usedPrefix, command }) {
-    let user = global.db.data.users[m.sender]
-    let name2 = conn.getName(m.sender)
-
-    if (user.registered === true) {
-        return m.reply(`💛 𝗬𝗮 𝘁𝗲 𝗲𝗻𝗰𝘂𝗲𝗻𝘁𝗿𝗮𝘀 𝗿𝗲𝗴𝗶𝘀𝘁𝗿𝗮𝗱𝗼.\n\n¿𝗤𝘂𝗶𝗲𝗿𝗲 𝘃𝗼𝗹𝘃𝗲𝗿 𝗮 𝗿𝗲𝗴𝗶𝘀𝘁𝗿𝗮𝗿𝘀𝗲?\n\n𝗨𝘀𝗲 𝗲𝘀𝘁𝗲 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 𝗽𝗮𝗿𝗮 𝗲𝗹𝗶𝗺𝗶𝗻𝗮𝗿 𝘀𝘂 𝗿𝗲𝗴𝗶𝘀𝘁𝗿𝗼.\n*${usedPrefix}unreg*`)
+const loadMarriages = () => {
+    if (fs.existsSync('./media/database/marry.json')) {
+        const data = JSON.parse(fs.readFileSync('./media/database/marry.json', 'utf-8'));
+        global.db.data.marriages = data;
+    } else {
+        global.db.data.marriages = {};
     }
+};
 
-    if (!Reg.test(text)) return m.reply(`Eʟ ғᴏʀᴍᴀᴛᴏ ɪɴɢʀᴇsᴀᴅᴏ ᴇs ɪɴᴄᴏʀʀᴇᴄᴛᴏ\n\nUsᴏ ᴅᴇʟ ᴄᴏᴍᴀɴᴅᴏ: ${usedPrefix + command} 𝗻𝗼𝗺𝗯𝗿𝗲.𝗲𝗱𝗮𝗱\nEᴊᴇᴍᴘʟᴏ : *${usedPrefix + command} ${name2}.14*`)
-
-    let [_, name, splitter, age] = text.match(Reg)
-    if (!name) return m.reply('💛 Eʟ ɴᴏʍ𝗯𝗿𝗲 ɴᴏ ᴘᴜᴇᴅᴇ ᴇsᴛᴀʀ ᴠᴀᴄɪᴏ.')
-    if (!age) return m.reply('💛 Lᴀ ᴇᴅᴀᴅ ɴᴏ ᴘᴜᴇᴅᴇ ᴇsᴛᴀʀ ᴠᴀᴄɪ́ᴀ.')
-    if (name.length >= 100) return m.reply('💛 El nombre es demasiado largo.')
-
-    age = parseInt(age)
-    if (age > 100) return m.reply('*ʟᴀ ᴇᴅᴀᴅ ɪɴɢʀᴇsᴀᴅᴀ ᴇs ɪɴᴄᴏʀʀᴇᴄᴛᴀ*')
-    if (age < 5) return m.reply('*ʟᴀ ᴇᴅᴀᴅ ɪɴɢʀᴇsᴀᴅᴀ ᴇs ɪɴᴄᴏʀʀᴇᴄᴛᴀ*')
-
-    user.name = name.trim()
-    user.age = age
-    user.regTime = +new Date
-    user.registered = true
-    global.db.data.users[m.sender].money += 600
-    global.db.data.users[m.sender].estrellas += 10
-    global.db.data.users[m.sender].exp += 245
-    global.db.data.users[m.sender].joincount += 5    
+var handler = async (m, { conn }) => {
+    loadMarriages();
 
     let who;
     if (m.quoted && m.quoted.sender) {
@@ -39,41 +21,68 @@ let handler = async function (m, { conn, text, args, usedPrefix, command }) {
         who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender;
     }
 
-    let api = await axios.get(`https://deliriussapi-oficial.vercel.app/tools/country?text=${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}`);
+    let pp = await conn.profilePictureUrl(who, 'image').catch(_ => imagen1);
+    let { premium, level, genre, birth, description, estrellas, exp, lastclaim, registered, regTime, age, role } = global.db.data.users[who] || {};
+    let username = conn.getName(who);
 
-let userNationalityData = api.data.result;
+    genre = genre === 0 ? 'No especificado' : genre || 'No especificado';
+    age = registered ? (age || 'Desconocido') : 'Sin especificar';
+    birth = birth || 'No Establecido';
+    description = description || 'Sin Descripción';
+    role = role || 'Aldeano';
+
+    let isMarried = who in global.db.data.marriages;
+    let partner = isMarried ? global.db.data.marriages[who] : null;
+    let partnerName = partner ? conn.getName(partner) : 'Nadie';
+    let api = await axios.get(`https://deliriussapi-oficial.vercel.app/tools/country?text=${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}`);
+    let userNationalityData = api.data.result;
     let userNationality = userNationalityData ? `${userNationalityData.name} ${userNationalityData.emoji}` : 'Desconocido';
 
-    let sn = createHash('md5').update(m.sender).digest('hex')
-    let regbot = `┏━━━━━━━━━━━━━━━━━━⬣
-┃⋄ *🎄 𝐑𝐄𝐆𝐈𝐒𝐓𝐑𝐎 - 𝐂𝐑𝐎𝐖𝐁𝐎𝐓*
-┗━━━━━━━━━━━━━━━━━━⬣\n`
-    regbot += `•┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄•\n`
-    regbot += `「💛」𝐍𝐨𝐦𝐛𝐫𝐞: ${name}\n`
-    regbot += `「💛」𝐄𝐝𝐚𝐝: ${age} años\n`
-    regbot += `「💛」𝐏𝐚𝐢𝐬: ${userNationality}\n`
-    regbot += `•┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄•\n`
-    regbot += `「💝」𝐑𝐞𝐜𝐨𝐦𝐩𝐞𝐧𝐬𝐚𝐬:\n> `
-    regbot += `• 15 Estrellas 🌟\n> `
-    regbot += `• 5 CrowCoins 🪙\n> `
-    regbot += `• 245 Experiencia 💸\n> `
-    regbot += `• 12 Tokens 💰\n`
-    regbot += `꒷꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒦꒷꒷꒦꒷\n> `
-    regbot += `${publi}`
+    let noprem = `
+「 👤 *PERFIL DE USUARIO* 」
+☁️ *Nombre:* ${username}
+💠 *Edad:* ${age}
+⚧️ *Genero:* ${genre}
+🎂 *Cumpleaños:* ${birth} 
+👩‍❤️‍👩 *Casad@:* ${isMarried ? partnerName : 'Nadie'}
+📜 *Descripción:* ${description}
+🌀 *Registrado:* ${registered ? '✅': '❌'}
+🌐 *Pais:* ${userNationality}
 
-    await m.react('📪')
-    await conn.sendLuffy(m.chat, '⊱『✅𝆺𝅥 𝐑𝐄𝐆𝐈𝐒𝐓𝐑𝐀𝐃𝐎(𝐀) 𝆹𝅥✅』⊰', textbot, regbot, imagen1, imagen1, channel, m, rcanal)
+「 💰 *RECURSOS* 」
+💴 *Estrellas:* ${estrellas || 0}
+🌟 *Nivel:* ${level || 0}
+✨ *Experiencia:* ${exp || 0}
+⚜️ *Rango:* ${role}
+👑 *Premium:* ${premium ? '✅': '❌'}
+`.trim();
 
-    let channelID = '120363381910502266@newsletter';
-    let messageContent = `◉ *Usuarios:* ${m.pushName || 'Anónimo'}\n◉ *País:* ${userNationality || 'Desconocido'}\n◉ *Verificación:* ${user.name}\n◉ *Edad:* ${age} años\n◉ *Número de serie:*\n⤷ ${sn}\n\n🎁 *Recompensa:* 600 crowcoins 🪙\n*¡Bienvenido/a al bot!*`;
+    let prem = `╭──⪩ 𝐔𝐒𝐔𝐀𝐑𝐈𝐎 𝐏𝐑𝐄𝐌𝐈𝐔𝐌 ⪨
+│⧼👤⧽ *ᴜsᴜᴀʀɪᴏ:* *${username}*
+│⧼💠⧽ *ᴇᴅᴀᴅ:* *${age}*
+│⧼⚧️⧽ *ɢᴇɴᴇʀᴏ:* *${genre}*
+│⧼🎂⧽ *ᴄᴜᴍᴘʟᴇᴀɴ̃ᴏs:* ${birth}
+│⧼👩‍❤️‍👩⧽ *ᴄᴀsᴀᴅᴏ:* ${isMarried ? partnerName : 'Nadie'}
+📜 *ᴅᴇsᴄʀɪᴘᴄɪᴏɴ:* ${description}
+│⧼🌀⧽ *ʀᴇɢɪsᴛʀᴀᴅᴏ:* ${registered ? '✅': '❌'}
+│⧼🌐⧽ *ᴘᴀɪs:* ${userNationality}
 
-    await conn.sendMessage(channelID, {
-        text: messageContent, ...rcanal
-    });
+╰─────────────────⪨
+
+╭────⪩ 𝐑𝐄𝐂𝐔𝐑𝐒𝐎𝐒 ⪨
+│⧼💴⧽ *estrellas:* ${estrellas || 0}
+│⧼🌟⧽ *ɴɪᴠᴇʟ:* ${level || 0}
+│⧼✨⧽ *ᴇxᴘᴇʀɪᴇɴᴄɪᴀ:* ${exp || 0}
+│⧼⚜️⧽ *ʀᴀɴɢᴏ:* ${role}
+╰───⪨ *𝓤𝓼𝓾𝓪𝓻𝓲𝓸 𝓓𝓮𝓼𝓽𝓪𝓬𝓪𝓭𝓸* ⪩`.trim();
+
+    conn.sendFile(m.chat, pp, 'perfil.jpg', `${premium ? prem.trim() : noprem.trim()}`, m, { mentions: [who] });
 }
 
-handler.help = ['reg']
-handler.tags = ['rg']
-handler.command = ['verify', 'verificar', 'reg', 'register', 'registrar']
+handler.help = ['profile'];
+handler.register = true;
+handler.group = true;
+handler.tags = ['rg'];
+handler.command = ['profile', 'perfil'];
 
-export default handler
+export default handler;

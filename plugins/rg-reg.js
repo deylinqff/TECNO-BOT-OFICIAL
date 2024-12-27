@@ -17,17 +17,17 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   if (age < 5) return m.reply('🍼 EL USUARIO ES DEMASIADO JOVEN PARA JUGAR.')
   
   // Creación del mensaje de carga
-  let loadingMessage = await m.reply('🔄 Cargando el registro... ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜')
+  let loadingMessage = await m.reply('🔄 Cargando el registro... ⬜⬜⬜⬜⬜⬜⬜')
   
   // Variables de la barra de carga
   let progress = 10
-  let progressBar = '⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜' // 10 bloques de la barra de carga
+  let progressBar = '⬜⬜⬜⬜⬜⬜⬜' // 7 bloques de la barra de carga
   
   // Intervalo para simular la carga progresiva
   let interval = setInterval(async () => {
     // Rellenamos la barra de progreso con 🟩 según el avance
     let filledBlocks = '🟩'.repeat(progress / 10)
-    let emptyBlocks = '⬜'.repeat(10 - progress / 10)
+    let emptyBlocks = '⬜'.repeat(7 - progress / 10)
     progressBar = filledBlocks + emptyBlocks
 
     await conn.sendMessage(m.chat, {

@@ -43,7 +43,7 @@ let handler = async function (m, { conn, text }) {
     await conn.sendMessage(m.chat, { edit: progressMessage.key, text: progressStages[i] });
   }
 
-  // Mensaje de registro
+  // Inserta el mensaje de registro en el mismo mensaje
   let regbot = `
 👤 𝗥 𝗘 𝗚 𝗜 𝗦 𝗧 𝗥 𝗢 👤
 •┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄•
@@ -59,7 +59,7 @@ let handler = async function (m, { conn, text }) {
 Número de registro: ${sn}
 `;
 
-  await conn.sendMessage(m.chat, { text: regbot }, { quoted: m });
+  await conn.sendMessage(m.chat, { edit: progressMessage.key, text: `${progressStages[5]}\n\n${regbot}` });
 };
 
 handler.help = ['reg'];

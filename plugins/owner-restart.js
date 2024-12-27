@@ -25,7 +25,7 @@ let handler = async (m, { conn, isROwner, text }) => {
         }
 
         // Mensaje final
-        await conn.sendMessage(m.chat, { text: "*『✅』*Tecno-Bot* reiniciado cin éxito espera unos segundos asta que el proceso termine.*", edit: key });
+        await conn.sendMessage(m.chat, { text: "*『✅』*Tecno-Bot* reiniciado con éxito espera unos segundos asta que el proceso termine.*", edit: key });
 
         // Reinicio del servidor
         await delay(2000); // Espera 2 segundos antes de reiniciar

@@ -29,7 +29,7 @@ let handler = async function (m, { conn, args, usedPrefix }) {
 
   // Eliminar registro
   user.registered = false;
-  m.reply(`🚀 Registro eliminado correctamente⚙️.`)
+  m.reply(`🚀 Registro eliminado con exito ⚙.`)
 }
 
 handler.help = ['unreg'] 

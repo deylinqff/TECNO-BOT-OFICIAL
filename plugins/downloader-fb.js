@@ -2,7 +2,7 @@ import { igdl } from 'ruhend-scraper';
 
 const handler = async (m, { text, conn, args, usedPrefix, command }) => {
   if (!args[0]) {
-    return conn.reply(m.chat, '*\`💻 Ingrese el enlace del video para descargar 🚀\n\n✨ Ejemplo .fb https://www.facebook.com/share/r/Zg7ye3TwwvkbW1gQ./\`🚀', m, fake);
+    return conn.reply(m.chat, '*\`💻 Ingrese el enlace del video para descargar 🚀\n\n✨ Ejemplo .fb https://www.fac.ebook.com/share/r/Zg7ye3T.wwvkbW1gQ`🚀', m, fake);
   }
 
   await m.react('🕒');

@@ -1,44 +1,49 @@
-from pytube import YouTube
-import venom
-import ffmpeg
+import { igdl } from 'ruhend-scraper';
 
-async def handle_fb_command(client, message):
-    """
-    Maneja el comando .fb para descargar videos de Facebook y enviarlos como audio a WhatsApp.
+const handler = async (m, { text, conn, args, usedPrefix, command }) => {
+  if (!args[0]) {
+    return conn.reply(m.chat, '*\`💻 Ingrese el enlace del video para descargar 🚀\n\n✨ Para reportes, envíe CP al número +51 928 215 461\`*', m, fake);
+  }
 
-    Args:
-        client: El cliente de Venom-bot.
-        message: El mensaje recibido.
-    """
+  await m.react('🕒');
+  let res;
+  try {
+    res = await igdl(args[0]);
+  } catch (error) {
+    return conn.reply(m.chat, '*`🚨 ¡Error al obtener datos! Verifica el enlace e intenta nuevamente.`*', m);
+  }
 
-    try:
-        # Extrae la URL de Facebook del mensaje
-        url = message.body.split(' ')[1]
+  let result = res.data;
+  if (!result || result.length === 0) {
+    return conn.reply(m.chat, '*`⚠️ No se encontraron resultados para este enlace.`*', m);
+  }
 
-        # Descarga el video en formato de audio
-        yt = YouTube(url)
-        audio_stream = yt.streams.filter(only_audio=True).first()
-        output_file = audio_stream.download(filename="temp.mp4")
+  let data;
+  try {
+    data = result.find(i => i.resolution === "720p (HD)") || result.find(i => i.resolution === "360p (SD)");
+  } catch (error) {
+    return conn.reply(m.chat, '*`🔍 ¡Error al procesar los datos! Por favor, intenta más tarde.`*', m);
+  }
 
-        # Convierte el video a formato .ogg (compatible con WhatsApp)
-        ffmpeg.input(output_file).output("temp.ogg", acodec='libopus').run()
+  if (!data) {
+    return conn.reply(m.chat, '*`❌ No se encontró una resolución adecuada.`*', m);
+  }
 
-        # Envía el audio como nota de voz
-        await client.sendAudio(message.from, "temp.ogg")
+  await m.react('✅');
+  let video = data.url;
 
-        # Elimina los archivos temporales
-        import os
-        os.remove("temp.mp4")
-        os.remove("temp.ogg")
+  try {
+    await conn.sendMessage(m.chat, { video: { url: video }, caption: dev, fileName: 'fb.mp4', mimetype: 'video/mp4' }, { quoted: m });
+  } catch (error) {
+    return conn.reply(m.chat, '*`⚡ ¡Error al enviar el video! Intenta nuevamente.`*', m);
+    await m.react('❌');
+  }
+};
 
-    except Exception as e:
-        await client.sendText(message.from, "Hubo un error al procesar tu solicitud. Asegúrate de que la URL sea válida y que el video esté disponible.")
-        print(f"Error: {e}")
+handler.help = ['fb *<link>*'];
+handler.corazones = 2;
+handler.tags = ['dl'];
+handler.command = /^(fb|facebook|fbdl)$/i;
+handler.register = true;
 
-# Inicializa el bot de WhatsApp
-venom.create().then(client => {
-    client.onMessage(async message => {
-        if message.body.startswith('.fb '):
-            await handle_fb_command(client, message)
-    })
-})
+export default handler;

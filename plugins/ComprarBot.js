@@ -6,7 +6,7 @@ m.react('⚙️');
 const message = "〔🚀 *TECNO-BOT* 🚀〕\n\n> \n\n*BOT PARA GRUPO* :\n> wa.me/50488198573\n\n*BOT PERZONALIZADO* :\n> wa.me/50488198573";
 if (m, rcanal) {
 //
-const imageUrl = 'https://i.ibb.co/qJNL5Bg/file.jpg';
+const imageUrl = 'https://files.catbox.moe/ir0kcu.jpg';
 try {
 // Que No Quites Los Créditos😑
 // Te Estoy Viendo😑

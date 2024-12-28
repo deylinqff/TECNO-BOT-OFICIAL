@@ -21,12 +21,11 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   user.regTime = + new Date
   user.registered = true
   let sn = createHash('md5').update(m.sender).digest('hex')
-  let img = await (await fetch(`https://files.catbox.moe/enrwmi.jpg`)).buffer()
+  let img = await (await fetch(`https://files.catbox.moe/zpj2cm.mp4`)).buffer()
   let txt = ` –  *R E G I S T R O  -  C R O W*\n\n`
       txt += `╔✎  🚀  *NOMBRE* : ${name}\n`
       txt += `╠✎  ⚙️  *EDAD* : ${age} años\n`
-      txt += `╚✎  🌐  *NUMERO DE SERIE*\n`
-      txt +=       🌎  *𝙿𝚊𝚒𝚜* » ${mundo}
+      txt +=  ╚════════ ≪ •❈• ≫ ════════╝
 await conn.sendAi(m.chat, botname, textbot, txt, img, img, canal, m)
 await m.react('✅')
 }

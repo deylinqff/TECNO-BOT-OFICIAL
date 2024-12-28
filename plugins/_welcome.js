@@ -13,7 +13,8 @@ export async function before(m, {conn, participants, groupMetadata}) {
       let welcome = chat.sWelcome.replace('@user', () => user);
       await conn.sendAi(m.chat, botname, textbot, welcome, img, img, canal)
     } else {
-      let bienvenida = `┌─★ 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n│「 Bienvenido 」\n└┬★ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │✑  Bienvenido a\n   │✑  ${groupMetadata.subject}\n   └───────────────┈ ⳹`
+      let bienvenida = `╔══⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n║「 Bienvenido 」\n╚╦★ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   ║✑  Bienvenido a\n   ║✑  ${groupMetadata.subject}\n   *╚═══❖⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕❖═══╝*
+https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`
       await conn.sendAi(m.chat, botname, textbot, bienvenida, img, img, canal)
     }
   }
@@ -24,7 +25,8 @@ export async function before(m, {conn, participants, groupMetadata}) {
       let bye = chat.sBye.replace('@user', () => user);
       await conn.sendAi(m.chat, botname, textbot, bye, img, img, canal)
     } else {
-      let bye = `┌─★ 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n│「 ADIOS 👋 」\n└┬★ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │✑  Se fue\n   │✑ Jamás te quisimos aquí\n   └───────────────┈ ⳹`
+      let bye = `╔══⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n║「 ADIOS 👋 」\n╚╦★ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   ║✑  Se fue\n   ║✑ Jamás te quisimos aquí\n   **╚═══❖•⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕•❖═══╝*
+https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`
       await conn.sendAi(m.chat, botname, textbot, bye, img, img, canal)
     }
   }
@@ -35,7 +37,8 @@ export async function before(m, {conn, participants, groupMetadata}) {
       let bye = chat.sBye.replace('@user', () => user);
       await conn.sendAi(m.chat, botname, textbot, bye, img, img, canal)
     } else {
-      let kick = `┌─★ 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n│「 ADIOS 👋 」\n└┬★ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │✑  Se fue\n   │✑ Jamás te quisimos aquí\n   └───────────────┈ ⳹`
+      let kick = `╔══⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n║〘 ADIOS 👋 〙\n╚╦✎ 〘 @${m.messageStubParameters[0].split`@`[0]} 〙\n   ║✎  Se fue\n   ║✇ Jamás te quisimos aquí\n   *╚═══❖•⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕•❖═══╝*
+https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`
       await conn.sendAi(m.chat, botname, textbot, kick, img, img, canal)
     }
 }}

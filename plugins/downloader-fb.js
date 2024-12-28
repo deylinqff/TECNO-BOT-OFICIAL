@@ -1,50 +1,44 @@
-const venom = require('venom-bot');
-const fbDownloader = require('facebook-video-downloader');
+from pytube import YouTube
+import venom
+import ffmpeg
 
-venom
-  .create()
-  .then(client => start(client))
-  .catch(err => console.log(err));
+async def handle_fb_command(client, message):
+    """
+    Maneja el comando .fb para descargar videos de Facebook y enviarlos como audio a WhatsApp.
 
-function start(client) {
-  client.onMessage(async message => {
-    // Verifica si el mensaje contiene el comando .fb seguido de una URL
-    if (message.body.startsWith('.fb ')) {
-      const fbUrl = message.body.split(' ')[1]; // Obtén la URL después del comando
-      
-      if (!isValidUrl(fbUrl)) {
-        client.sendText(message.from, 'Por favor, proporciona una URL válida de Facebook.');
-        return;
-      }
+    Args:
+        client: El cliente de Venom-bot.
+        message: El mensaje recibido.
+    """
 
-      try {
-        // Descarga el video usando la librería
-        const videoInfo = await fbDownloader(fbUrl);
+    try:
+        # Extrae la URL de Facebook del mensaje
+        url = message.body.split(' ')[1]
 
-        if (videoInfo && videoInfo.sd || videoInfo.hd) {
-          // Usa el enlace SD o HD del video
-          const videoLink = videoInfo.hd || videoInfo.sd;
-          
-          // Envía el video al usuario
-          await client.sendFileFromUrl(
-            message.from,
-            videoLink,
-            'video.mp4',
-            'Aquí está tu video de Facebook.'
-          );
-        } else {
-          client.sendText(message.from, 'No se pudo descargar el video. Asegúrate de que el enlace sea público.');
-        }
-      } catch (error) {
-        console.error(error);
-        client.sendText(message.from, 'Hubo un error al procesar tu solicitud. Intenta nuevamente.');
-      }
-    }
-  });
-}
+        # Descarga el video en formato de audio
+        yt = YouTube(url)
+        audio_stream = yt.streams.filter(only_audio=True).first()
+        output_file = audio_stream.download(filename="temp.mp4")
 
-// Función para validar URLs
-function isValidUrl(url) {
-  const regex = /(https?:\/\/)?(www\.)?(facebook\.com)\/.+/;
-  return regex.test(url);
-}
+        # Convierte el video a formato .ogg (compatible con WhatsApp)
+        ffmpeg.input(output_file).output("temp.ogg", acodec='libopus').run()
+
+        # Envía el audio como nota de voz
+        await client.sendAudio(message.from, "temp.ogg")
+
+        # Elimina los archivos temporales
+        import os
+        os.remove("temp.mp4")
+        os.remove("temp.ogg")
+
+    except Exception as e:
+        await client.sendText(message.from, "Hubo un error al procesar tu solicitud. Asegúrate de que la URL sea válida y que el video esté disponible.")
+        print(f"Error: {e}")
+
+# Inicializa el bot de WhatsApp
+venom.create().then(client => {
+    client.onMessage(async message => {
+        if message.body.startswith('.fb '):
+            await handle_fb_command(client, message)
+    })
+})

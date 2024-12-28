@@ -1,4 +1,6 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
+const os = require('os');
+const { execSync } = require('child_process');
 
 // Inicializar el cliente
 const client = new Client({
@@ -6,28 +8,40 @@ const client = new Client({
 });
 
 client.on('ready', () => {
-    console.log('El bot está listo!');
+    console.log('El bot está listo y conectado a WhatsApp!');
 });
 
 // Escuchar mensajes
 client.on('message', (message) => {
-    if (message.body.toLowerCase() === '.sistema') {
+    if (message.body.toLowerCase() === 'comandob.sistema') {
+        // Obtener información del sistema
+        const totalMem = (os.totalmem() / (1024 ** 3)).toFixed(2); // Memoria total en GB
+        const freeMem = (os.freemem() / (1024 ** 3)).toFixed(2); // Memoria libre en GB
+        const usedMem = (totalMem - freeMem).toFixed(2); // Memoria usada en GB
+
+        // Obtener espacio en disco (Linux/Unix/Windows)
+        let diskInfo = 'Espacio en disco no disponible';
+        try {
+            const diskUsage = execSync('df -h --total | grep total').toString();
+            const diskData = diskUsage.split(/\s+/);
+            const totalDisk = diskData[1];
+            const usedDisk = diskData[2];
+            const availableDisk = diskData[3];
+            diskInfo = `Disco Total: ${totalDisk}, Usado: ${usedDisk}, Disponible: ${availableDisk}`;
+        } catch (error) {
+            diskInfo = 'No se pudo obtener el espacio en disco.';
+        }
+
+        // Construir respuesta
         const sistemaInfo = `
-📢 *Sistema del Bot* 📢
-- ✅ *Plataforma*: WhatsApp
-- 🤖 *Librería*: whatsapp-web.js
-- 🚀 *Versión del Bot*: 1.0.0
-- 💻 *Lenguaje*: JavaScript
-- ⚙️ *Funcionalidades*:
-  1️⃣ Responder mensajes automáticamente.
-  2️⃣ Proporcionar comandos específicos.
-  3️⃣ Gestionar información del servidor.
+📊 *Información del Sistema* 📊
+- 💾 *Memoria Total*: ${totalMem} GB
+- 🗂️ *Memoria Usada*: ${usedMem} GB
+- 📂 *Memoria Libre*: ${freeMem} GB
+- 💿 *Almacenamiento*: ${diskInfo}
 
-💡 *Comandos disponibles*:
-- *.Sistema*: Ver detalles del sistema.
-- Más comandos estarán disponibles pronto.
-
-🛠️ *Desarrollador*: [Tu Nombre o Alias]
+🛠️ *Servidor Activo*: Sí
+🕒 *Tiempo de Actividad*: ${(os.uptime() / 3600).toFixed(2)} horas
         `;
         message.reply(sistemaInfo);
     }

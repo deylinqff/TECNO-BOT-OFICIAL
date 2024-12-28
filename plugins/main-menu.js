@@ -198,7 +198,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let pp13 = 'https://i.ibb.co/Cs6Tt9V/Sylph.jpg'
     let pp14 = 'https://i.ibb.co/JmcS3kv/Sylph.jpg'
     let pp15 = 'https://i.ibb.co/Cs6Tt9V/Sylph.jpg'
-    let images = [
+    let images =
   'https://files.catbox.moe/enrwmi.jpg',
   'https://i.ibb.co/CPVcnqH/file.jpg',
   'https://i.ibb.co/9WrytGt/file.jpg',

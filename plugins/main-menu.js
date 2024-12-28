@@ -1,34 +1,48 @@
-import fs from 'fs'
-import fetch from 'node-fetch'
-import { xpRange } from '../lib/levelling.js'
-const { levelling } = '../lib/levelling.js'
 import { promises } from 'fs'
 import { join } from 'path'
-let handler = async (m, { conn, usedPrefix, usedPrefix: _p, __dirname, text, command }) => {
-try {        
-let _package = JSON.parse(await promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
-let { exp, yenes, level, role } = global.db.data.users[m.sender]
-let { min, xp, max } = xpRange(level, global.multiplier)
-let name = await conn.getName(m.sender)
-let _uptime = process.uptime() * 1000
-let _muptime
-if (process.send) {
-process.send('uptime')
-_muptime = await new Promise(resolve => {
-process.once('message', resolve)
-setTimeout(resolve, 1000)
-}) * 1000
+import fetch from 'node-fetch'
+import { xpRange } from '../lib/levelling.js'
+let Styles = (text, style = 1) => {
+  var xStr = 'abcdefghijklmnopqrstuvwxyz1234567890'.split('');
+  var yStr = Object.freeze({
+    1: 'ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘqʀꜱᴛᴜᴠᴡxʏᴢ1234567890'
+  });
+  var replacer = [];
+  xStr.map((v, i) => replacer.push({
+    original: v,
+    convert: yStr[style].split('')[i]
+  }));
+  var str = text.toLowerCase().split('');
+  var output = [];
+  str.map(v => {
+    const find = replacer.find(x => x.original == v);
+    find ? output.push(find.convert) : output.push(v);
+  });
+  return output.join('');
+};
+let tags = {
+  'anime': '🧧 ANIME 🎐',
+  'main': '❗ INFO ❕',
+  'search': '🔎 SEARCH 🔍',
+  'game': '🕹️ GAME 🎮',
+  'serbot': '⚙️ SUB BOTS 🤖',
+  'rpg': '🌐 RPG 🥇',
+  'rg': '🎑 REGISTRO 🎟️',
+  'sticker': '💟 STICKER 🏷️',
+  'img': '🖼️ IMAGE 🎇',
+  'group': '👥 GROUPS 📢',
+//  'logo': 'MAKER',
+  'nable': '🎛️ ON / OFF 🔌', 
+  'premium': '💎 PREMIUM 👑',
+  'downloader': '📥 DOWNLOAD 📤',
+  'tools': '🔧 TOOLS 🛠️',
+  'fun': '🎉 FUN 🎊',
+  'nsfw': '🔞 NSFW 📛', 
+  'cmd': '🧮 DATABASE 🖥️',
+  'owner': '👤 OWNER 👁️', 
+  'audio': '📣 AUDIOS 🔊', 
+  'advanced': '🗝️ ADVANCED 📍',
 }
-let user = global.db.data.users[m.sender]
-let muptime = clockString(_muptime)
-let uptime = clockString(_uptime)
-let totalreg = Object.keys(global.db.data.users).length
-let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered == true).length
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-let mentionedJid = [who]
-let perfil = await conn.profilePictureUrl(who, 'image').catch(_ => 'https://qu.ax/QGAVS.jpg')
-let taguser = '@' + m.sender.split("@s.whatsapp.net")[0]
-const vid = ['https://files.catbox.moe/1dtvv7.mp4', 'https://files.catbox.moe/yxpqgu.mp4', 'https://files.catbox.moe/0iw0dc.mp4']
 
 const defaultMenu = {
   before: `

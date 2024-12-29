@@ -12,7 +12,7 @@ Escríbele y lo solucionará de inmediato.
 
 🌌 *𝗖𝗥𝗘𝗔𝗗𝗢𝗥*:  
 📞 *Deylin*:  
-🌐 [ 𝗪𝗮.𝗺𝗲/𝟱𝟬𝟰𝟴𝟴𝟭𝟵𝟴𝟱𝟳𝟯 ]  
+🌐 [ wa.me/50488198573 ]  
 `;  
 
     await conn.sendFile(  

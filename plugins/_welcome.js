@@ -29,12 +29,7 @@ https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m
       let bye = chat.sBye.replace('@user', () => user);
       await conn.sendAi(m.chat, botname, textbot, bye, img, img, canal)
     } else {
-      let bye = `╔══⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n║「 ADIOS 👋 」\n╚╦★ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   ║✑  Se fue\n   ║✑ Jamás te quisimos aquí\n   *╚═══❖•⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕•❖═══╝*
-╔═════ೋೋ═════╗
-║𝑼𝒏𝒆𝒕𝒆 𝒂𝒎𝒊 𝒄𝒂𝒏𝒂𝒍 𝒐𝒇𝒊𝒄𝒊𝒂𝒍     ║
-╚═════ೋೋ═════╝
-https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m
-`
+      let bye = `╔══⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n║「 ADIOS 👋 」\n╚╦★ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   ║✑  Se fue\n   ║✑ Jamás te quisimos aquí\n   *╚═══❖•⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕•❖═══╝*`
       await conn.sendAi(m.chat, botname, textbot, bye, img, img, canal)
     }
   }
@@ -45,10 +40,7 @@ https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m
       let bye = chat.sBye.replace('@user', () => user);
       await conn.sendAi(m.chat, botname, textbot, bye, img, img, canal)
     } else {
-      let kick = `╔══⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n║〘 ADIOS 👋 〙\n╚╦✎ 〘 @${m.messageStubParameters[0].split`@`[0]} 〙\n   ║✎  Se fue\n   ║✇ Jamás te quisimos aquí\n   *╚═══❖•⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕•❖═══╝*
-╔═════ೋೋ═════╗
-║𝑼𝒏𝒆𝒕𝒆 𝒂𝒎𝒊 𝒄𝒂𝒏𝒂𝒍 𝒐𝒇𝒊𝒄𝒊𝒂𝒍     ║
-╚═════ೋೋ═════╝ https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`
+      let kick = `╔══⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n║〘 ADIOS 👋 〙\n╚╦✎ 〘 @${m.messageStubParameters[0].split`@`[0]} 〙\n   ║✎  Se fue\n   ║✇ Jamás te quisimos aquí\n   *╚═══❖•⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕•❖═══╝*`
       await conn.sendAi(m.chat, botname, textbot, kick, img, img, canal)
     }
 }}

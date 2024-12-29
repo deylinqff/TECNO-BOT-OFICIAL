@@ -13,30 +13,27 @@ const handler = async (m, { conn }) => {
             throw new Error('No se encontró la imagen en la ruta especificada.');
         }
 
-        // Mensaje informativo del bot con bordes
+        // Mensaje informativo del bot
         const infoBot = `
-╔════════════════════════════╗
-║      🤖 *TECNO-BOT* 🤖       ║
-╠════════════════════════════╣
-║ 📌 *Información del Bot:*   ║
-║ • **Nombre:** TECNO-BOT     ║
-║ • **Creador:** Deyin        ║
-║ • **Versión:** Beta 2.0     ║
-╠════════════════════════════╣
-║ 🔹 *Características:*        ║
-║ • Comandos útiles y rápidos ║
-║ • Funciona en grupos/privado║
-║ • Soporte y mejoras contínuas║
-╠════════════════════════════╣
-║ 📢 *Nota:*                  ║
-║ Este bot está en Beta. Si   ║
-║ encuentras errores, avísanos║
-╚════════════════════════════╝
+🤖 *TECNO-BOT* 🤖
 
-¡Gracias por usar *TECNO-BOT*!
+📌 *Información del Bot:*
+• **Nombre:** TECNO-BOT  
+• **Creador:** Deyin  
+• **Versión:** Beta 2.0  
+
+🔹 *Características:*
+• **Comandos útiles:** Responde a tus solicitudes con rapidez.  
+• **Integración grupal:** Funciona en grupos o en privado.  
+• **Soporte continuo:** Estamos mejorando continuamente.  
+
+📢 *Nota:*  
+El bot está en su versión Beta, por lo que podría tener errores. Si notas algo extraño, avísanos para resolverlo.  
+
+Gracias por usar *TECNO-BOT*. ¡Estoy listo para ayudarte!
 `.trim();
 
-        // Enviar la imagen junto con el mensaje
+        // Enviar imagen junto con el mensaje
         await conn.sendMessage(
             m.chat,
             {

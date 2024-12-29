@@ -51,7 +51,7 @@ throw false
 chat.autoAceptar = isEnable
 break
 
-    case 'antilink':
+    case 'antilink2':
       if (m.isGroup) {
         if (!(isAdmin || isOwner)) {
           global.dfail('admin', m, conn)

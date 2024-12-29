@@ -1,28 +1,65 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-var handler = async (m, { conn }) => {
+const handler = async (m, { conn }) => {
     try {
-        // Mensaje de información del bot
-        let infoBot = `
-🤖 *TECNO-BOT: Tu Asistente Virtual* 🤖
+        // Ruta de la imagen (cambia por tu ruta real)
+        const imagePath = path.join(__dirname, 'ruta/a/tu/imagen.jpg');
 
-📌 *Información General:*
-• **Nombre:** TECNO-BOT  
-• **Creador:** Deyin  
-• **Versión:** Beta  
+        // Verifica si la imagen existe
+        try {
+            await fs.access(imagePath);
+        } catch {
+            throw new Error('No se encontró la imagen en la ruta especificada.');
+        }
 
-📢 *Nota Importante:*  
-Este bot está en su versión Beta, por lo que podría presentar errores en grupos o con ciertos comandos. Estamos trabajando continuamente para mejorar tu experiencia.
+        // Mensaje informativo del bot con bordes
+        const infoBot = `
+╔════════════════════════════╗
+║      🤖 *TECNO-BOT* 🤖       ║
+╠════════════════════════════╣
+║ 📌 *Información del Bot:*   ║
+║ • **Nombre:** TECNO-BOT     ║
+║ • **Creador:** Deyin        ║
+║ • **Versión:** Beta 2.0     ║
+╠════════════════════════════╣
+║ 🔹 *Características:*        ║
+║ • Comandos útiles y rápidos ║
+║ • Funciona en grupos/privado║
+║ • Soporte y mejoras contínuas║
+╠════════════════════════════╣
+║ 📢 *Nota:*                  ║
+║ Este bot está en Beta. Si   ║
+║ encuentras errores, avísanos║
+╚════════════════════════════╝
 
-Gracias por confiar en TECNO-BOT. ¡Estoy aquí para ayudarte en lo que necesites!
+¡Gracias por usar *TECNO-BOT*!
 `.trim();
 
-        // Enviar el mensaje de información
-        await conn.reply(m.chat, infoBot, m);
+        // Enviar la imagen junto con el mensaje
+        await conn.sendMessage(
+            m.chat,
+            {
+                image: { url: imagePath },
+                caption: infoBot,
+            },
+            { quoted: m }
+        );
     } catch (err) {
-        console.error('Error al procesar el comando:', err);
-        await conn.reply(m.chat, '⚠️ Hubo un inconveniente al procesar tu solicitud. Por favor, intenta nuevamente más tarde.', m);
+        console.error('Error en el comando:', err.message);
+
+        // Respuesta en caso de error
+        await conn.reply(
+            m.chat,
+            `
+⚠️ *Error:*  
+Ocurrió un problema al procesar tu solicitud.  
+
+🔍 *Detalles:* ${err.message}  
+Por favor, revisa la configuración e intenta de nuevo.
+`.trim(),
+            m
+        );
     }
 };
 

@@ -17,7 +17,7 @@ Escríbele y lo solucionará de inmediato.
 
     await conn.sendFile(  
         m.chat,  
-        "https://files.catbox.moe/pfndcv.jpg",  
+        "https://files.catbox.moe/uwxegp.jpg",  
         'thumbnail.jpg',  
         txt_owner,  
         m  

@@ -13,9 +13,9 @@ export async function before(m, {conn, participants, groupMetadata}) {
       let welcome = chat.sWelcome.replace('@user', () => user);
       await conn.sendAi(m.chat, botname, textbot, welcome, img, img, canal)
     } else {
-      let bienvenida = `╔══⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n║「 Bienvenido 」\n╚╦★ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   ║✑  Bienvenido a\n   ║✑  ${groupMetadata.subject}\n   *╚═══❖⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕❖═══╝*
+      let bienvenida = `╔══⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n║「 Bienvenido 」\n╚╦★ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   ║✑  Bienvenido a\n   ║✑  ${groupMetadata.subject}\n   *╚╦══❖⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕❖═══╝*
 ╔═╝
-*╔═══❖•ೋ° °ೋ•❖═══╗*
+*╠═══❖•ೋ° °ೋ•❖═══╗*
 https://chat.whatsapp.com/DQLT8n8IghUHYdkD2YLLnz
 *╚═══❖•ೋ° °ೋ•❖═══╝*
 `

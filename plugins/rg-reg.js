@@ -1,4 +1,5 @@
 import { createHash } from 'crypto'
+import fs from 'fs'
 import fetch from 'node-fetch'
 
 let Reg = /\|?(.*)([.|] *?)([0-9]*)$/i
@@ -17,39 +18,40 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   let [_, name, splitter, age] = text.match(Reg)
 
   // Validaciones adicionales
-  if (!name || !age) 
-    return m.reply('👻 EL NOMBRE Y LA EDAD SON OBLIGATORIOS.')
-  if (name.length >= 100) 
-    return m.reply('🫥 EL NOMBRE ESTÁ MUY LARGO.')
-  
+  if (!name) return m.reply('👻 EL NOMBRE NO PUEDE ESTAR VACÍO.')
+  if (!age) return m.reply('👻 LA EDAD NO PUEDE ESTAR VACÍA.')
+  if (name.length >= 100) return m.reply('🫥 EL NOMBRE ESTÁ MUY LARGO.')
   age = parseInt(age)
-  if (age > 100) 
-    return m.reply('👴🏻 WOW, EL ABUELO QUIERE JUGAR CON EL BOT.')
-  if (age < 5) 
-    return m.reply('🚼 EL BEBÉ QUIERE JUGAR JAJA.')
+  if (age > 100) return m.reply('👴🏻 WOW, EL ABUELO QUIERE JUGAR CON EL BOT.')
+  if (age < 5) return m.reply('🚼 EL BEBÉ QUIERE JUGAR JAJA.')
 
-  // Reacción inicial 📨
+  // Enviar reacción inicial 📨
   await m.react('📨')
 
   // Registrar usuario
   user.name = name.trim()
   user.age = age
-  user.regTime = Date.now()
+  user.regTime = +new Date()
   user.registered = true
 
-  // Mensaje de confirmación
+  // Generar número de serie
   let sn = createHash('md5').update(m.sender).digest('hex')
-  let imgURL = 'https://files.catbox.moe/wq12s1.jpg'
+  let img = await (await fetch(`https://files.catbox.moe/wq12s1.jpg`)).buffer()
+
+  // Mensaje de confirmación
   let txt = ` –  *R E G I S T R O  - T E C N O*\n\n`
   txt += `  🌐  *NOMBRE* : ${name}\n`
   txt += `  🚀  *EDAD* : ${age} años\n`
+  
+  // Enviar mensaje de registro
+  await conn.sendAi(m.chat, botname, textbot, txt, img, img, canal, m)
 
-  // Enviar mensaje y reaccionar al final
-  await conn.sendAi(m.chat, botname, textbot, txt, imgURL, imgURL, canal, m)
+  // Reacción final 📩
   await m.react('📩')
 }
 handler.help = ['reg'].map(v => v + ' *<nombre.edad>*')
 handler.tags = ['rg']
+
 handler.command = ['verify', 'reg', 'register', 'registrar'] 
 
 export default handler

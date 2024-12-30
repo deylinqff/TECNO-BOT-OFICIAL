@@ -84,7 +84,7 @@ if (methodCode && !conn.authState.creds.registered) {
     setTimeout(async () => {
         let codeBot = await conn.requestPairingCode(cleanedNumber);
         codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot;
-        let txt = `*\`「🔱」 Serbot - Code 「🔱」\`*\n\n*\`[ Pasos : ]\`*\n\`1 ❥\` _Click en los 3 puntos_\n\`2 ❥\` _Toca en dispositivos vinculados_\n\`3 ❥\` _Seleciona Vincular con codigo_\n\`4 ❥\` _Escribe El Codigo_\n\n> *:⁖֟⊱┈֟፝❥ Nota:* Este Codigo Solo Funciona Con Quien Lo Solicito`
+        let txt = `*\`「🚀」 Serbot - Code 「🚀」\`*\n\n*\`[ Pasos : ]\`*\n\`1 🚀\` _Click en los 3 puntos_\n\`2 🚀\` _Toca en dispositivos vinculados_\n\`3 🚀\` _Seleciona Vincular con codigo_\n\`4 🚀\` _Escribe El Codigo_\n\n> *:⁖֟⊱┈֟፝🌐 Nota:* Este Codigo Solo Funciona Con Quien Lo Solicito`
          await parent.reply(m.chat, txt, m, rcanal)
          await parent.reply(m.chat, codeBot, m, rcanal)
         rl.close()

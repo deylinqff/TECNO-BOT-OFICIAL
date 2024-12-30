@@ -1,55 +1,58 @@
-const { default: makeWASocket, useSingleFileAuthState, DisconnectReason } = require('@whiskeysockets/baileys');
-const { unlinkSync } = require('fs');
-const qrcode = require('qrcode-terminal');
+const { default: makeWASocket, DisconnectReason, useSingleFileAuthState } = require('@adiwajshing/baileys');
+const { Boom } = require('@hapi/boom');
+const { writeFileSync } = require('fs');
 
 const { state, saveState } = useSingleFileAuthState('./auth_info.json');
 
-// Expresión regular para detectar enlaces de grupos
-const groupLinkRegex = /https:\/\/chat\.whatsapp\.com\/[A-Za-z0-9]+/;
+let noxDenegarActivado = false; // Estado de la función
 
 async function startBot() {
     const sock = makeWASocket({
         auth: state,
+        printQRInTerminal: true,
     });
 
-    sock.ev.on('creds.update', saveState);
+    sock.ev.on('messages.upsert', async ({ messages, type }) => {
+        if (type !== 'notify') return;
 
-    sock.ev.on('messages.upsert', async (messageUpdate) => {
-        const messages = messageUpdate.messages;
-        if (!messages[0].key.fromMe && messages[0].message) {
-            const sender = messages[0].key.remoteJid;
-            const text = messages[0]?.message?.conversation ||
-                         messages[0]?.message?.extendedTextMessage?.text || '';
+        const msg = messages[0];
+        if (!msg.message || msg.key.fromMe) return;
 
-            // Activar el bot solo con el comando `.denegar`
-            if (text.trim() === '.denegar') {
-                if (groupLinkRegex.test(text)) {
-                    await sock.sendMessage(sender, { text: 'Lo siento, su solicitud no fue aprobada.' });
-                    console.log(`Enlace de grupo detectado y denegado de: ${sender}`);
-                } else {
-                    await sock.sendMessage(sender, { text: 'No se encontró ningún enlace para denegar.' });
-                    console.log(`El comando ".denegar" fue enviado, pero no se detectó enlace de grupo.`);
-                }
-            }
+        const from = msg.key.remoteJid;
+        const text = msg.message.conversation || msg.message.extendedTextMessage?.text || '';
+
+        // Comando para activar la función
+        if (text.toLowerCase() === '.nox denegar') {
+            noxDenegarActivado = true;
+            await sock.sendMessage(from, { text: 'Modo de denegación activado. Enlaces serán bloqueados.' });
+        }
+
+        // Comando para desactivar la función
+        if (text.toLowerCase() === '.nox permitir') {
+            noxDenegarActivado = false;
+            await sock.sendMessage(from, { text: 'Modo de denegación desactivado. Enlaces permitidos.' });
+        }
+
+        // Verificar si hay un enlace y si la función está activada
+        if (noxDenegarActivado && text.includes('http')) {
+            await sock.sendMessage(from, { text: 'Lo siento, su solicitud no fue aprobada.' });
         }
     });
 
     sock.ev.on('connection.update', (update) => {
         const { connection, lastDisconnect } = update;
         if (connection === 'close') {
-            const reason = lastDisconnect?.error?.output?.statusCode || 0;
-            const shouldReconnect = reason !== DisconnectReason.loggedOut;
-            console.log(`Conexión cerrada. Razón: ${reason}. Reconectando: ${shouldReconnect}`);
-            if (shouldReconnect) startBot();
+            const shouldReconnect = lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut;
+            console.log('Conexión cerrada. ¿Reconectar?', shouldReconnect);
+            if (shouldReconnect) {
+                startBot();
+            }
         } else if (connection === 'open') {
-            console.log('Bot conectado correctamente.');
+            console.log('Conexión exitosa');
         }
     });
 
-    sock.ev.on('qr', (qr) => {
-        qrcode.generate(qr, { small: true });
-        console.log('Escanea el código QR para conectar.');
-    });
+    sock.ev.on('creds.update', saveState);
 }
 
 startBot();

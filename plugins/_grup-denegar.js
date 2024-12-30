@@ -1,48 +1,47 @@
-from flask import Flask, request
-import re
-import requests
+const { default: makeWASocket, useSingleFileAuthState } = require('@whiskeysockets/baileys');
+const { unlinkSync } = require('fs');
+const qrcode = require('qrcode-terminal');
 
-app = Flask(__name__)
+// Autenticación
+const { state, saveState } = useSingleFileAuthState('./auth_info.json');
 
-# Configura tus credenciales de WhatsApp API
-ACCESS_TOKEN = "YOUR_ACCESS_TOKEN"  # Reemplaza con tu token de acceso
-PHONE_NUMBER_ID = "YOUR_PHONE_NUMBER_ID"  # Reemplaza con tu número de teléfono ID
+// Expresión regular para detectar enlaces de grupos
+const groupLinkRegex = /https:\/\/chat\.whatsapp\.com\/[A-Za-z0-9]+/;
 
-# Expresión regular para detectar enlaces de grupos
-group_link_pattern = re.compile(r"https://chat\.whatsapp\.com/\S+")
+async function startBot() {
+    const sock = makeWASocket({
+        auth: state,
+        printQRInTerminal: true,
+    });
 
-# Función para enviar mensajes
-def send_message(phone_number, message):
-    url = f"https://graph.facebook.com/v17.0/{PHONE_NUMBER_ID}/messages"
-    headers = {
-        "Authorization": f"Bearer {ACCESS_TOKEN}",
-        "Content-Type": "application/json",
-    }
-    data = {
-        "messaging_product": "whatsapp",
-        "to": phone_number,
-        "type": "text",
-        "text": {"body": message},
-    }
-    response = requests.post(url, headers=headers, json=data)
-    return response.status_code
+    sock.ev.on('creds.update', saveState);
 
-# Ruta para manejar los mensajes entrantes
-@app.route("/webhook", methods=["POST"])
-def webhook():
-    data = request.json
+    sock.ev.on('messages.upsert', async (messageUpdate) => {
+        const messages = messageUpdate.messages;
+        if (!messages[0].key.fromMe && messages[0].message) {
+            const sender = messages[0].key.remoteJid;
+            const text = messages[0].message.conversation || '';
 
-    # Procesar solo mensajes entrantes
-    if "messages" in data["entry"][0]["changes"][0]["value"]:
-        message = data["entry"][0]["changes"][0]["value"]["messages"][0]
-        phone_number = message["from"]
-        text = message.get("text", {}).get("body", "")
+            // Si el mensaje contiene un enlace de grupo
+            if (groupLinkRegex.test(text)) {
+                await sock.sendMessage(sender, {
+                    text: 'Lo siento, su solicitud no fue aprobada.',
+                });
+                console.log(`Enlace de grupo detectado de: ${sender}`);
+            }
+        }
+    });
 
-        # Detectar enlace de grupo
-        if group_link_pattern.search(text):
-            send_message(phone_number, "Lo siento, su solicitud no fue aprobada.")
+    sock.ev.on('connection.update', (update) => {
+        const { connection, lastDisconnect } = update;
+        if (connection === 'close') {
+            const shouldReconnect = lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut;
+            console.log('Conexión cerrada. Reconectando:', shouldReconnect);
+            if (shouldReconnect) startBot();
+        } else if (connection === 'open') {
+            console.log('Bot conectado correctamente.');
+        }
+    });
+}
 
-    return "OK", 200
-
-if __name__ == "__main__":
-    app.run(port=5000)
+startBot();

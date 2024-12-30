@@ -4,6 +4,7 @@ const qrcode = require('qrcode-terminal');
 
 const { state, saveState } = useSingleFileAuthState('./auth_info.json');
 
+// Expresión regular para detectar enlaces de grupos
 const groupLinkRegex = /https:\/\/chat\.whatsapp\.com\/[A-Za-z0-9]+/;
 
 async function startBot() {
@@ -20,9 +21,15 @@ async function startBot() {
             const text = messages[0]?.message?.conversation ||
                          messages[0]?.message?.extendedTextMessage?.text || '';
 
-            if (groupLinkRegex.test(text)) {
-                await sock.sendMessage(sender, { text: 'Lo siento, su solicitud no fue aprobada.' });
-                console.log(`Enlace de grupo detectado de: ${sender}`);
+            // Activar el bot solo con el comando `.denegar`
+            if (text.trim() === '.denegar') {
+                if (groupLinkRegex.test(text)) {
+                    await sock.sendMessage(sender, { text: 'Lo siento, su solicitud no fue aprobada.' });
+                    console.log(`Enlace de grupo detectado y denegado de: ${sender}`);
+                } else {
+                    await sock.sendMessage(sender, { text: 'No se encontró ningún enlace para denegar.' });
+                    console.log(`El comando ".denegar" fue enviado, pero no se detectó enlace de grupo.`);
+                }
             }
         }
     });

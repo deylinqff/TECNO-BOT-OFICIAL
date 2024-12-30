@@ -1,24 +1,48 @@
-from pyrogram import Client, filters
+from flask import Flask, request
 import re
+import requests
 
-# Configuración del bot
-API_ID = "YOUR_API_ID"  # Reemplaza con tu API_ID de Telegram
-API_HASH = "YOUR_API_HASH"  # Reemplaza con tu API_HASH de Telegram
-BOT_TOKEN = "YOUR_BOT_TOKEN"  # Token del bot de Telegram
+app = Flask(__name__)
 
-app = Client("whatsapp-bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+# Configura tus credenciales de WhatsApp API
+ACCESS_TOKEN = "YOUR_ACCESS_TOKEN"  # Reemplaza con tu token de acceso
+PHONE_NUMBER_ID = "YOUR_PHONE_NUMBER_ID"  # Reemplaza con tu número de teléfono ID
 
 # Expresión regular para detectar enlaces de grupos
 group_link_pattern = re.compile(r"https://chat\.whatsapp\.com/\S+")
 
-@app.on_message(filters.private & filters.text)
-def detect_group_link(client, message):
-    # Verifica si el mensaje contiene un enlace de grupo
-    if group_link_pattern.search(message.text):
-        message.reply_text("Lo siento, su solicitud no fue aprobada.")
-        print(f"Enlace detectado y rechazado de: {message.from_user.first_name}")
+# Función para enviar mensajes
+def send_message(phone_number, message):
+    url = f"https://graph.facebook.com/v17.0/{PHONE_NUMBER_ID}/messages"
+    headers = {
+        "Authorization": f"Bearer {ACCESS_TOKEN}",
+        "Content-Type": "application/json",
+    }
+    data = {
+        "messaging_product": "whatsapp",
+        "to": phone_number,
+        "type": "text",
+        "text": {"body": message},
+    }
+    response = requests.post(url, headers=headers, json=data)
+    return response.status_code
 
-# Ejecutar el bot
+# Ruta para manejar los mensajes entrantes
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    data = request.json
+
+    # Procesar solo mensajes entrantes
+    if "messages" in data["entry"][0]["changes"][0]["value"]:
+        message = data["entry"][0]["changes"][0]["value"]["messages"][0]
+        phone_number = message["from"]
+        text = message.get("text", {}).get("body", "")
+
+        # Detectar enlace de grupo
+        if group_link_pattern.search(text):
+            send_message(phone_number, "Lo siento, su solicitud no fue aprobada.")
+
+    return "OK", 200
+
 if __name__ == "__main__":
-    print("El bot está corriendo...")
-    app.run()
+    app.run(port=5000)

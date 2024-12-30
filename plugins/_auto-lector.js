@@ -1,4 +1,4 @@
-const { default: makeWASocket, DisconnectReason, useSingleFileAuthState } = require('@adiwajshing/baileys');
+Const { default: makeWASocket, DisconnectReason, useSingleFileAuthState } = require('@adiwajshing/baileys');
 const { existsSync, mkdirSync } = require('fs');
 
 // Crear carpeta para el almacenamiento si no existe
@@ -25,7 +25,7 @@ const startBot = () => {
         const body = message.message.conversation || message.message.extendedTextMessage?.text || '';
 
         // Comando para activar/desactivar el autolector
-        if (body === '.Auto lector el Bob') {
+        if (body === '.lector') {
             autoLectorActivado = !autoLectorActivado;
             await sock.sendMessage(from, {
                 text: `Auto lector ${autoLectorActivado ? 'activado' : 'desactivado'}.`,

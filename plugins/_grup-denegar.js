@@ -1,6 +1,5 @@
 const { default: makeWASocket, DisconnectReason, useSingleFileAuthState } = require('@adiwajshing/baileys');
 const { Boom } = require('@hapi/boom');
-const { writeFileSync } = require('fs');
 
 const { state, saveState } = useSingleFileAuthState('./auth_info.json');
 
@@ -21,6 +20,8 @@ async function startBot() {
         const from = msg.key.remoteJid;
         const text = msg.message.conversation || msg.message.extendedTextMessage?.text || '';
 
+        console.log("Mensaje recibido:", text); // Depuración
+
         // Comando para activar la función
         if (text.toLowerCase() === '.nox denegar') {
             noxDenegarActivado = true;
@@ -34,7 +35,7 @@ async function startBot() {
         }
 
         // Verificar si hay un enlace y si la función está activada
-        if (noxDenegarActivado && text.includes('http')) {
+        if (noxDenegarActivado && /(https?:\/\/[^\s]+)/gi.test(text)) {
             await sock.sendMessage(from, { text: 'Lo siento, su solicitud no fue aprobada.' });
         }
     });

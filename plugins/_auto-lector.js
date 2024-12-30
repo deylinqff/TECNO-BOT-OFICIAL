@@ -1,60 +1,71 @@
-Const { default: makeWASocket, DisconnectReason, useSingleFileAuthState } = require('@adiwajshing/baileys');
-const { existsSync, mkdirSync } = require('fs');
+require('dotenv').config(); // Para manejar variables de entorno
+const { Client, LocalAuth } = require('whatsapp-web.js');
+const qrcode = require('qrcode-terminal');
+const fs = require('fs');
 
-// Crear carpeta para el almacenamiento si no existe
-if (!existsSync('./auth')) mkdirSync('./auth');
+// Inicializa el cliente de WhatsApp
+const client = new Client({
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        headless: true, // Cambia a false si necesitas ver la ventana del navegador
+        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Opciones para entornos de servidor
+    },
+});
 
-// Autenticación
-const { state, saveState } = useSingleFileAuthState('./auth/session.json');
+// Variable para activar/desactivar el autolector
+let autolectorActivado = false;
 
-// Iniciar el cliente de WhatsApp
-const startBot = () => {
-    const sock = makeWASocket({
-        auth: state,
-        printQRInTerminal: true,
-    });
+// Genera el QR en la terminal y lo guarda en un archivo (opcional)
+client.on('qr', (qr) => {
+    console.log('Escanea este código QR con tu WhatsApp:');
+    qrcode.generate(qr, { small: true });
 
-    let autoLectorActivado = false;
+    // Guarda el QR en un archivo para facilitar acceso
+    fs.writeFileSync('./qrcode.txt', qr);
+});
 
-    // Evento: Mensaje recibido
-    sock.ev.on('messages.upsert', async (m) => {
-        const message = m.messages[0];
-        if (!message.message) return;
+// Mensaje cuando el cliente esté listo
+client.on('ready', () => {
+    console.log(`[${new Date().toISOString()}] ¡El bot está listo y conectado!`);
+});
 
-        const from = message.key.remoteJid; // ID del remitente
-        const body = message.message.conversation || message.message.extendedTextMessage?.text || '';
+// Escucha mensajes entrantes
+client.on('message', (message) => {
+    // Comandos para activar/desactivar el autolector
+    if (message.body.toLowerCase() === '.autolector-on') {
+        autolectorActivado = true;
+        message.reply('Autolector activado.');
+        console.log(`[${new Date().toISOString()}] Autolector activado.`);
+    } else if (message.body.toLowerCase() === '.autolector-off') {
+        autolectorActivado = false;
+        message.reply('Autolector desactivado.');
+        console.log(`[${new Date().toISOString()}] Autolector desactivado.`);
+    }
 
-        // Comando para activar/desactivar el autolector
-        if (body === '.lector') {
-            autoLectorActivado = !autoLectorActivado;
-            await sock.sendMessage(from, {
-                text: `Auto lector ${autoLectorActivado ? 'activado' : 'desactivado'}.`,
-            });
-            return;
-        }
+    // Funcionalidad del autolector
+    if (autolectorActivado) {
+        console.log(`[${new Date().toISOString()}] Mensaje de ${message.from}: ${message.body}`);
 
-        // Marcar mensajes dirigidos al bot como leídos si la función está activada
-        if (autoLectorActivado && message.key.fromMe) {
-            await sock.readMessages([message.key]);
-            console.log('Mensaje marcado como leído:', body);
-        }
-    });
+        // Marca el mensaje como leído
+        message.markAsRead().then(() => {
+            console.log(`[${new Date().toISOString()}] Mensaje de ${message.from} marcado como leído.`);
+        }).catch((err) => {
+            console.error('Error al marcar como leído:', err);
+        });
+    }
+});
 
-    // Manejar desconexión
-    sock.ev.on('connection.update', (update) => {
-        const { connection, lastDisconnect } = update;
-        if (connection === 'close') {
-            const shouldReconnect =
-                (lastDisconnect.error)?.output?.statusCode !== DisconnectReason.loggedOut;
-            console.log('Conexión cerrada, reconectando...', shouldReconnect);
-            if (shouldReconnect) startBot();
-        } else if (connection === 'open') {
-            console.log('¡Conexión exitosa!');
-        }
-    });
+// Manejo de errores de autenticación
+client.on('auth_failure', (msg) => {
+    console.error(`[${new Date().toISOString()}] Error de autenticación:`, msg);
+});
 
-    sock.ev.on('creds.update', saveState);
-};
+// Manejo de desconexiones y reconexiones
+client.on('disconnected', (reason) => {
+    console.error(`[${new Date().toISOString()}] Cliente desconectado:`, reason);
+    console.log('Intentando reconectar...');
+    client.initialize();
+});
 
-// Iniciar el bot
-startBot();
+// Inicia el cliente
+client.initialize();

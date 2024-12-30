@@ -2,10 +2,10 @@ import { igdl } from 'ruhend-scraper'
 
 const handler = async (m, { text, conn, args, usedPrefix, command }) => {
 if (!args[0]) {
-return conn.reply(m.chat, '🌐 *Ingresa Un Link De Facebook*', m, rcanal)}
+return conn.reply(m.chat, '🚀 *Ingresa Un Link De Facebook*', m, rcanal)}
 let res
 try {
-conn.reply(m.chat, `🚀 *Descargando su video de facebook.*`, m, {
+conn.reply(m.chat, `🕒 *Descargando su video de facebook.*`, m, {
 contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, showAdAttribution: true,
 title: packname,
 body: dev,
@@ -15,7 +15,7 @@ await m.react(rwait)
 res = await igdl(args[0])
 } catch {
 await m.react(error)
-return conn.reply(m.chat, '⚙️ *Error al obtener datos. Verifica el enlace.*', m, fake)}
+return conn.reply(m.chat, '🌐 *Error al obtener datos. Verifica el enlace.*', m, fake)}
 let result = res.data
 if (!result || result.length === 0) {
 return conn.reply(m.chat, '🌐 *No se encontraron resultados.*', m, fake)}

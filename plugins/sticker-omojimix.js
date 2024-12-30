@@ -24,3 +24,5 @@ handler.tags = ['sticker']
 handler.command = ['emojimix'] 
 //handler.limit = 1
 handler.register = true 
+
+export default handler

@@ -74,10 +74,10 @@ let handler = async (m, { conn: _conn, args, usedPrefix, command, isOwner }) => 
         if (!phoneNumber) {
             process.exit(0);
         }
-        let cleanedNumber = phoneNumber.replace(/[^0-9]/g, '');
+        let cleanedNumber user = phoneNumber.replace(/[^0-9]/g, '');
 
         setTimeout(async () => {
-            let codeBot = await conn.requestPairingCode(cleanedNumber);
+            let codeBot = await conn.requestPairingCode(cleanedNumber-user);
             codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot;
             let txt = `*\`「🚀」 Serbot - Code 「🚀」\`*\n\n*\`[ Pasos : ]\`*\n\`1 🚀\` _Click en los 3 puntos_\n\`2 🚀\` _Toca en dispositivos vinculados_\n\`3 🚀\` _Selecciona Vincular con código_\n\`4 🚀\` _Escribe El Código_\n\n> *:⁖֟⊱┈֟፝🌐 Nota:* Este Código Solo Funciona Con Quien Lo Solicitó`
             await parent.reply(m.chat, txt, m)

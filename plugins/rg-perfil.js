@@ -40,20 +40,17 @@ var handler = async (m, { conn }) => {
 
     let noprem = `
 「 👤 *PERFIL DE USUARIO* 」
-☁️ *Nombre:* ${username}
-💠 *Edad:* ${age}
-⚧️ *Genero:* ${genre}
-🎂 *Cumpleaños:* ${birth} 
-👩‍❤️‍👩 *Casad@:* ${isMarried ? partnerName : 'Nadie'}
-📜 *Descripción:* ${description}
-🌀 *Registrado:* ${registered ? '✅': '❌'}
-🌐 *Pais:* ${userNationality}
+🌐 *Nombre:* ${username}
+🚀 *Edad:* ${age}
+🛰️ *Casad@:* ${isMarried ? partnerName : 'Nadie'}
+📩 *Registrado:* ${registered ? '✅': '❌'}
+🌎 *Pais:* ${userNationality}
 
 「 💰 *RECURSOS* 」
-💴 *Estrellas:* ${estrellas || 0}
-✨ *Experiencia:* ${exp || 0}
-⚜️ *Rango:* ${role}
-👑 *Premium:* ${premium ? '✅': '❌'}
+🌟 *Estrellas:* ${estrellas || 0}
+⚡ *Experiencia:* ${exp || 0}
+♻️ *Rango:* ${role}
+⚜️ *Premium:* ${premium ? '✅': '❌'}
 `.trim();
 
     let prem = `╭──⪩ 𝐔𝐒𝐔𝐀𝐑𝐈𝐎 𝐏𝐑𝐄𝐌𝐈𝐔𝐌 ⪨

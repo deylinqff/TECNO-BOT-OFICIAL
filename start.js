@@ -280,4 +280,4 @@ async function initialize() {
             conn.credsUpdate = saveCreds.bind(global.conn, true);
 
             const currentDateTime = new Date();
-            const message
+const message = "Initialization completed"; // Example initialization

@@ -1,5 +1,5 @@
 {
-"name": "TECNO-BOT",
+"name": "Yuki_Suou-Bot",
 "version": "2.0.0",
 "description": "Simple WhatsApp Bot Multi Device",
 "main": "start.js",
@@ -18,16 +18,16 @@
 "eslint": "eslint .",
 "eslintfix": "eslint --fix ."
 },
-"homepage": "https://github.com/Deylinel/TECNO-BOT-OFICIAL",
+"homepage": "https://github.com/The-King-Destroy/Yuki_Suou-Bot",
 "author": {
-"name": "The-King-Deylin"
+"name": "The-King-Destroy"
 },
 "repository": {
 "type": "git",
-"url": "git+https://github.com/Deylinel/TECNO-BOT-OFICIAL.git"
+"url": "git+https://github.com/The-King-Destroy/Yuki_Suou-Bot.git"
 },
 "bugs": {
-"url": "https://github.com/Deylinel/TECNO-BOT-OFICIAL/issues"
+"url": "https://github.com/The-King-Destroy/Yuki_Suou-Bot/issues"
 },
 "license": "GPL-3.0-or-later",
 "dependencies": {

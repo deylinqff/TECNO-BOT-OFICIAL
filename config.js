@@ -42,17 +42,17 @@ global.jadi = 'YukiJadiBot'
 
 //• ↳ ◜𝑴𝑨𝑹𝑪𝑨𝑺 𝑫𝑬 𝑨𝑮𝑼𝑨◞ • 💌
 global.packsticker = `♾ ━━━━━━━━\n├ ɓσƭ:\n├ ρяοριєταяιο:\n├ ƒєϲнα ∂є ϲяєαϲιόи:\n├ нοяα:\n♾━━━━━━━━`
-global.packname = `𝐘𝐮𝐤𝐢_𝐒𝐮𝐨𝐮-𝐁𝐨𝐭 🌸`
-global.author = `♾━━━━━━━━\n⇝͟͞ ۵̤͟𝐘𝐮𝐤𝐢_𝐒𝐮𝐨𝐮-𝐁𝐨𝐭̈♡̵̑ ͟͞ ⋆\n⇝ ۵-̱̅ⁱᵃᵐ|𝔇ĕ𝐬†𝓻⊙γ𒆜-͞ˍ\n⇝ ${moment.tz('America/Los_Angeles').format('DD/MM/YY')}\n⇝ ${moment.tz('America/Los_Angeles').format('HH:mm:ss')} \n♾━━━━━━━━\n\n\n\nѕτιϲκєя ϐγ: ৎ୭࠭͢𝐘𝐮𝐤𝐢_𝐒𝐮𝐨𝐮-𝐁𝐨𝐭ⷭ𓆪͟͞ `;
-global.wm = 'ৎ୭࠭͢𝐘𝐮𝐤𝐢_𝐒𝐮𝐨𝐮-𝐁𝐨𝐭ⷭ𓆪͟͞ ';
-global.titulowm = '͟͞ ৎ୭࠭͢𝒴𝓊𝓀𝒾_𝒮𝓊𝑜𝓊-𝐵𝑜𝓉̤𓆪 ͟͞';
-global.titulowm2 = `͟͞ ৎ୭࠭͢𝒴𝓊𝓀𝒾_𝒮𝓊𝑜𝓊-𝐵𝑜𝓉̤𓆪 ͟͞`
-global.igfg = 'ᥫᩣⁱᵃᵐ|𝔇ĕ𝐬†𝓻⊙γ𒆜'
-global.botname = '♡⃝𝒴𝓊𝓀𝒾_𝒮𝓊𝑜𝓊-𝐵𝑜𝓉ᚐ҉ᚐ'
-global.dev = '© 𝒫𝑜𝓌𝑒𝓇𝑒𝒹 𝐵𝓎 ⁱᵃᵐ|𝔇ĕ𝐬†𝓻⊙γ𒆜'
-global.textbot = 'ৎ୭࠭͢𝐘𝐮𝐤𝐢_𝐒𝐮𝐨𝐮-𝐁𝐨𝐭ⷭ𓆪͟͞ '
-global.gt = '͟͞ ৎ୭࠭͢𝒴𝓊𝓀𝒾_𝒮𝓊𝑜𝓊-𝐵𝑜𝓉̤𓆪 ͟͞';
-global.namechannel = '♡⃝𝒞𝐻𝒜𝒩𝒩𝐸𝐿 𝒴𝒰𝒦𝐼 𝒮𝒰𝒪𝒰ᚐ҉ᚐ'
+global.packname = `𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 🚀`
+global.author = `♾━━━━━━━━\n⇝͟͞ ۵̤͟𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕̈♡̵̑ ͟͞ ⋆\n⇝ ۵-̱̅𝕯𝖊𝖞𝖑𝖎𝖓-͞ˍ\n⇝ ${moment.tz('America/Los_Angeles').format('DD/MM/YY')}\n⇝ ${moment.tz('America/Los_Angeles').format('HH:mm:ss')} \n♾━━━━━━━━\n\n\n\nѕτιϲκєя ϐγ: ৎ୭࠭͢𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕ⷭ𓆪͟͞ `;
+global.wm = 'ৎ୭࠭͢𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕ⷭ𓆪͟͞ ';
+global.titulowm = '͟͞ ৎ୭࠭͢𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕̤𓆪 ͟͞';
+global.titulowm2 = `͟͞ ৎ୭࠭͢𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕̤𓆪 ͟͞`
+global.igfg = '𝕯𝖊𝖞𝖑𝖎𝖓'
+global.botname = '♡⃝𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕ᚐ҉ᚐ'
+global.dev = '© 𝒫𝑜𝓌𝑒𝓇𝑒𝒹 𝐵𝓎 𝕯𝖊𝖞𝖑𝖎𝖓'
+global.textbot = 'ৎ୭࠭͢𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕ⷭ𓆪͟͞ '
+global.gt = '͟͞ ৎ୭࠭͢𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕̤𓆪 ͟͞';
+global.namechannel = '♡⃝𝒞𝐻𝒜𝒩𝒩𝐸𝐿 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕ᚐ҉ᚐ'
 
 //• ↳ ◜𝑰𝑴𝑨́𝑮𝑬𝑵𝑬𝑺◞ • 🌇
 global.imagen1 = fs.readFileSync('./src/menus/Menu2.jpg');

@@ -41,7 +41,6 @@ global.miniurl = fs.readFileSync('./storage/img/miniurl.jpg');
 
 //*═══════════✧════════════✧═══════════*
 
-TODAVÍA NO TENGO GRUPO 
 
 global.canal = '📡 https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m';
 

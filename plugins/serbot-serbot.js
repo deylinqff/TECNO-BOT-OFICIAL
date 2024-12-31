@@ -1,66 +1,62 @@
-const { fetchLatestBaileysVersion, useMultiFileAuthState, DisconnectReason } = await import('@whiskeysockets/baileys');
+import { fetchLatestBaileysVersion, useMultiFileAuthState } from '@whiskeysockets/baileys';
 import fs from 'fs';
 import pino from 'pino';
 import crypto from 'crypto';
 import { makeWASocket } from '../lib/simple.js';
 
-if (global.conns instanceof Array) {
-  console.log();
-} else {
+if (!Array.isArray(global.conns)) {
   global.conns = [];
 }
 
 const codes = {}; // Para almacenar los códigos generados temporalmente.
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-  let parentw = args[0] && args[0] === "plz" ? conn : await global.conn;
+let handler = async (m, { conn, args, usedPrefix }) => {
+  let parentConn = args[0] === "plz" ? conn : global.conn;
 
-  if (!(args[0] && args[0] === 'plz' || (await global.conn).user.jid === conn.user.jid)) {
-    return m.reply("Este comando solo puede ser usado en el bot principal! wa.me/" + global.conn.user.jid.split`@`[0x0] + "?text=" + usedPrefix + "serbot");
+  if (!parentConn || parentConn.user.jid !== conn.user.jid) {
+    return m.reply(
+      `Este comando solo puede ser usado en el bot principal! \n\nLink: wa.me/${global.conn.user.jid.split('@')[0]}?text=${usedPrefix}serbot`
+    );
   }
 
-  async function serbot() {
-    let serbotFolder = m.sender.split('@')[0];
-    let folderSub = `./serbot/${serbotFolder}`;
-    if (!fs.existsSync(folderSub)) {
-      fs.mkdirSync(folderSub, { recursive: true });
+  async function createSubBot() {
+    let subBotFolder = `./serbot/${m.sender.split('@')[0]}`;
+    if (!fs.existsSync(subBotFolder)) {
+      fs.mkdirSync(subBotFolder, { recursive: true });
     }
-    if (args[0]) {
-      fs.writeFileSync(`${folderSub}/creds.json`, Buffer.from(args[0], 'base64').toString('utf-8'));
+    if (args[1]) {
+      fs.writeFileSync(`${subBotFolder}/creds.json`, Buffer.from(args[1], 'base64').toString('utf-8'));
     }
 
-    const { state, saveCreds } = await useMultiFileAuthState(folderSub);
+    const { state, saveCreds } = await useMultiFileAuthState(subBotFolder);
     const { version } = await fetchLatestBaileysVersion();
 
     const connectionOptions = {
       version,
-      keepAliveIntervalMs: 30000,
-      logger: pino({ level: "fatal" }),
+      logger: pino({ level: "silent" }),
       auth: state,
-      browser: [`【 ✯ Ai Hoshino - MD ✰ 】`, "IOS", "4.1.0"],
+      browser: ["Sub Bot - MD", "Desktop", "3.0.0"],
     };
 
-    let conn = makeWASocket(connectionOptions);
+    const conn = makeWASocket(connectionOptions);
 
-    async function connectionUpdate(update) {
+    conn.ev.on("connection.update", async (update) => {
       const { connection, lastDisconnect, isNewLogin } = update;
 
       if (isNewLogin) {
-        conn.isInit = true;
+        // Generar un código único de 8 caracteres
+        const code = crypto.randomBytes(4).toString('hex').toUpperCase();
+        codes[code] = { conn, folder: subBotFolder, timestamp: Date.now() };
 
-        // Generar un código de 8 dígitos.
-        const code = crypto.randomBytes(4).toString('hex').toUpperCase().slice(0, 8);
-        codes[code] = { conn, folderSub, timestamp: Date.now() };
+        // Notificar al usuario
+        const msg = `*Sub Bot - Vinculación*\n\n` +
+          `✅ Código generado con éxito:\n` +
+          `*${code}*\n\n` +
+          `_Nota: Este código expira en 5 minutos._`;
 
-        // Enviar el código al usuario.
-        let txt = '`–  S E R B O T  -  S U B B O T`\n\n';
-        txt += `┌ ✩  *Conecta este Sub Bot usando el código*\n`;
-        txt += `│ ✩  Código: *${code}*\n`;
-        txt += `└ ✩  *Nota:* Este código expira en 5 minutos.`;
+        await parentConn.reply(m.chat, msg, m);
 
-        await parentw.reply(m.chat, txt, m);
-
-        // Limpiar el código después de 5 minutos.
+        // Limpiar el código tras 5 minutos
         setTimeout(() => {
           delete codes[code];
         }, 300000);
@@ -68,39 +64,41 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
       if (connection === "open") {
         global.conns.push(conn);
-        await parentw.reply(m.chat, 'Conectado exitosamente.', m);
-      }
-    }
+        await parentConn.reply(m.chat, "✅ Sub Bot conectado con éxito.", m);
+      } else if (connection === "close") {
+        const reason = lastDisconnect?.error?.output?.statusCode || "Desconocido";
+        await parentConn.reply(m.chat, `❌ Sub Bot desconectado. Razón: ${reason}`, m);
 
-    conn.ev.on("connection.update", connectionUpdate);
+        // Eliminar archivos temporales
+        fs.rmSync(subBotFolder, { recursive: true, force: true });
+      }
+    });
 
     setTimeout(() => {
       if (!conn.user) {
         try {
           conn.ws.close();
-        } catch {}
+        } catch { }
         conn.ev.removeAllListeners();
-        let i = global.conns.indexOf(conn);
-        if (i >= 0) {
-          delete global.conns[i];
-          global.conns.splice(i, 1);
-        }
-        fs.rmdirSync(folderSub, { recursive: true });
+        const index = global.conns.indexOf(conn);
+        if (index >= 0) global.conns.splice(index, 1);
+
+        fs.rmSync(subBotFolder, { recursive: true, force: true });
       }
     }, 30000);
   }
 
-  serbot();
+  createSubBot();
 };
 
 handler.verifyCode = async (code, m) => {
   if (codes[code]) {
-    const { conn, folderSub } = codes[code];
-    delete codes[code]; // Eliminar el código tras su uso.
+    const { conn } = codes[code];
+    delete codes[code]; // Código ya utilizado
 
-    conn.ev.on('connection.update', async (update) => {
-      if (update.connection === 'open') {
-        await conn.reply(m.chat, 'Sub Bot vinculado exitosamente.', m);
+    conn.ev.on("connection.update", async (update) => {
+      if (update.connection === "open") {
+        await conn.reply(m.chat, "✅ Sub Bot vinculado con éxito.", m);
       }
     });
 
@@ -111,11 +109,7 @@ handler.verifyCode = async (code, m) => {
 };
 
 handler.help = ["serbot"];
-handler.tags = ["serbot"];
-handler.command = ['serbot', 'qrbot', 'jadibot', 'qr'];
+handler.tags = ["tools"];
+handler.command = ["serbot", "jadibot"];
 
 export default handler;
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}

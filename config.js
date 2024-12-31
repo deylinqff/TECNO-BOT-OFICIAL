@@ -56,7 +56,6 @@ global.gt = '͟͞ ৎ୭࠭͢𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕𓆪 ͟͞';
 global.namechannel = '♡⃝𝑪𝒂𝒏𝒂𝒍 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕ᚐ҉ᚐ'
 
 //• ↳ ◜𝑰𝑴𝑨́𝑮𝑬𝑵𝑬𝑺◞ • 🌇
-global.imagen1 = fs.readFileSync('./src/menus/Menu2.jpg');
 global.imagen2 = fs.readFileSync('./src/anime.jpg');
 global.imagen3 = fs.readFileSync('./src/menus/Menu3.jpg');
 global.imagen4 = fs.readFileSync('./src/menus/Menu.jpg');

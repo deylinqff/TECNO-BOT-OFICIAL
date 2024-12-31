@@ -7,26 +7,26 @@ import cfonts from 'cfonts';
 import { createInterface } from 'readline';
 import yargs from 'yargs';
 import chalk from 'chalk';
-console.log('\n✰ Iniciando CrowBot ✰');
+console.log('\n✰ Iniciando TECNO-BOT ✰');
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(__dirname);
 const { name, description, author, version } = require(join(__dirname, './package.json'));
 const { say } = cfonts;
 const rl = createInterface(process.stdin, process.stdout);
-say('CrowBot\nBot', {
+say('TECNO-BOT', {
 font: 'block',
 align: 'center',
-colors: ['white']
+colors: ['magentaBright']
 });
 say(`Multi Device`, {
 font: 'chrome',
 align: 'center',
-colors: ['red']
+colors: ['redBright']
 });
-say(`Developed By • Niño Piña`, {
+say(`Developed By • The-King-Deylin`, {
 font: 'console',
 align: 'center',
-colors: ['magenta']
+colors: ['blueBright']
 });
 var isRunning = false;
 function start(file) {
@@ -36,7 +36,7 @@ let args = [join(__dirname, file), ...process.argv.slice(2)];
 say([process.argv[0], ...args].join(' '), {
 font: 'console',
 align: 'center',
-colors: ['green']
+colors: ['candy']
 });
 setupMaster({
 exec: args[0],
@@ -57,7 +57,7 @@ break;
 });
 p.on('exit', (_, code) => {
 isRunning = false;
-console.error('🚩 Error:\n', code);
+console.error('⚙️ Error:\n', code);
 process.exit();
 if (code === 0) return;
 watchFile(args[0], () => {
@@ -73,8 +73,8 @@ p.emit('message', line.trim());
 }
 process.on('warning', (warning) => {
 if (warning.name === 'MaxListenersExceededWarning') {
-console.warn('🚩 Se excedió el límite de Listeners en:');
+console.warn('🌐 Se excedió el límite de Listeners en:');
 console.warn(warning.stack);
 }
 });
-start('crow.js');
+start('start.js');

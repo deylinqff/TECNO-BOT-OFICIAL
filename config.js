@@ -1,4 +1,3 @@
-El problema con tu código es un error de 
 import { watchFile, unwatchFile } from 'fs';
 import chalk from 'chalk';
 import { fileURLToPath } from 'url';

@@ -1,5 +1,5 @@
-import axios from 'axios'
-import fetch from 'node-fetch'
+import axios from 'axios';
+import fetch from 'node-fetch';
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
@@ -23,9 +23,11 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
             const description = await luminsesi(query, username, prompt);
 
-            // Enviar imagen y luego la respuesta
-            await conn.sendFile(m.chat, 'https://files.catbox.moe/adcnsj.jpg', 'respuesta.jpg', '', m);
-            await conn.reply(m.chat, description, m);
+            // Enviar imagen junto con el texto
+            await conn.sendMessage(m.chat, {
+                image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
+                caption: description
+            }, { quoted: m });
         } catch (error) {
             console.error('💛 Error al analizar la imagen:', error);
             await conn.reply(m.chat, '💛 Error al analizar la imagen.', m);
@@ -42,9 +44,11 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
             const response = await luminsesi(query, username, prompt);
 
-            // Enviar imagen y luego la respuesta
-            await conn.sendFile(m.chat, 'https://files.catbox.moe/adcnsj.jpg', 'respuesta.jpg', '', m);
-            await conn.reply(m.chat, response, m);
+            // Enviar imagen junto con el texto
+            await conn.sendMessage(m.chat, {
+                image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
+                caption: response
+            }, { quoted: m });
         } catch (error) {
             console.error('💛 Error al obtener la respuesta:', error);
             await conn.reply(m.chat, 'Error: intenta más tarde.', m);

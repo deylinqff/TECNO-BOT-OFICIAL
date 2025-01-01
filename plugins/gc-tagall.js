@@ -1,19 +1,18 @@
 const handler = async (m, {isOwner, isAdmin, conn, text, participants, args, command, usedPrefix}) => {
 
   if (usedPrefix == 'a' || usedPrefix == 'A') return;
- 
+
   if (!(isAdmin || isOwner)) {
     global.dfail('admin', m, conn);
     throw false;
   }
   const pesan = args.join` `;
-const oi = `⇢=͟͟͞͞🄰νίऽ૭ : ${pesan}`;
-  let teks = `(づ｡◕‿◕｡)づ 💛 Revivan Plantas"\n  ⧼P̼⧽= ${participants.length} ℙ𝐀𝔍𝐈ꪀəﻜ\n\n ${oi}\n\n╭•┈┈•┈┈⊰🔥⃪᜔꫶┈•┈┈•◌ᜓ ݊ ᜒ𝅄\n`;
+  const oi = `╔═══「 *📡 SISTEMA CENTRAL* 」═══╗\n║ ⚠️ *Broadcast Iniciado* ⚠️\n║ ✉️ *Mensaje*: ${pesan}\n╚═══════════════════════╝`;
+  let teks = `💻 *[MODO SISTEMA ACTIVADO]* 💻\n\n⟪ *Usuarios Vinculados*: ${participants.length} ⟫\n\n${oi}\n\n┏━━━〔 *TRANSMISIÓN EN PROCESO* 〕━━━┓`;
   for (const mem of participants) {
-    teks += `│ ❏ᝰ. @${mem.id.split('@')[0]}\n`;
+    teks += `\n┃ ▶️ @${mem.id.split('@')[0]}`;
   }
-  teks += `╰─┐ • •ㅤ•-ˏˋ✿ˊˎ-• •ㅤ•
-        ꒷︶︶꒷︶︶꒷꒦︶✧꒷₊˚`;
+  teks += `\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n\n🛰️ *Operación Finalizada con Éxito* 🛰️`;
   conn.sendMessage(m.chat, {text: teks, mentions: participants.map((a) => a.id)} );
 };
 handler.help = ['todos <mesaje>'];

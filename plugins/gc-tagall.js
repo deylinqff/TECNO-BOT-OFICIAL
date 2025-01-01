@@ -13,7 +13,18 @@ const handler = async (m, {isOwner, isAdmin, conn, text, participants, args, com
     teks += `\n┃ ▶️ @${mem.id.split('@')[0]}`;
   }
   teks += `\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n\n🛰️ *Operación Finalizada con Éxito* 🛰️`;
-  conn.sendMessage(m.chat, {text: teks, mentions: participants.map((a) => a.id)} );
+
+  const imageUrl = 'https://files.catbox.moe/i9zyaz.jpg'; // Reemplaza con la URL de tu imagen
+
+  conn.sendMessage(
+    m.chat, 
+    {
+      text: teks,
+      mentions: participants.map((a) => a.id),
+      image: {url: imageUrl}, // Incluye la imagen desde una URL
+      caption: teks // El texto que aparecerá como pie de la imagen
+    }
+  );
 };
 handler.help = ['todos <mesaje>'];
 handler.tags = ['group'];

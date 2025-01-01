@@ -30,15 +30,6 @@ const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, co
       image: { url: imageUrl }, // Imagen a enviar
       caption: teks, // Texto como pie de foto
       mentions: participants.map((a) => a.id), // Menciones
-      contextInfo: {
-        externalAdReply: {
-          title: '¡Únete al canal!',
-          body: 'Haz clic aquí para ir al canal',
-          mediaType: 1, // Indica que es una imagen
-          thumbnailUrl: imageUrl, // Miniatura (opcional)
-          mediaUrl: 'https://chat.whatsapp.com/120363365444927738@newsletter', // Enlace al canal
-        },
-      },
     }
   );
 };

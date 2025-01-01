@@ -11,7 +11,7 @@ const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, co
   // Mensaje personalizado
   const pesan = args.join(' ');
   const oi = `⇢𝐓𝐄𝐂𝐍𝐎-𝐁𝐎𝐓 : ${pesan}`;
-  let teks = `𝒊𝒏𝒃𝒐𝒄𝒂𝒏𝒅𝒐 𝒈𝒓𝒖𝒑𝒐\n⧼P̼⧽= ${participants.length} 𝐔𝐬𝐮𝐚𝐫𝐢𝐨𝐬\n\n${oi}\n\n╔═══════•| 🚀 |•═══════╗\n`;
+  let teks = `𝑰𝒏𝒗𝒐𝒄𝒂𝒏𝒅𝒐 𝒆𝒍 𝒈𝒓𝒖𝒑𝒐\n⧼P̼⧽= ${participants.length} 𝐔𝐬𝐮𝐚𝐫𝐢𝐨𝐬\n\n${oi}\n\n╔═══════•| 🚀 |•═══════╗\n`;
 
   // Agrega menciones para cada participante
   for (const mem of participants) {

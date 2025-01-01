@@ -7,7 +7,7 @@ let Reg = /\|?(.*)([.|] *?)([0-9]*)$/i
 let handler = async function (m, { conn, text, usedPrefix, command }) {
   let user = global.db.data.users[m.sender]
   let name2 = conn.getName(m.sender)
-  if (user.registered === true) return m.reply(`🧑‍💻 YA ESTAS REGISTRADO.\n\n*¿QUIERES HACERLO DE NUEVO?*\n\nUSE ESTE COMANDO PARA ELIMINAR SU REGISTRO.\n*${usedPrefix}unreg* <Número de serie>`)
+  if (user.registered === true) return m.reply(`🧑‍💻 YA ESTAS REGISTRADO.\n\n*¿QUIERES HACERLO DE NUEVO?*\n\nUSE ESTE COMANDO PARA ELIMINAR SU REGISTRO.\n*${usedPrefix}unreg* `)
   if (!Reg.test(text)) return m.reply(`🤖 FORMATO INCORRECTO.\n\nUSO DEL COMANDO: *${usedPrefix + command} nombre.edad*\nEjemplo : *${usedPrefix + command} ${name2}.16*`)
   let [_, name, splitter, age] = text.match(Reg)
   if (!name) return m.reply('👻 El NOMBRE NO PUEDE ESTAR VACÍO.')

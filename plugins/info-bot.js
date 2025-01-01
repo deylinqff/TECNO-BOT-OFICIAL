@@ -1,70 +1,44 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import ws from 'ws'
 
-const handler = async (m, { conn }) => {
-    try {
-        // Ruta de la imagen (cambia por tu ruta real)
-        const imagePath = path.join(__dirname, 'ruta/a/tu/imagen.jpg');
+async function handler(m, { conn: _envio, usedPrefix }) {
+const users = [...new Set([...global.conns.filter((conn) => conn.user && conn.ws.socket && conn.ws.socket.readyState !== ws.CLOSED).map((conn) => conn)])]
+function convertirMsADiasHorasMinutosSegundos(ms) {
+var segundos = Math.floor(ms / 1000)
+var minutos = Math.floor(segundos / 60)
+var horas = Math.floor(minutos / 60)
+var días = Math.floor(horas / 24)
 
-        // Verifica si la imagen existe
-        try {
-            await fs.access(imagePath);
-        } catch {
-            throw new Error('No se encontró la imagen en la ruta especificada.');
-        }
+segundos %= 60
+minutos %= 60
+horas %= 24
 
-        // Mensaje informativo del bot
-        const infoBot = `
-🤖 *TECNO-BOT* 🤖
+var resultado = ''
+if (días !== 0) {
+resultado += días + ' días, '
+}
+if (horas !== 0) {
+resultado += horas + ' horas, '
+}
+if (minutos !== 0) {
+resultado += minutos + ' minutos, '
+}
+if (segundos !== 0) {
+resultado += segundos + ' segundos'
+}
 
-📌 *Información del Bot:*
-• **Nombre:** TECNO-BOT  
-• **Creador:** Deyin  
-• **Versión:** Beta 2.0  
+return resultado
+}
 
-🔹 *Características:*
-• **Comandos útiles:** Responde a tus solicitudes con rapidez.  
-• **Integración grupal:** Funciona en grupos o en privado.  
-• **Soporte continuo:** Estamos mejorando continuamente.  
+const message = users.map((v, index) => `${index + 1} @${v.user.jid.replace(/[^0-9]/g, '')}\n wa.me/${v.user.jid.replace(/[^0-9]/g, '')}?text=${usedPrefix}estado\n*Nombre:* ${v.user.name || '-'}\n*Actividad:* ${ v.uptime ? convertirMsADiasHorasMinutosSegundos(Date.now() - v.uptime) : 'Desconocido'}`).join('\n\n')
+const replyMessage = message.length === 0 ? '🚩 *No hay sub bots disponibles por el momento.*\n- Verifique más tarde.' : message
+const totalUsers = users.length
+const responseMessage = `${replyMessage.trim()}`.trim()
 
-📢 *Nota:*  
-El bot está en su versión Beta, por lo que podría tener errores. Si notas algo extraño, avísanos para resolverlo.  
+await m.reply(`🚀 *Aquí tiene la lista de los subbots activós en estos momentos*\n\nJadiBots conectados: ${totalUsers || '0'}`)
+await _envio.sendMessage(m.chat, {text: responseMessage, mentions: _envio.parseMention(responseMessage)}, {quoted: m})
 
-Gracias por usar *TECNO-BOT*. ¡Estoy listo para ayudarte!
-`.trim();
+}
+handler.command = handler.help = ['listjadibot', 'bots', 'subsbots'];
+handler.tags = ['jadibot']
 
-        // Enviar imagen junto con el mensaje
-        await conn.sendMessage(
-            m.chat,
-            {
-                image: { url: imagePath },
-                caption: infoBot,
-            },
-            { quoted: m }
-        );
-    } catch (err) {
-        console.error('Error en el comando:', err.message);
-
-        // Respuesta en caso de error
-        await conn.reply(
-            m.chat,
-            `
-⚠️ *Error:*  
-Ocurrió un problema al procesar tu solicitud.  
-
-🔍 *Detalles:* ${err.message}  
-Por favor, revisa la configuración e intenta de nuevo.
-`.trim(),
-            m
-        );
-    }
-};
-
-// Configuración del comando
-handler.help = ['infobot'];
-handler.tags = ['info'];
-handler.command = /^(infobot)$/i;
-
-handler.register = true;
-
-export default handler;
+export default handler

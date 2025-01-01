@@ -23,10 +23,9 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   let sn = createHash('md5').update(m.sender).digest('hex')
   let img = await (await fetch(`https://files.catbox.moe/g95ury.jpg`)).buffer()
   let txt = ` –  *R E G I S T R O  -  C R O W*\n\n`
-      txt += `┌  ❄️  *NOMBRE* : ${name}\n`
-      txt += `│  ❄️  *EDAD* : ${age} años\n`
-      txt += `│  ❄️  *NUMERO DE SERIE*\n`
-      txt += `└  ❄️  ${sn}`
+      txt += `╔  🚀  *NOMBRE* : ${name}\n`
+      txt += `╠  ⚡  *EDAD* : ${age} años\n`
+      txt += `╚  ✎𝑫𝒊𝒔𝒇𝒓𝒖𝒕𝒂 𝒅𝒆 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 𝑽𝒆𝒓𝒔𝒊𝒐𝒏: 𝑩𝒆𝒕𝒂
 await conn.sendAi(m.chat, botname, textbot, txt, img, img, canal, m)
 await m.react('✅')
 }

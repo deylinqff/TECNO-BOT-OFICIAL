@@ -23,8 +23,9 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
       const description = await luminsesi(query, username, prompt);
 
+      // Enviar una imagen fija o generada junto con la descripción
       await conn.sendMessage(m.chat, {
-        image: { url: imageAnalysis.imageUrl },
+        image: { url: 'https://example.com/image.jpg' }, // Cambia esto a una URL de imagen fija o generada
         caption: description,
       });
     } catch (error) {
@@ -33,41 +34,32 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     }
   } else {
     if (!text) {
-      return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Genera una imagen de un dragón volando`, m);
+      return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m);
     }
 
-    if (command === 'generarimagen') {
-      await m.react('🎨');
-      try {
-        const imageUrl = await generateImage(text);
-        await conn.sendMessage(m.chat, {
-          image: { url: imageUrl },
-          caption: `Imagen generada basada en tu descripción: "${text}"`,
-        });
-      } catch (error) {
-        console.error('💛 Error al generar la imagen:', error);
-        await conn.reply(m.chat, '💛 Error al generar la imagen.', m);
-      }
-    } else {
-      await m.react('💬');
-      try {
-        const query = text;
-        const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
-        const response = await luminsesi(query, username, prompt);
+    await m.react('💬');
 
-        await conn.reply(m.chat, response, m);
-      } catch (error) {
-        console.error('💛 Error al obtener la respuesta:', error);
-        await conn.reply(m.chat, 'Error: intenta más tarde.', m);
-      }
+    try {
+      const query = text;
+      const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
+      const response = await luminsesi(query, username, prompt);
+
+      // Enviar una imagen fija o generada junto con la respuesta
+      await conn.sendMessage(m.chat, {
+        image: { url: 'https://example.com/image.jpg' }, // Cambia esto a una URL de imagen fija o generada
+        caption: response,
+      });
+    } catch (error) {
+      console.error('💛 Error al obtener la respuesta:', error);
+      await conn.reply(m.chat, 'Error: intenta más tarde.', m);
     }
   }
 };
 
-handler.help = ['chatgpt <texto>', 'ia <texto>', 'generarimagen <texto>'];
+handler.help = ['chatgpt <texto>', 'ia <texto>'];
 handler.tags = ['tools'];
 handler.register = true;
-handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt', 'generarimagen'];
+handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
 export default handler;
 
 // Función para enviar una imagen y obtener el análisis
@@ -92,7 +84,7 @@ async function fetchImageBuffer(content, imageBuffer) {
 // Función para interactuar con la IA usando prompts
 async function luminsesi(q, username, logic) {
   try {
-    const response = await axios.post('https://Luminai.my.id', {
+    const response = await axios.post("https://Luminai.my.id", {
       content: q,
       user: username,
       prompt: logic,
@@ -102,25 +94,6 @@ async function luminsesi(q, username, logic) {
     return response.data.result;
   } catch (error) {
     console.error('💛 Error al obtener:', error);
-    throw error;
-  }
-}
-
-// Función para generar imágenes basadas en texto
-async function generateImage(prompt) {
-  try {
-    const response = await axios.post('https://api.example.com/generate-image', {
-      prompt: prompt,
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    // La API devuelve una URL de la imagen generada
-    return response.data.imageUrl;
-  } catch (error) {
-    console.error('Error al generar imagen:', error);
     throw error;
   }
 }

@@ -1,31 +1,35 @@
-const handler = async (m, {isOwner, isAdmin, conn, text, participants, args, command, usedPrefix}) => {
+const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, command, usedPrefix }) => {
+  // Evita el uso de ciertos prefijos
+  if (usedPrefix === 'a' || usedPrefix === 'A') return;
 
-  if (usedPrefix == 'a' || usedPrefix == 'A') return;
-
+  // Verifica si el usuario es administrador o propietario
   if (!(isAdmin || isOwner)) {
     global.dfail('admin', m, conn);
     throw false;
   }
 
-  const pesan = args.join` `;
+  // Mensaje personalizado
+  const pesan = args.join(' ');
   const oi = `⇢𝐓𝐄𝐂𝐍𝐎-𝐁𝐎𝐓 : ${pesan}`;
-  let teks = ` 𝒊𝒏𝒃𝒐𝒄𝒂𝒏𝒅𝒐 𝒈𝒓𝒖𝒑𝒐\n⧼P̼⧽= ${participants.length} 𝐔𝐬𝐮𝐚𝐫𝐢𝐨𝐬\n\n${oi}\n\n╔═══════•| 🚀 |•═══════╗\n`;
+  let teks = `𝒊𝒏𝒃𝒐𝒄𝒂𝒏𝒅𝒐 𝒈𝒓𝒖𝒑𝒐\n⧼P̼⧽= ${participants.length} 𝐔𝐬𝐮𝐚𝐫𝐢𝐨𝐬\n\n${oi}\n\n╔═══════•| 🚀 |•═══════╗\n`;
 
+  // Agrega menciones para cada participante
   for (const mem of participants) {
     teks += `╠ ✰➥. @${mem.id.split('@')[0]}\n`;
   }
 
   teks += `╚═══════•| 🚀 |•═══════╝`;
 
-  const imageUrl = 'https://files.catbox.moe/i9zyaz.jpg'; // Cambia esto a la URL de tu imagen
+  // URL de la imagen
+  const imageUrl = 'https://files.catbox.moe/i9zyaz.jpg';
 
-  conn.sendMessage(
-    m.chat, 
+  // Envía la imagen con el texto como pie de foto (caption) y menciones
+  await conn.sendMessage(
+    m.chat,
     {
-      text: teks,
-      mentions: participants.map((a) => a.id),
-      image: {url: imageUrl}, // Incluye la imagen
-      caption: teks // Texto como pie de imagen
+      image: { url: imageUrl }, // Imagen a enviar
+      caption: teks, // Texto como pie de foto
+      mentions: participants.map((a) => a.id), // Menciones
     }
   );
 };

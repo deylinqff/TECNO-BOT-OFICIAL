@@ -25,7 +25,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
       // Enviar una imagen fija o generada junto con la descripción
       await conn.sendMessage(m.chat, {
-        image: { url: 'https://example.com/image.jpg' }, // Cambia esto a una URL de imagen fija o generada
+        image: { url: 'https://files.catbox.moe/adcnsj.jpg' }, // Cambia esto a una URL de imagen fija o generada
         caption: description,
       });
     } catch (error) {

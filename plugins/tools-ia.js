@@ -34,13 +34,11 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
       const description = await luminsesi(query, username, prompt);
 
-      await conn.reply(
-        m.chat,
-        description,
-        m
-      );
-
-      await conn.sendFile(m.chat, defaultImageUrl, 'image.jpg', '', m);
+      await conn.sendMessage(m.chat, {
+        text: description,
+        image: { url: defaultImageUrl },
+        caption: description,
+      }, { quoted: m });
 
     } catch (error) {
       console.error('💛 Error al analizar la imagen:', error);
@@ -63,9 +61,11 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
       const response = await luminsesi(query, username, prompt);
 
-      await conn.reply(m.chat, response, m);
-
-      await conn.sendFile(m.chat, defaultImageUrl, 'image.jpg', '', m);
+      await conn.sendMessage(m.chat, {
+        text: response,
+        image: { url: defaultImageUrl },
+        caption: response,
+      }, { quoted: m });
 
     } catch (error) {
       console.error('💛 Error al obtener la respuesta:', error);

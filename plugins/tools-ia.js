@@ -37,7 +37,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
         }
 
-        await m.react('🤔');
+        await m.react('💭');
 
         try {
             const query = text;

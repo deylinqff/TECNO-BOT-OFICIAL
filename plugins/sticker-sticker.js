@@ -1,117 +1,55 @@
-import { sticker } from '../lib/sticker.js';
-import uploadFile from '../lib/uploadFile.js';
-import uploadImage from '../lib/uploadImage.js';
-import { webp2png } from '../lib/webp2mp4.js';
+
+import { sticker } from '../lib/sticker.js'
+//import uploadFile from '../lib/uploadFile.js'
+//import uploadImage from '../lib/uploadImage.js'
+//import { webp2png } from '../lib/webp2mp4.js'
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-  let stiker = false;
 
-  // Verificar si el usuario está en la base de datos
-  let user = db.data.users[m.sender] || { lastmining: 0 };
-  db.data.users[m.sender] = user;
+let stiker = false
+try {
+let q = m.quoted ? m.quoted : m
+let mime = (q.msg || q).mimetype || q.mediaType || ''
+if (/webp|image|video/g.test(mime)) {
+if (/video/g.test(mime)) if ((q.msg || q).seconds > 8) return m.reply(`☁️ *¡El video no puede durar mas de 8 segundos!*`)
+let img = await q.download?.()
 
-  // Tiempo de espera entre comandos
-  const cooldown = 10000; // 10 segundos
-  if (new Date() - user.lastmining < cooldown) {
-    return await conn.reply(
-      m.chat,
-      '*⏳ ESPERA UNOS MINUTOS PARA USAR OTRO COMANDO*',
-      m
-    );
-  }
+if (!img) return conn.reply(m.chat, `🍁 *_Y el video ?, intenta enviar primero imagen/video/gif y luego responde con el comando._*`, m, rcanal)
 
-  try {
-    let q = m.quoted ? m.quoted : m;
-    let mime = (q.msg || q).mimetype || q.mediaType || '';
+let out
+try {
+stiker = await sticker(img, false, global.packname, global.author)
+} catch (e) {
+console.error(e)
+} finally {
+if (!stiker) {
+if (/webp/g.test(mime)) out = await webp2png(img)
+else if (/image/g.test(mime)) out = await uploadImage(img)
+else if (/video/g.test(mime)) out = await uploadFile(img)
+if (typeof out !== 'string') out = await uploadImage(img)
+stiker = await sticker(false, out, global.packname, global.author)
+}}
+} else if (args[0]) {
+if (isUrl(args[0])) stiker = await sticker(false, args[0], global.packname, global.author)
 
-    if (/webp|image|video/g.test(mime)) {
-      if (/video/g.test(mime) && (q.msg || q).seconds > 7) {
-        return m.reply(
-          '⚠️ *ADVERTENCIA* ⚠️\nEl video no debe durar más de *7 segundos*.'
-        );
-      }
+else return m.reply(`💫 El url es incorrecto`)
 
-      let img = await q.download?.();
-      if (!img) {
-        throw '⚠️ *Error: Responde a una imagen, video, GIF o URL válida para crear el sticker.*';
-      }
-
-      let out;
-      try {
-        stiker = await sticker(img, false, global.packname, global.author);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        await conn.reply(m.chat, '⏳ *Creando sticker, espera un momento...*', m);
-        if (!stiker) {
-          if (/webp/g.test(mime)) out = await webp2png(img);
-          else if (/image/g.test(mime)) out = await uploadImage(img);
-          else if (/video/g.test(mime)) out = await uploadFile(img);
-          if (typeof out !== 'string') out = await uploadImage(img);
-          stiker = await sticker(false, out, global.packname, global.author);
-        }
-      }
-    } else if (args[0]) {
-      if (isUrl(args[0])) {
-        stiker = await sticker(false, args[0], global.packname, global.author);
-      } else {
-        return m.reply('⚠️ *Error: URL inválida.*');
-      }
-    }
-  } catch (e) {
-    console.error(e);
-    if (!stiker) stiker = e;
-  } finally {
-    if (stiker) {
-      conn.sendFile(
-        m.chat,
-        stiker,
-        'sticker.webp',
-        '',
-        m,
-        true,
-        {
-          contextInfo: {
-            'forwardingScore': 200,
-            'isForwarded': false,
-            externalAdReply: {
-              showAdAttribution: false,
-              title: 'Super TECNO-BOT',
-              body: '🚀 WhatsApp Bot',
-              mediaType: 2,
-              sourceUrl: accountsgb,
-              thumbnail: imagen1
-            }
-          }
-        },
-        { quoted: m }
-      );
-    } else {
-      throw '⚠️ *Error al crear el sticker. Intenta nuevamente.*';
-    }
-    user.lastmining = new Date().getTime();
-  }
-};
-
-handler.help = ['sticker'];
-handler.tags = ['sticker'];
-handler.command = ['s', 'sticker', 'stiker'];
-
-export default handler;
-
-// Función para convertir tiempo en formato legible
-function msToTime(duration) {
-  const seconds = Math.floor((duration / 1000) % 60);
-  const minutes = Math.floor((duration / (1000 * 60)) % 60);
-  return `${minutes} m y ${seconds} s`;
 }
+} catch (e) {
+console.error(e)
+if (!stiker) stiker = e
+} finally {
+if (stiker) conn.sendFile(m.chat, stiker, 'sticker.webp', '',m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: packname, body: `CrowBot - ST 🚩`, mediaType: 2, sourceUrl: redes, thumbnail: icons}}}, { quoted: m })
 
-// Validar si el texto es una URL válida
+else return conn.reply(m.chat, `🚀 *_La conversión ha fallado, intenta enviar primero imagen/video/gif y luego responde con el comando._*\n\n> `, m, rcanal)
+
+
+}}
+handler.help = ['stiker <img>', 'sticker <url>']
+handler.tags = ['sticker']
+handler.command = ['s', 'sticker', 'stiker']
+
+export default handler
+
 const isUrl = (text) => {
-  return text.match(
-    new RegExp(
-      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/,
-      'gi'
-    )
-  );
-};
+return text.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)(jpe?g|gif|png)/, 'gi'))} 

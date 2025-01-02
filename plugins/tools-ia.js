@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
     const username = `${conn.getName(m.sender)}`;
-    const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explociones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
+    const basePrompt = `Tu nombre es Tecno-bot y fuiste creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
 
     if (isQuotedImage) {
         const q = m.quoted;
@@ -12,7 +12,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
         if (!img) {
             console.error('💛 Error: No image buffer available');
-            return conn.reply(m.chat, '💛 Error: No se pudo descargar la imagen.', m, fake);
+            return conn.reply(m.chat, '💛 Error: No se pudo descargar la imagen.', m);
         }
 
         const content = '💛 ¿Qué se observa en la imagen?';
@@ -34,7 +34,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         }
     } else {
         if (!text) {
-            return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m, rcanal);
+            return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m);
         }
 
         await m.react('💬');
@@ -59,7 +59,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 handler.help = ['chatgpt <texto>', 'ia <texto>'];
 handler.tags = ['tools'];
 handler.register = true;
-// handler.estrellas = 1
 handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
 
 export default handler;
@@ -73,7 +72,8 @@ async function fetchImageBuffer(content, imageBuffer) {
         }, {
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            timeout: 10000 // Timeout de 10 segundos
         });
         return response.data;
     } catch (error) {
@@ -90,6 +90,8 @@ async function luminsesi(q, username, logic) {
             user: username,
             prompt: logic,
             webSearchMode: false
+        }, {
+            timeout: 10000 // Timeout de 10 segundos
         });
         return response.data.result;
     } catch (error) {

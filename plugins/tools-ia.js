@@ -8,7 +8,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
 
   const username = `${conn.getName(m.sender)}`;
-  const basePrompt = `Tu nombre es Tecno-Bot y fuiste creado por Deylin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explociones. Siempre Darás Publicidad A Tu Canal Oficial o Ofc el cual es : https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
+  const basePrompt = `Tu nombre es Tecno-Bot y fuiste creado por Deylin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explociones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
 
   if (isQuotedImage) {
     const q = m.quoted;

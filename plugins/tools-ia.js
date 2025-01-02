@@ -2,100 +2,117 @@ import axios from 'axios';
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
-    const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
-    const username = `${conn.getName(m.sender)}`;
-    const basePrompt = `Tu nombre es Tecno-bot y fuiste creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
+  const isQuotedImage =
+    m.quoted &&
+    (m.quoted.msg || m.quoted).mimetype &&
+    (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
 
-    if (isQuotedImage) {
-        const q = m.quoted;
-        const img = await q.download?.();
+  const username = `${conn.getName(m.sender)}`;
+  const basePrompt = `Tu nombre es Tecno-Bot y fuiste creado por Deylin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explociones. Siempre Darás Publicidad A Tu Canal Oficial o Ofc el cual es : https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
 
-        if (!img) {
-            console.error('💛 Error: No image buffer available');
-            return conn.reply(m.chat, '💛 Error: No se pudo descargar la imagen.', m);
-        }
+  if (isQuotedImage) {
+    const q = m.quoted;
+    const img = await q.download?.();
 
-        const content = '💛 ¿Qué se observa en la imagen?';
-
-        try {
-            const imageAnalysis = await fetchImageBuffer(content, img);
-            const query = '😊 Descríbeme la imagen y detalla por qué actúan así. También dime quién eres';
-            const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
-            const description = await luminsesi(query, username, prompt);
-
-            // Enviar imagen junto con el texto
-            await conn.sendMessage(m.chat, {
-                image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
-                caption: description
-            }, { quoted: m });
-        } catch (error) {
-            console.error('💛 Error al analizar la imagen:', error);
-            await conn.reply(m.chat, '💛 Error al analizar la imagen.', m);
-        }
-    } else {
-        if (!text) {
-            return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m);
-        }
-
-        await m.react('💬');
-
-        try {
-            const query = text;
-            const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
-            const response = await luminsesi(query, username, prompt);
-
-            // Enviar imagen junto con el texto
-            await conn.sendMessage(m.chat, {
-                image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
-                caption: response
-            }, { quoted: m });
-        } catch (error) {
-            console.error('💛 Error al obtener la respuesta:', error);
-            await conn.reply(m.chat, 'Error: intenta más tarde.', m);
-        }
+    if (!img) {
+      console.error('💛 Error: No image buffer available');
+      return conn.reply(
+        m.chat,
+        '💛 Error: No se pudo descargar la imagen.',
+        m,
+        fake
+      );
     }
+
+    const content = '💛 ¿Qué se observa en la imagen?';
+
+    try {
+      const imageAnalysis = await fetchImageBuffer(content, img);
+      const query =
+        '😊 Descríbeme la imagen y detalla por qué actúan así. También dime quién eres';
+      const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
+      const description = await luminsesi(query, username, prompt);
+
+      await conn.sendMessage(m.chat, {
+        text: description,
+        image: { url: 'https://files.catbox.moe/4zvxee.jpg' },
+        caption: description,
+      });
+    } catch (error) {
+      console.error('💛 Error al analizar la imagen:', error);
+      await conn.reply(m.chat, '💛 Error al analizar la imagen.', m);
+    }
+  } else {
+    if (!text) {
+      return conn.reply(
+        m.chat,
+        `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`,
+        m,
+        rcanal
+      );
+    }
+
+    await m.react('💬');
+
+    try {
+      const query = text;
+      const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
+      const response = await luminsesi(query, username, prompt);
+
+      await conn.sendMessage(m.chat, {
+        text: response,
+        image: { url: 'https://files.catbox.moe/4zvxee.jpg' },
+        caption: response,
+      });
+    } catch (error) {
+      console.error('💛 Error al obtener la respuesta:', error);
+      await conn.reply(m.chat, 'Error: intenta más tarde.', m);
+    }
+  }
 };
 
 handler.help = ['chatgpt <texto>', 'ia <texto>'];
-handler.tags = ['tools'];
+handler.tags = ['ai'];
 handler.register = true;
+handler.estrellas = 4;
 handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
 
 export default handler;
 
 // Función para enviar una imagen y obtener el análisis
 async function fetchImageBuffer(content, imageBuffer) {
-    try {
-        const response = await axios.post('https://Luminai.my.id', {
-            content: content,
-            imageBuffer: imageBuffer
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            timeout: 10000 // Timeout de 10 segundos
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
+  try {
+    const response = await axios.post(
+      'https://Luminai.my.id',
+      {
+        content: content,
+        imageBuffer: imageBuffer,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
 }
 
 // Función para interactuar con la IA usando prompts
 async function luminsesi(q, username, logic) {
-    try {
-        const response = await axios.post("https://Luminai.my.id", {
-            content: q,
-            user: username,
-            prompt: logic,
-            webSearchMode: false
-        }, {
-            timeout: 10000 // Timeout de 10 segundos
-        });
-        return response.data.result;
-    } catch (error) {
-        console.error('💛 Error al obtener:', error);
-        throw error;
-    }
+  try {
+    const response = await axios.post('https://Luminai.my.id', {
+      content: q,
+      user: username,
+      prompt: logic,
+      webSearchMode: false,
+    });
+    return response.data.result;
+  } catch (error) {
+    console.error('💛 Error al obtener:', error);
+    throw error;
+  }
 }

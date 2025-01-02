@@ -8,7 +8,9 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
 
   const username = `${conn.getName(m.sender)}`;
-  const basePrompt = `Tu nombre es Tecno-Bot y fuiste creado por Deylin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explociones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
+  const basePrompt = `Tu nombre es Tecno-Bot y fuiste creado por Deylin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
+
+  const imageURL = 'https://files.catbox.moe/4zvxee.jpg'; // Imagen predeterminada
 
   if (isQuotedImage) {
     const q = m.quoted;
@@ -19,8 +21,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       return conn.reply(
         m.chat,
         '💛 Error: No se pudo descargar la imagen.',
-        m,
-        fake
+        m
       );
     }
 
@@ -35,7 +36,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
       await conn.sendMessage(m.chat, {
         text: description,
-        image: { url: 'https://files.catbox.moe/4zvxee.jpg' },
+        image: { url: imageURL }, // Imagen predeterminada
         caption: description,
       });
     } catch (error) {
@@ -47,8 +48,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       return conn.reply(
         m.chat,
         `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`,
-        m,
-        rcanal
+        m
       );
     }
 
@@ -61,7 +61,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
       await conn.sendMessage(m.chat, {
         text: response,
-        image: { url: 'https://files.catbox.moe/4zvxee.jpg' },
+        image: { url: imageURL }, // Imagen predeterminada
         caption: response,
       });
     } catch (error) {

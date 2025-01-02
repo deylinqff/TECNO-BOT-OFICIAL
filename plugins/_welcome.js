@@ -1,4 +1,4 @@
-import {WAMessageStubType} from '@whiskeysockets/baileys'
+ import {WAMessageStubType} from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
 
 export async function before(m, {conn, participants, groupMetadata}) {
@@ -43,4 +43,4 @@ https://chat.whatsapp.com/DQLT8n8IghUHYdkD2YLLnz
       let kick = `╔══⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n║〘 ADIOS 👋 〙\n╚╦✎ 〘 @${m.messageStubParameters[0].split`@`[0]} 〙\n   ║✎  Se fue\n   ║✇ Jamás te quisimos aquí\n   *╚═══❖•⏤͟͟͞͞𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕•❖═══╝*`
       await conn.sendAi(m.chat, botname, textbot, kick, img, img, canal)
     }
-}}
+}} 

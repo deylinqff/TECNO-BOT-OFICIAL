@@ -23,11 +23,21 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
             const description = await luminsesi(query, username, prompt);
 
-            // Enviar imagen junto con el texto
-            await conn.sendMessage(m.chat, {
+            // Crear mensaje con botones interactivos
+            const buttons = [
+                { buttonText: { displayText: '👍 Aceptar' }, type: 1, id: 'accept' },
+                { buttonText: { displayText: '👎 Rechazar' }, type: 1, id: 'reject' }
+            ];
+
+            const buttonMessage = {
                 image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
-                caption: description
-            }, { quoted: m });
+                caption: description,
+                buttons,
+                headerType: 4
+            };
+
+            // Enviar mensaje con botones
+            await conn.sendMessage(m.chat, buttonMessage, { quoted: m });
         } catch (error) {
             console.error('⚠️ Error al procesar la imagen:', error);
             await conn.reply(m.chat, '⚠️ Ocurrió un problema al analizar la imagen. Por favor, inténtalo más tarde.', m);
@@ -37,18 +47,28 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
         }
 
-        await m.react('💭');
+        await m.react('🤔');
 
         try {
             const query = text;
             const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
             const response = await luminsesi(query, username, prompt);
 
-            // Enviar imagen junto con el texto
-            await conn.sendMessage(m.chat, {
+            // Crear mensaje con botones interactivos
+            const buttons = [
+                { buttonText: { displayText: '👍 Aceptar' }, type: 1, id: 'accept' },
+                { buttonText: { displayText: '👎 Rechazar' }, type: 1, id: 'reject' }
+            ];
+
+            const buttonMessage = {
                 image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
-                caption: response
-            }, { quoted: m });
+                caption: response,
+                buttons,
+                headerType: 4
+            };
+
+            // Enviar mensaje con botones
+            await conn.sendMessage(m.chat, buttonMessage, { quoted: m });
         } catch (error) {
             console.error('⚠️ Error al obtener la respuesta:', error);
             await conn.reply(m.chat, '⚠️ Lo siento, no pude procesar tu solicitud. Por favor, inténtalo más tarde.', m);

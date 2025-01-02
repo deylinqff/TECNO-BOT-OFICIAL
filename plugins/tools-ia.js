@@ -35,9 +35,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       const description = await luminsesi(query, username, prompt);
 
       await conn.sendMessage(m.chat, {
-        text: description,
         image: { url: imageURL }, // Imagen predeterminada
-        caption: description,
+        caption: description, // Respuesta de la IA en el campo "caption"
       });
     } catch (error) {
       console.error('💛 Error al analizar la imagen:', error);
@@ -52,17 +51,14 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       );
     }
 
-    await m.react('💬');
-
     try {
       const query = text;
       const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
       const response = await luminsesi(query, username, prompt);
 
       await conn.sendMessage(m.chat, {
-        text: response,
         image: { url: imageURL }, // Imagen predeterminada
-        caption: response,
+        caption: response, // Respuesta de la IA en el campo "caption"
       });
     } catch (error) {
       console.error('💛 Error al obtener la respuesta:', error);

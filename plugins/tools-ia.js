@@ -12,6 +12,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
   const imageURL = 'https://files.catbox.moe/4zvxee.jpg'; // Imagen predeterminada
 
+  await conn.reply(m.chat, '💭 Procesando tu solicitud...', m); // Reacción de espera
+
   if (isQuotedImage) {
     const q = m.quoted;
     const img = await q.download?.();

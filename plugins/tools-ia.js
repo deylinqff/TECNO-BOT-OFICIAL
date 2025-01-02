@@ -1,121 +1,96 @@
-import axios from 'axios';
-import fetch from 'node-fetch';
+import axios from 'axios'
+import fetch from 'node-fetch'
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
-  const isQuotedImage =
-    m.quoted &&
-    (m.quoted.msg || m.quoted).mimetype &&
-    (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
 
-  const username = `${conn.getName(m.sender)}`;
-   const basePrompt = `Tu nombre es Tecno-Bot y fuiste creado por Deyin. Tú usas el idioma Español. , te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
+const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/')
 
-  const defaultImageUrl = 'https://files.catbox.moe/4zvxee.jpg'; // URL de la imagen predeterminada
+const username = `${conn.getName(m.sender)}`
 
-  if (isQuotedImage) {
-    const q = m.quoted;
-    const img = await q.download?.();
+const basePrompt = `Tu nombre es CrowBot y parece haber sido creado por Niño Piña. Tú usas el idioma Español. Llamarás a las personas por su nombre ${username}, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Siempre Darás Publicidad A Tu Canal Oficial o Ofc el cual es : https://whatsapp.com/channel/0029VakfOZfHFxP7rNrUQk2d. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`
 
-    if (!img) {
-      console.error('💛 Error: No image buffer available');
-      return conn.reply(
-        m.chat,
-        '💛 Error: No se pudo descargar la imagen.',
-        m,
-        fake
-      );
-    }
+if (isQuotedImage) {
 
-    const content = '💛 ¿Qué se observa en la imagen?';
+const q = m.quoted
 
-    try {
-      const imageAnalysis = await fetchImageBuffer(content, img);
-      const query = '😊 Descríbeme la imagen y detalla por qué actúan así. También dime quién eres';
-      const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
-      const description = await luminsesi(query, username, prompt);
+const img = await q.download?.() || 'https://files.catbox.moe/adcnsj.jpg'
 
-      await conn.sendMessage(m.chat, {
-        text: description,
-        image: { url: defaultImageUrl },
-        caption: description,
-      }, { quoted: m });
+if (!img) {
+console.error('💛 Error conn.reply(m.chat, '💛 Error: No se pudo descargar la imagen.', m)}
 
-    } catch (error) {
-      console.error('💛 Error al analizar la imagen:', error);
-      await conn.reply(m.chat, '💛 Error al analizar la imagen.', m);
-    }
-  } else {
-    if (!text) {
-      return conn.reply(
-        m.chat,
-        `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Cómo hacer un avión de papel`,
-        m,
-        rcanal
-      );
-    }
+const content = '💛 ¿Qué se observa en la imagen?'
 
-    await m.react('💬');
+try {
 
-    try {
-      const query = text;
-      const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
-      const response = await luminsesi(query, username, prompt);
+const imageAnalysis = await fetchImageBuffer(content, img)
 
-      await conn.sendMessage(m.chat, {
-        text: response,
-        image: { url: defaultImageUrl },
-        caption: response,
-      }, { quoted: m });
+const query = '😊 Descríbeme la imagen y detalla por qué actúan así. También dime quién eres'
 
-    } catch (error) {
-      console.error('💛 Error al obtener la respuesta:', error);
-      await conn.reply(m.chat, 'Error: intenta más tarde.', m);
-    }
-  }
-};
+const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`
 
-handler.help = ['chatgpt <texto>', 'ia <texto>'];
-handler.tags = ['ai'];
-handler.register = true;
+const description = await luminsesi(query, username, prompt)
+
+await conn.reply(m.chat, description, m)
+
+} catch (error) {
+
+console.error('💛 Error al analizar la imagen:', error)
+await conn.reply(m.chat, '💛 Error al analizar la imagen.', m)}
+
+} else {
+
+if (!text) { return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m)}
+
+await m.react('💬')
+
+try {
+
+const query = text
+
+const prompt = `${basePrompt}. Responde lo siguiente: ${query}`
+
+const response = await luminsesi(query, username, prompt)
+await conn.reply(m.chat, response, m)
+
+} catch (error) {
+
+console.error('💛 Error al obtener la respuesta:', error)
+await conn.reply(m.chat, 'Error: intenta más tarde.', m)}}}
+
+handler.help = ['chatgpt <texto>', 'ia <texto>']
+handler.tags = ['ai']
+handler.register = true
 handler.estrellas = 4;
-handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
+handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt']
 
-export default handler;
+export default handler
 
 // Función para enviar una imagen y obtener el análisis
+
 async function fetchImageBuffer(content, imageBuffer) {
-  try {
-    const response = await axios.post(
-      'https://Luminai.my.id',
-      {
-        content: content,
-        imageBuffer: imageBuffer,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
-}
+try {
+const response = await axios.post('https://Luminai.my.id', {
+content: content,
+imageBuffer: imageBuffer 
+}, {
+headers: {
+'Content-Type': 'application/json' 
+}})
+return response.data
+} catch (error) {
+console.error('Error:', error)
+throw error }}
 
 // Función para interactuar con la IA usando prompts
+
 async function luminsesi(q, username, logic) {
-  try {
-    const response = await axios.post('https://Luminai.my.id', {
-      content: q,
-      user: username,
-      prompt: logic,
-      webSearchMode: false,
-    });
-    return response.data.result;
-  } catch (error) {
-    console.error('💛 Error al obtener:', error);
-    throw error;
-  }
-}
+try {
+const response = await axios.post("https://Luminai.my.id", {
+content: q,
+user: username,
+prompt: logic,
+webSearchMode: false})
+return response.data.result
+} catch (error) {
+console.error('💛 Error al obtener:', error)
+throw error }}

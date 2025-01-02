@@ -74,8 +74,6 @@ let handler = async (m, { conn, args }) => {
                     }
                 }
             });
-        } else {
-            conn.reply(m.chat, `🌲 *_La conversión ha fallado. Intenta con otro archivo o formato._*`, m);
         }
     }
 };

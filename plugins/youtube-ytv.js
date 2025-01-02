@@ -3,7 +3,7 @@ import fetch from 'node-fetch'
 let limit = 100
 
 let handler = async (m, { conn, args, text, isPrems, isOwner, usedPrefix, command }) => {
- if (!text) throw m.reply(`   ⛄Uso: ${usedPrefix}${command} <YouTube Video Link>`);
+ if (!text) throw m.reply(`   🚀Uso: ${usedPrefix}${command} <YouTube Video Link>`);
 
 await m.react('🕓')
 try {

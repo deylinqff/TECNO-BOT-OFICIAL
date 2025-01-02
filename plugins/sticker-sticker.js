@@ -19,7 +19,7 @@ let handler = async (m, { conn, args }) => {
             // Descargar contenido
             let img = await q.download?.();
             if (!img) {
-                return conn.reply(m.chat, `🍁 *_No se pudo descargar el archivo. Asegúrate de enviar una imagen/video/gif y responder con el comando._*`, m);
+                return conn.reply(m.chat, `🍂 *_Envía una imagen/video/gif o proporciona un URL para convertirlo en sticker._*`, m);
             }
 
             // Intentar crear el sticker

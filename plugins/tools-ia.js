@@ -1,5 +1,5 @@
+// Elimina el import de fetch si no lo usas
 import axios from 'axios';
-import fetch from 'node-fetch';
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
@@ -23,7 +23,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
             const description = await luminsesi(query, username, prompt);
 
-            // Crear mensaje con botones interactivos
             const buttons = [
                 { buttonText: { displayText: '👍 Aceptar' }, type: 1, id: 'accept' },
                 { buttonText: { displayText: '👎 Rechazar' }, type: 1, id: 'reject' }
@@ -36,7 +35,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
                 headerType: 4
             };
 
-            // Enviar mensaje con botones
             await conn.sendMessage(m.chat, buttonMessage, { quoted: m });
         } catch (error) {
             console.error('⚠️ Error al procesar la imagen:', error);
@@ -54,7 +52,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
             const response = await luminsesi(query, username, prompt);
 
-            // Crear mensaje con botones interactivos
             const buttons = [
                 { buttonText: { displayText: '👍 Aceptar' }, type: 1, id: 'accept' },
                 { buttonText: { displayText: '👎 Rechazar' }, type: 1, id: 'reject' }
@@ -67,7 +64,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
                 headerType: 4
             };
 
-            // Enviar mensaje con botones
             await conn.sendMessage(m.chat, buttonMessage, { quoted: m });
         } catch (error) {
             console.error('⚠️ Error al obtener la respuesta:', error);
@@ -76,24 +72,17 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     }
 };
 
-handler.help = ['chatgpt <texto>', 'ia <texto>'];
-handler.tags = ['tools'];
-handler.register = true;
-handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
-
-export default handler;
-
-// Función para enviar una imagen y obtener el análisis
 async function fetchImageBuffer(content, imageBuffer) {
     try {
+        const base64Image = imageBuffer.toString('base64');  // Convierte la imagen a base64
         const response = await axios.post('https://Luminai.my.id', {
             content: content,
-            imageBuffer: imageBuffer
+            imageBuffer: base64Image  // Envía la imagen en formato base64
         }, {
             headers: {
                 'Content-Type': 'application/json'
             },
-            timeout: 10000 // Timeout de 10 segundos
+            timeout: 10000
         });
         return response.data;
     } catch (error) {
@@ -102,7 +91,6 @@ async function fetchImageBuffer(content, imageBuffer) {
     }
 }
 
-// Función para interactuar con la IA usando prompts
 async function luminsesi(q, username, logic) {
     try {
         const response = await axios.post("https://Luminai.my.id", {
@@ -111,7 +99,7 @@ async function luminsesi(q, username, logic) {
             prompt: logic,
             webSearchMode: false
         }, {
-            timeout: 10000 // Timeout de 10 segundos
+            timeout: 10000
         });
         return response.data.result;
     } catch (error) {
@@ -119,3 +107,5 @@ async function luminsesi(q, username, logic) {
         throw error;
     }
 }
+
+export default handler;

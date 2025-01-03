@@ -15,7 +15,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
     // Validar si el texto contiene palabras clave relacionadas con contenido sexual
     if (text && sexualKeywords.some(keyword => text.toLowerCase().includes(keyword))) {
-        const response = "Lo siento, no respondo preguntas de ese tipo.";
+        const response = "Aquí tienes una respuesta a tu pregunta 😉:";
         const imageUrl = "https://files.catbox.moe/7docrv.jpg";
 
         return await conn.sendMessage(m.chat, {

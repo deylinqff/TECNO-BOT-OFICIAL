@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
     const username = `${conn.getName(m.sender)}`;
-    const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
+    const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username} si alguien te pregunta algo se sexual tu respondes cun el mensaje cun esta imagen en un solo mensaje con tu respuesta imagen `;
 
     if (isQuotedImage) {
         const q = m.quoted;

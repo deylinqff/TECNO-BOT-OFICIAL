@@ -2,7 +2,7 @@ import axios from 'axios';
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     const username = `${conn.getName(m.sender)}`;
-    const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
+    const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo el anime. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
 
     // Palabras clave relacionadas con contenido sexual
     const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo", "sensual", "relación íntima", "porno", "tetas", "pene"];
@@ -14,7 +14,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     }
 
     // Mostrar que está "pensando"
-    await m.react('💭');
+    await m.react(💬');
 
     try {
         const query = text;

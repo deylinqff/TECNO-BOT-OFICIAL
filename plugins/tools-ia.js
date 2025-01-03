@@ -13,6 +13,9 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
     }
 
+    // Mostrar que está "pensando"
+    await m.react('💭');
+
     try {
         const query = text;
         const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
@@ -32,8 +35,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         await conn.reply(m.chat, '⚠️ Lo siento, no pude procesar tu solicitud. Por favor, inténtalo más tarde.', m);
     }
 };
-
-await m.react('💭'); // Mostrar que está "pensando"
 
 handler.help = ['chatgpt <texto>', 'ia <texto>'];
 handler.tags = ['tools'];

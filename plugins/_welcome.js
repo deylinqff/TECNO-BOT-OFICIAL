@@ -35,7 +35,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
     // Mensaje de bienvenida
     if (m.messageStubType === 27) { 
-        let wel = `┌─⪩ *TECNO-BOT 🤖* \n│「 ¡𝐁𝐈𝐄𝐍𝐕𝐄𝐍𝐈𝐃𝐎! 」\n└┬⪩ Usuario: @${userId.split`@`[0]}\n   │✨  Nos alegra tenerte en\n   │📢  ${groupName}\n   │🔗 Usa *#menu* para ver comandos\n   └───────────────`;
+        let wel = `┌─⪩ *TECNO-BOT 🤖* \n│「 ¡𝐁𝐈𝐄𝐍𝐕𝐄𝐍𝐈𝐃𝐎! 」\n└┬⪩ Usuario: @${user.split`@`[0]}\n   │✨  Nos alegra tenerte en\n   │📢  ${groupName}\n   │🔗 Usa *#menu* para ver comandos\n   └───────────────`;
         try {
             await conn.sendMessage(m.chat, { image: img, caption: wel }, { quoted: fkontak });
         } catch (sendError) {
@@ -45,7 +45,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
     // Mensaje de despedida
     if (m.messageStubType === 28) {
-        let bye = `┌─⪩ *TECNO-BOT 🤖* \n│「 𝐇𝐀𝐒𝐓𝐀 𝐋𝐔𝐄𝐆𝐎 」\n└┬⪩ Usuario: @${userId.split`@`[0]}\n   │🛑  Ha dejado el grupo\n   │💔  ¡Te deseamos lo mejor!\n   └───────────────`;
+        let bye = `┌─⪩ *TECNO-BOT 🤖* \n│「 𝐇𝐀𝐒𝐓𝐀 𝐋𝐔𝐄𝐆𝐎 」\n└┬⪩ Usuario: @${user.split`@`[0]}\n   │🛑  Ha dejado el grupo\n   │💔  ¡Te deseamos lo mejor!\n   └───────────────`;
         let img2;
         try {
             img2 = await (await fetch(goodbyeImage)).buffer();
@@ -57,7 +57,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
     // Mensaje de expulsión
     if (m.messageStubType === 32) {
-        let kick = `┌─⪩ *TECNO-BOT 🤖* \n│「 𝐄𝐗𝐏𝐔𝐋𝐒𝐀𝐃𝐎 」\n└┬⪩ Usuario: @${userId.split`@`[0]}\n   │❌  Ha sido removido del grupo\n   │🚪  ¡Que tengas suerte!\n   └───────────────`;
+        let kick = `┌─⪩ *TECNO-BOT 🤖* \n│「 𝐄𝐗𝐏𝐔𝐋𝐒𝐀𝐃𝐎 」\n└┬⪩ Usuario: @${user.split`@`[0]}\n   │❌  Ha sido removido del grupo\n   │🚪  ¡Que tengas suerte!\n   └───────────────`;
         let img3;
         try {
             img3 = await (await fetch(goodbyeImage)).buffer();

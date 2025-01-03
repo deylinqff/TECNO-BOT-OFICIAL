@@ -6,6 +6,24 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     const username = `${conn.getName(m.sender)}`;
     const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
 
+    // Palabras clave relacionadas con contenido sexual
+    const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo"];
+
+    if (!text && !isQuotedImage) {
+        return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
+    }
+
+    // Validar si el texto contiene palabras clave relacionadas con contenido sexual
+    if (text && sexualKeywords.some(keyword => text.toLowerCase().includes(keyword))) {
+        const response = "Lo siento, no respondo preguntas de ese tipo.";
+        const imageUrl = "https://files.catbox.moe/7docrv.jpg";
+
+        return await conn.sendMessage(m.chat, {
+            image: { url: imageUrl },
+            caption: response
+        }, { quoted: m });
+    }
+
     if (isQuotedImage) {
         const q = m.quoted;
         const img = await q.download?.();
@@ -23,7 +41,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
             const description = await luminsesi(query, username, prompt);
 
-            // Enviar imagen junto con el texto
             await conn.sendMessage(m.chat, {
                 image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
                 caption: description
@@ -33,10 +50,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             await conn.reply(m.chat, '⚠️ Ocurrió un problema al analizar la imagen. Por favor, inténtalo más tarde.', m);
         }
     } else {
-        if (!text) {
-            return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
-        }
-
         await m.react('💭');
 
         try {
@@ -44,7 +57,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
             const response = await luminsesi(query, username, prompt);
 
-            // Enviar imagen junto con el texto
             await conn.sendMessage(m.chat, {
                 image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
                 caption: response
@@ -73,7 +85,7 @@ async function fetchImageBuffer(content, imageBuffer) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            timeout: 10000 // Timeout de 10 segundos
+            timeout: 10000
         });
         return response.data;
     } catch (error) {
@@ -91,7 +103,7 @@ async function luminsesi(q, username, logic) {
             prompt: logic,
             webSearchMode: false
         }, {
-            timeout: 10000 // Timeout de 10 segundos
+            timeout: 10000
         });
         return response.data.result;
     } catch (error) {

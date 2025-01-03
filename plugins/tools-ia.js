@@ -7,21 +7,10 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
 
     // Palabras clave relacionadas con contenido sexual
-    const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo"];
+    const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo", "sensual", "relación íntima"];
 
     if (!text && !isQuotedImage) {
         return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
-    }
-
-    // Validar si el texto contiene palabras clave relacionadas con contenido sexual
-    if (text && sexualKeywords.some(keyword => text.toLowerCase().includes(keyword))) {
-        const response = "Aquí tienes una respuesta a tu pregunta 😉:";
-        const imageUrl = "https://files.catbox.moe/7docrv.jpg";
-
-        return await conn.sendMessage(m.chat, {
-            image: { url: imageUrl },
-            caption: response
-        }, { quoted: m });
     }
 
     if (isQuotedImage) {
@@ -57,10 +46,19 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
             const response = await luminsesi(query, username, prompt);
 
-            await conn.sendMessage(m.chat, {
-                image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
-                caption: response
-            }, { quoted: m });
+            // Detectar si la pregunta contiene contenido sexual
+            if (sexualKeywords.some(keyword => query.toLowerCase().includes(keyword))) {
+                // Enviar respuesta con la imagen especial
+                await conn.sendMessage(m.chat, {
+                    image: { url: 'https://files.catbox.moe/7docrv.jpg' },
+                    caption: response
+                }, { quoted: m });
+            } else {
+                // Responder normalmente
+                await conn.sendMessage(m.chat, {
+                    text: response
+                }, { quoted: m });
+            }
         } catch (error) {
             console.error('⚠️ Error al obtener la respuesta:', error);
             await conn.reply(m.chat, '⚠️ Lo siento, no pude procesar tu solicitud. Por favor, inténtalo más tarde.', m);

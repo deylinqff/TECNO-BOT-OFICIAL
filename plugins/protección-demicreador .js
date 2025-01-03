@@ -1,62 +1,69 @@
-const { default: makeWASocket, proto, DisconnectReason } = require('@adiwajshing/baileys');
+const { default: makeWASocket, useSingleFileAuthState, DisconnectReason } = require('@adiwajshing/baileys');
 const { Boom } = require('@hapi/boom');
+const fs = require('fs');
+
+// Configuración para autenticación
+const { state, saveState } = useSingleFileAuthState('./auth_info.json');
 
 async function startBot() {
-    const sock = makeWASocket();
+    const sock = makeWASocket({
+        auth: state,
+        printQRInTerminal: true,
+    });
 
-    sock.ev.on('messages.upsert', async (message) => {
-        const msg = message.messages[0];
-        if (!msg.key.participant || !msg.key.remoteJid.includes('@g.us')) return;
+    // Guardar la sesión
+    sock.ev.on('creds.update', saveState);
 
-        const groupMetadata = await sock.groupMetadata(msg.key.remoteJid);
-        const isAdmin = groupMetadata.participants.some(
-            (p) => p.id === sock.user.id && p.admin
-        );
+    // Escuchar eventos de participantes en el grupo
+    sock.ev.on('group-participants.update', async (update) => {
+        const { id, participants, action } = update;
 
-        if (msg.messageStubType === proto.WebMessageInfo.WEB_MESSAGE_STUB_TYPE.REMOVE) {
-            const removedUser = msg.messageStubParameters[0];
-            const creatorNumber = '50488198573@s.whatsapp.net';
+        console.log(`Evento detectado en grupo: ${id}, Acción: ${action}`);
+        const creatorNumber = '50488198573@s.whatsapp.net'; // Cambia al número de tu creador
 
-            if (removedUser === creatorNumber) {
-                if (isAdmin) {
-                    // Mensaje de advertencia
-                    await sock.sendMessage(msg.key.remoteJid, {
-                        text: '🚀 No puedes eliminar a mi creador si está en este grupo.',
+        // Detectar si el creador fue eliminado
+        if (action === 'remove' && participants.includes(creatorNumber)) {
+            console.log('El creador ha sido eliminado del grupo.');
+
+            const groupMetadata = await sock.groupMetadata(id);
+            const isAdmin = groupMetadata.participants.some(
+                (p) => p.id === sock.user.id && p.admin
+            );
+
+            if (isAdmin) {
+                // Intentar re-agregar al creador
+                try {
+                    await sock.groupParticipantsUpdate(id, [creatorNumber], 'add');
+                    await sock.sendMessage(id, {
+                        text: '🚀 No puedes eliminar a mi creador. Lo he vuelto a agregar al grupo.',
                     });
-
-                    // Intentar agregar al creador nuevamente
-                    try {
-                        await sock.groupParticipantsUpdate(
-                            msg.key.remoteJid,
-                            [creatorNumber],
-                            'add'
-                        );
-                    } catch (error) {
-                        console.error('Error al agregar al creador:', error);
-                    }
-                } else {
-                    // Mensaje y salida del grupo
-                    await sock.sendMessage(msg.key.remoteJid, {
-                        text: '🚀 Eliminaste a mi creador, lo cual me obliga a salirme del grupo ya que no soy admin.',
-                    });
-
-                    // Salir del grupo
-                    await sock.groupLeave(msg.key.remoteJid);
+                } catch (error) {
+                    console.error('Error al intentar agregar al creador:', error);
                 }
+            } else {
+                // Salir del grupo si no es administrador
+                await sock.sendMessage(id, {
+                    text: '🚀 Eliminaste a mi creador. Como no soy administrador, me retiro del grupo.',
+                });
+                await sock.groupLeave(id);
             }
         }
     });
 
+    // Manejar actualizaciones de conexión
     sock.ev.on('connection.update', (update) => {
         const { connection, lastDisconnect } = update;
+
         if (connection === 'close') {
             const reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
             if (reason === DisconnectReason.loggedOut) {
-                console.error('El bot fue desconectado.');
+                console.error('El bot fue desconectado. Escanea el QR nuevamente.');
             } else {
                 console.error('Reconectando...');
                 startBot();
             }
+        } else if (connection === 'open') {
+            console.log('Bot conectado correctamente.');
         }
     });
 }

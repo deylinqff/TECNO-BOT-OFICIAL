@@ -40,4 +40,4 @@ handler.command = /^(tagall|invocar|marcar|todos|invocación)$/i;
 handler.admin = true;
 handler.group = true;
 
-export default handler;
+export default handler; 

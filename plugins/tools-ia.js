@@ -33,6 +33,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     }
 };
 
+await m.react('💭'); // Mostrar que está "pensando"
+
 handler.help = ['chatgpt <texto>', 'ia <texto>'];
 handler.tags = ['tools'];
 handler.register = true;

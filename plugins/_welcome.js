@@ -45,7 +45,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
     // Mensaje de despedida (salida)
     if (chat.welcome && (m.messageStubType === 28 || m.messageStubType === 32)) {
-        let bye = `┌─⪩ TECNO-BOT 🚀\n│「 ADIÓS 」\n└┬⪩ @${userId.split`@`[0]}\n   │👋 ¡Hasta nunca!\n   │🥀 ${userId.split`@`[0]}, no te extrañaremos.\n   └───────────────`;
+        let bye = `┌─⪩ TECNO-BOT 🚀\n│「 ADIÓS 」\n└┬⪩ @${userId.split`@`[0]}\n   │👋 ¡Hasta nunca!\n   │🥀 no te extrañaremos.\n   └───────────────`;
         let img2;
 
         try {

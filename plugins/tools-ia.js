@@ -42,7 +42,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         }
     } else {
         if (!text) {
-            return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m, rcanal);
+            return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m);
         }
 
         await m.react('💬');

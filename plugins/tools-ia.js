@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     const username = `${conn.getName(m.sender)}`;
@@ -10,15 +10,11 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     const sexualImage = "https://files.catbox.moe/7docrv.jpg";
 
     if (!text) {
-        return conn.reply(
-            m.chat,
-            `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`,
-            m
-        );
+        return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
     }
 
     // Mostrar que está "pensando"
-    await conn.sendMessage(m.chat, { text: "💬 Procesando tu solicitud, espera un momento..." });
+    await m.react(💬');
 
     try {
         const query = text;
@@ -30,50 +26,37 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         const imageUrl = isSexual ? sexualImage : normalImage;
 
         // Responder con texto e imagen
-        await conn.sendMessage(
-            m.chat,
-            {
-                image: { url: imageUrl },
-                caption: response,
-            },
-            { quoted: m }
-        );
+        await conn.sendMessage(m.chat, {
+            image: { url: imageUrl },
+            caption: response
+        }, { quoted: m });
     } catch (error) {
-        console.error("⚠️ Error al obtener la respuesta:", error);
-        await conn.reply(
-            m.chat,
-            "⚠️ Lo siento, no pude procesar tu solicitud. Por favor, inténtalo más tarde.",
-            m
-        );
+        console.error('⚠️ Error al obtener la respuesta:', error);
+        await conn.reply(m.chat, '⚠️ Lo siento, no pude procesar tu solicitud. Por favor, inténtalo más tarde.', m);
     }
 };
 
-handler.help = ["chatgpt <texto>", "ia <texto>"];
-handler.tags = ["tools"];
+handler.help = ['chatgpt <texto>', 'ia <texto>'];
+handler.tags = ['tools'];
 handler.register = true;
-handler.command = ["ia", "chatgpt", "ai", "chat", "gpt"];
+handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
 
 export default handler;
 
 // Función para interactuar con la IA usando prompts
 async function luminsesi(q, username, logic) {
     try {
-        const response = await axios.post(
-            "https://Luminai.my.id/api", // Reemplaza esta URL con la correcta, si es necesario
-            {
-                content: q,
-                user: username,
-                prompt: logic,
-                webSearchMode: false,
-            },
-            {
-                headers: { "Content-Type": "application/json" },
-                timeout: 15000, // Tiempo de espera ajustado a 15 segundos
-            }
-        );
+        const response = await axios.post("https://Luminai.my.id", {
+            content: q,
+            user: username,
+            prompt: logic,
+            webSearchMode: false
+        }, {
+            timeout: 10000
+        });
         return response.data.result;
     } catch (error) {
-        console.error("⚠️ Error al procesar la solicitud:", error);
+        console.error('⚠️ Error al procesar la solicitud:', error);
         throw error;
     }
 }

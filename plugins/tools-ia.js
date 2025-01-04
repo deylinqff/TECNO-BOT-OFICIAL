@@ -4,23 +4,30 @@ import fetch from 'node-fetch';
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
     const username = `${conn.getName(m.sender)}`;
+
     const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
-
-    if (isQuotedImage) {
-        const q = m.quoted;
-        const img = await q.download?.();
-
-        if (!img) {
-            console.error('⚠️ Error: No se pudo obtener el contenido de la imagen.');
-            return conn.reply(m.chat, '⚠️ Lo siento, no pude descargar la imagen. Por favor, inténtalo de nuevo con otra imagen.', m);
-        }
 
     // Palabras clave relacionadas con contenido sexual
     const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo", "sensual", "relación íntima", "porno", "tetas", "pene"];
     const normalImage = "https://files.catbox.moe/adcnsj.jpg";
     const sexualImage = "https://files.catbox.moe/7docrv.jpg";
 
-        const content = '🤖 Estoy analizando la imagen que enviaste...';
+    // Filtro de contenido sexual
+    if (sexualKeywords.some(keyword => (text || '').toLowerCase().includes(keyword))) {
+        await conn.sendFile(m.chat, sexualImage, 'alerta.jpg', '⚠️ No se permite este tipo de contenido aquí.', m);
+        return;
+    }
+
+    if (isQuotedImage) {
+        const q = m.quoted;
+        const img = await q.download?.();
+
+        if (!img) {
+            console.error('💛 Error: No image buffer available');
+            return conn.reply(m.chat, '💛 Error: No se pudo descargar la imagen.', m, fake);
+        }
+
+        const content = '💛 ¿Qué se observa en la imagen?';
 
         try {
             const imageAnalysis = await fetchImageBuffer(content, img);
@@ -28,35 +35,27 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
             const description = await luminsesi(query, username, prompt);
 
-            // Enviar imagen junto con el texto
-            await conn.sendMessage(m.chat, {
-                image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
-                caption: description
-            }, { quoted: m });
+            await conn.reply(m.chat, description, m);
         } catch (error) {
-            console.error('⚠️ Error al procesar la imagen:', error);
-            await conn.reply(m.chat, '⚠️ Ocurrió un problema al analizar la imagen. Por favor, inténtalo más tarde.', m);
+            console.error('💛 Error al analizar la imagen:', error);
+            await conn.reply(m.chat, '💛 Error al analizar la imagen.', m);
         }
     } else {
         if (!text) {
-            return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
+            return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m, rcanal);
         }
 
-        await m.react('🤔');
+        await m.react('💬');
 
         try {
             const query = text;
             const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
             const response = await luminsesi(query, username, prompt);
 
-            // Enviar imagen junto con el texto
-            await conn.sendMessage(m.chat, {
-                image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
-                caption: response
-            }, { quoted: m });
+            await conn.reply(m.chat, response, m);
         } catch (error) {
-            console.error('⚠️ Error al obtener la respuesta:', error);
-            await conn.reply(m.chat, '⚠️ Lo siento, no pude procesar tu solicitud. Por favor, inténtalo más tarde.', m);
+            console.error('💛 Error al obtener la respuesta:', error);
+            await conn.reply(m.chat, 'Error: intenta más tarde.', m);
         }
     }
 };
@@ -64,6 +63,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 handler.help = ['chatgpt <texto>', 'ia <texto>'];
 handler.tags = ['tools'];
 handler.register = true;
+// handler.estrellas = 1
 handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
 
 export default handler;
@@ -77,12 +77,12 @@ async function fetchImageBuffer(content, imageBuffer) {
         }, {
             headers: {
                 'Content-Type': 'application/json'
-            },
-            timeout: 10000 // Timeout de 10 segundos
+            }
         });
+
         return response.data;
     } catch (error) {
-        console.error('Error al analizar la imagen:', error);
+        console.error('Error:', error);
         throw error;
     }
 }
@@ -95,12 +95,11 @@ async function luminsesi(q, username, logic) {
             user: username,
             prompt: logic,
             webSearchMode: false
-        }, {
-            timeout: 10000 // Timeout de 10 segundos
         });
+
         return response.data.result;
     } catch (error) {
-        console.error('⚠️ Error al procesar la solicitud:', error);
+        console.error('💛 Error al obtener:', error);
         throw error;
     }
 }

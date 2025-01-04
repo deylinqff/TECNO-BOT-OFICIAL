@@ -1,91 +1,50 @@
+/*Codigo creado por Deylin*/
+
+
 import axios from 'axios';
-import fetch from 'node-fetch';
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
-    const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
     const username = `${conn.getName(m.sender)}`;
-
     const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
 
     // Palabras clave relacionadas con contenido sexual
-    const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo", "sensual", "relación íntima", "porno", "tetas", "pene"];
+    const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo", "sensual", "relación íntima", "porno"];
     const normalImage = "https://files.catbox.moe/adcnsj.jpg";
     const sexualImage = "https://files.catbox.moe/7docrv.jpg";
 
-    // Filtro de contenido sexual
-    if (sexualKeywords.some(keyword => (text || '').toLowerCase().includes(keyword))) {
-        await conn.sendFile(m.chat, sexualImage, 'alerta.jpg', '⚠️ No se permite este tipo de contenido aquí.', m);
-        return;
+    if (!text) {
+        return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
     }
 
-    if (isQuotedImage) {
-        const q = m.quoted;
-        const img = await q.download?.();
+    // Mostrar que está "pensando"
+    await m.react('💭');
 
-        if (!img) {
-            console.error('💛 Error: No image buffer available');
-            return conn.reply(m.chat, '💛 Error: No se pudo descargar la imagen.', m, fake);
-        }
+    try {
+        const query = text;
+        const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
+        const response = await luminsesi(query, username, prompt);
 
-        const content = '💛 ¿Qué se observa en la imagen?';
+        // Detectar si la pregunta contiene contenido sexual
+        const isSexual = sexualKeywords.some(keyword => query.toLowerCase().includes(keyword));
+        const imageUrl = isSexual ? sexualImage : normalImage;
 
-        try {
-            const imageAnalysis = await fetchImageBuffer(content, img);
-            const query = '😊 Descríbeme la imagen y detalla por qué actúan así. También dime quién eres';
-            const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
-            const description = await luminsesi(query, username, prompt);
-
-            await conn.reply(m.chat, description, m);
-        } catch (error) {
-            console.error('💛 Error al analizar la imagen:', error);
-            await conn.reply(m.chat, '💛 Error al analizar la imagen.', m);
-        }
-    } else {
-        if (!text) {
-            return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m);
-        }
-
-        await m.react('💬');
-
-        try {
-            const query = text;
-            const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
-            const response = await luminsesi(query, username, prompt);
-
-            await conn.reply(m.chat, response, m);
-        } catch (error) {
-            console.error('💛 Error al obtener la respuesta:', error);
-            await conn.reply(m.chat, 'Error: intenta más tarde.', m);
-        }
+        // Responder con texto e imagen
+        await conn.sendMessage(m.chat, {
+            image: { url: imageUrl },
+            caption: response
+        }, { quoted: m });
+    } catch (error) {
+        console.error('⚠️ Error al obtener la respuesta:', error);
+        await conn.reply(m.chat, '⚠️ Lo siento, no pude procesar tu solicitud. Por favor, inténtalo más tarde.', m);
     }
 };
 
 handler.help = ['chatgpt <texto>', 'ia <texto>'];
 handler.tags = ['tools'];
 handler.register = true;
-// handler.estrellas = 1
 handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
 
 export default handler;
-
-// Función para enviar una imagen y obtener el análisis
-async function fetchImageBuffer(content, imageBuffer) {
-    try {
-        const response = await axios.post('https://Luminai.my.id', {
-            content: content,
-            imageBuffer: imageBuffer
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        return response.data;
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-}
 
 // Función para interactuar con la IA usando prompts
 async function luminsesi(q, username, logic) {
@@ -95,11 +54,12 @@ async function luminsesi(q, username, logic) {
             user: username,
             prompt: logic,
             webSearchMode: false
+        }, {
+            timeout: 10000
         });
-
         return response.data.result;
     } catch (error) {
-        console.error('💛 Error al obtener:', error);
+        console.error('⚠️ Error al procesar la solicitud:', error);
         throw error;
     }
 }

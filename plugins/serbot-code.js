@@ -1,184 +1,52 @@
-const {
-    useMultiFileAuthState,
-    DisconnectReason,
-    fetchLatestBaileysVersion, 
-    MessageRetryMap,
-    makeCacheableSignalKeyStore, 
-    jidNormalizedUser
-   } = await import('@whiskeysockets/baileys')
-import moment from 'moment-timezone'
-import NodeCache from 'node-cache'
-import readline from 'readline'
-import qrcode from "qrcode"
-import crypto from 'crypto'
-import fs from "fs"
-import pino from 'pino';
-import * as ws from 'ws';
-const { CONNECTING } = ws
-import { Boom } from '@hapi/boom'
-import { makeWASocket } from '../lib/simple.js';
+/*⚠ PROHIBIDO EDITAR ⚠
 
-if (global.conns instanceof Array) console.log()
-else global.conns = []
+El código de este archivo está totalmente hecho por:
+- Aiden_NotLogic >> https://github.com/ferhacks
 
-let handler = async (m, { conn: _conn, args, usedPrefix, command, isOwner }) => {
-  let parent = args[0] && args[0] == 'plz' ? _conn : await global.conn
-  if (!((args[0] && args[0] == 'plz') || (await global.conn).user.jid == _conn.user.jid)) {
-        return m.reply(`Este comando solo puede ser usado en el bot principal! wa.me/${global.conn.user.jid.split`@`[0]}?text=${usedPrefix}code`)
-}
+El código de este archivo fue creado para:
+- Megumin-Bot-MD >> https://github.com/David-Chian/Megumin-Bot-MD
 
-  async function serbot() {
+El código de este archivo fue parchado por:
+- ReyEndymion >> https://github.com/ReyEndymion
+- BrunoSobrino >> https://github.com/BrunoSobrino
 
-  let authFolderB = m.sender.split('@')[0]
-    if (!fs.existsSync("./Sesion Subbots/"+ authFolderB)){
-        fs.mkdirSync("./Sesion Subbots/"+ authFolderB, { recursive: true });
+Adaptación y edición hecha por:
+- David-Chian >> https://github.com/David-Chian
+- OfcKing >> https://github.com/OfcKing
+
+Adaptado para TECNO-BOT-OFICIAL por:
+- Deylinel >> https://github.com/Deylinel
+*/
+
+const _0x518f3d = _0x3488;
+(function(_0x49b83b, _0x4831d7) {
+  const _0x21ab81 = _0x3488,
+        _0x11a96b = _0x49b83b();
+  while (!![]) {
+    try {
+      const _0x140fd1 = parseInt(_0x21ab81(0x10a)) / 0x1 * (parseInt(_0x21ab81(0xe6)) / 0x2) + -parseInt(_0x21ab81(0xee)) / 0x3 + -parseInt(_0x21ab81(0xd6)) / 0x4 * (parseInt(_0x21ab81(0x115)) / 0x5) + parseInt(_0x21ab81(0x137)) / 0x6 + -parseInt(_0x21ab81(0xda)) / 0x7 * (parseInt(_0x21ab81(0x117)) / 0x8) + parseInt(_0x21ab81(0xc7)) / 0x9 + parseInt(_0x21ab81(0x140)) / 0xa;
+      if (_0x140fd1 === _0x4831d7) break;
+      else _0x11a96b['push'](_0x11a96b['shift']());
+    } catch (_0x22da20) {
+      _0x11a96b['push'](_0x11a96b['shift']());
     }
-    args[0] ? fs.writeFileSync("./Sesion Subbots/" + authFolderB + "/creds.json", JSON.stringify(JSON.parse(Buffer.from(args[0], "base64").toString("utf-8")), null, '\t')) : ""
-
-const {state, saveState, saveCreds} = await useMultiFileAuthState(`./Sesion Subbots/${authFolderB}`)
-const msgRetryCounterMap = (MessageRetryMap) => { };
-const msgRetryCounterCache = new NodeCache()
-const {version} = await fetchLatestBaileysVersion();
-let phoneNumber = m.sender.split('@')[0]
-
-const methodCodeQR = process.argv.includes("qr")
-const methodCode = !!phoneNumber || process.argv.includes("code")
-const MethodMobile = process.argv.includes("mobile")
-
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
-const question = (texto) => new Promise((resolver) => rl.question(texto, resolver))
-
-const connectionOptions = {
-  logger: pino({ level: 'silent' }),
-  printQRInTerminal: false,
-  mobile: MethodMobile, 
-  browser: ["Ubuntu", "Chrome", "20.0.04"],
-  auth: {
-  creds: state.creds,
-  keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
-  },
-  markOnlineOnConnect: true, 
-  generateHighQualityLinkPreview: true, 
-  getMessage: async (clave) => {
-  let jid = jidNormalizedUser(clave.remoteJid)
-  let msg = await store.loadMessage(jid, clave.id)
-  return msg?.message || ""
-  },
-  msgRetryCounterCache,
-  msgRetryCounterMap,
-  defaultQueryTimeoutMs: undefined,   
-  version
   }
+}(_0xdcc6, 0xa67dc));
 
-let conn = makeWASocket(connectionOptions)
-
-if (methodCode && !conn.authState.creds.registered) {
-    if (!phoneNumber) {
-        process.exit(0);
-    }
-    let cleanedNumber = phoneNumber.replace(/[^0-9]/g, '');
-  /*  if (!Object.keys(PHONENUMBER_MCC).some(v => cleanedNumber.startsWith(v))) {
-        process.exit(0);
-    }*/
-
-    setTimeout(async () => {
-        let codeBot = await conn.requestPairingCode(cleanedNumber);
-        codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot;
-        let txt = `*\`「🔱」 Serbot - Code 「🔱」\`*\n\n*\`[ Pasos : ]\`*\n\`1 ❥\` _Click en los 3 puntos_\n\`2 ❥\` _Toca en dispositivos vinculados_\n\`3 ❥\` _Seleciona Vincular con codigo_\n\`4 ❥\` _Escribe El Codigo_\n\n> *:⁖֟⊱┈֟፝❥ Nota:* Este Codigo Solo Funciona Con Quien Lo Solicito`
-         await parent.reply(m.chat, txt, m, rcanal)
-         await parent.reply(m.chat, codeBot, m, rcanal)
-        rl.close()
-    }, 3000)
+const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, jidNormalizedUser } = await import(_0x518f3d(0xfa));
+import _0x5dc57f from 'qrcode';
+import _0x39d2c2 from 'fs';
+function _0x3488(_0xc9504e, _0x22768d) {
+  const _0xdcc6de = _0xdcc6();
+  return _0x3488 = function(_0x3488f7, _0x53bf6e) {
+    _0x3488f7 = _0x3488f7 - 0xc5;
+    let _0x5070ca = _0xdcc6de[_0x3488f7];
+    return _0x5070ca;
+  }, _0x3488(_0xc9504e, _0x22768d);
 }
+import _0x4f6af8 from 'pino';
+import 'ws';
 
-conn.isInit = false
-let isInit = true
-
-async function connectionUpdate(update) {
-    const { connection, lastDisconnect, isNewLogin, qr } = update
-    if (isNewLogin) conn.isInit = true
-    const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode;
-        if (code && code !== DisconnectReason.loggedOut && conn?.ws.socket == null) {
-      let i = global.conns.indexOf(conn)
-      if (i < 0) return console.log(await creloadHandler(true).catch(console.error))
-      delete global.conns[i]
-      global.conns.splice(i, 1)
-
-          if (code !== DisconnectReason.connectionClosed) {
-          parent.sendMessage(m.chat, { text: "Conexión perdida.." }, { quoted: m })
-        } else {
-        }
-      }
-
-    if (global.db.data == null) loadDatabase()
-
-    if (connection == 'open') {
-    conn.isInit = true
-    global.conns.push(conn)
-    await parent.reply(m.chat, args[0] ? 'Conectado con exito' : '*\`[ Conectado Exitosamente 🤍 ]\`*\n\n> _Se intentara reconectar en caso de desconexion de sesion_\n> _Si quieres eliminr el subbot borra la sesion en dispositivos vinculados_\n> _El número del bot puede cambiar, guarda este enlace :_\n\https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m', m)
-    await sleep(5000)
-    if (args[0]) return
-
-                await parent.reply(conn.user.jid, `La siguiente vez que se conecte envía el siguiente mensaje para iniciar sesión sin utilizar otro código `, m, rcanal)
-
-                await parent.sendMessage(conn.user.jid, {text : usedPrefix + command + " " + Buffer.from(fs.readFileSync("./serbot/" + authFolderB + "/creds.json"), "utf-8").toString("base64")}, { quoted: m })
-          }
-
-  }
-
-  setInterval(async () => {
-    if (!conn.user) {
-      try { conn.ws.close() } catch { }
-      conn.ev.removeAllListeners()
-      let i = global.conns.indexOf(conn)
-      if (i < 0) return
-      delete global.conns[i]
-      global.conns.splice(i, 1)
-    }}, 60000)
-
-let handler = await import('../handler.js')
-let creloadHandler = async function (restatConn) {
-try {
-const Handler = await import(`../handler.js?update=${Date.now()}`).catch(console.error)
-if (Object.keys(Handler || {}).length) handler = Handler
-} catch (e) {
-console.error(e)
-}
-if (restatConn) {
-try { conn.ws.close() } catch { }
-conn.ev.removeAllListeners()
-conn = makeWASocket(connectionOptions)
-isInit = true
-}
-
-if (!isInit) {
-conn.ev.off('messages.upsert', conn.handler)
-conn.ev.off('connection.update', conn.connectionUpdate)
-conn.ev.off('creds.update', conn.credsUpdate)
-}
-
-conn.handler = handler.handler.bind(conn)
-conn.connectionUpdate = connectionUpdate.bind(conn)
-conn.credsUpdate = saveCreds.bind(conn, true)
-
-conn.ev.on('messages.upsert', conn.handler)
-conn.ev.on('connection.update', conn.connectionUpdate)
-conn.ev.on('creds.update', conn.credsUpdate)
-isInit = false
-return true
-}
-creloadHandler(false)
-}
-serbot()
-
-}
-handler.help = ['code']
-handler.tags = ['serbot']
-handler.command = ['code', 'serbotcode']
-handler.rowner = false
-
-export default handler
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+function _0xdcc6() {
+  const _0x239f2c = [
+    'reply', 'Chrome', 'chat', '\x0a💫\x20*𝐕𝐞𝐫𝐬𝐢𝐨́𝐧\x20𝐬𝐮𝐛\x20𝐛𝐨𝐭*\x20»\x205.0\x0a\x0a>\x20*¡𝙲𝚘𝚗𝚟𝚒𝚎́𝚛𝚝𝚎𝚝𝚎\x20𝚎𝚗\x20𝚜𝚞𝚋-𝚋𝚘𝚝\x20𝚊𝚑𝚘𝚛𝚊!*\x0awa.me/', 'connection.update', '218wixgZa', 'deleteUpdate', 'connectionLost', 'error', 'user', 'Ubuntu', 'close', 'Anónimo', '3545607souddD', 'pushName', 'image', 'unlinkSync', '*🍧\x20𝑺𝒆\x20𝒉𝒂\x20𝒂𝒍𝒄𝒂𝒏𝒛𝒂𝒅𝒐\x20𝒆𝒍\x20𝒍𝒊𝒎𝒊𝒕𝒆\x20𝒅𝒆\x20𝒓𝒆𝒄𝒐𝒏𝒆𝒄𝒊𝒐𝒏𝒆𝒔,\x20𝒑𝒐𝒓\x20𝒇𝒂𝒗𝒐𝒓\x20𝒊𝒏𝒕𝒆𝒏𝒕𝒆\x20𝒎𝒂𝒔\x20𝒕𝒂𝒓𝒅𝒆.*', 'uptime', 'Yuki-Suou-Bot', 'loggedOut', '../handler.js?update=', 'base64', 'mentionedJid', 'serbot', '@whiskeysockets/baileys', 'call', 'participantsUpdate', 'badSession', 'toBuffer', 'sendMessage', 'idchannel', 'parse', '2.0.0', '*🌸\x20𝒀𝒂\x20𝒆𝒔𝒕𝒂𝒔\x20𝒄𝒐𝒏𝒆𝒄𝒕𝒂𝒅𝒐,\x20𝒔𝒆\x20𝒑𝒂𝒄𝒊𝒆𝒏𝒕𝒆\x20𝒍𝒐𝒔\x20𝒎𝒆𝒏𝒔𝒂𝒋𝒆𝒔\x20𝒔𝒆\x20𝒆𝒔𝒕𝒂𝒏\x20𝒄𝒂𝒓𝒈𝒂𝒏𝒅𝒐...*\x0a\x0a*⌜⌟\x20𝑷𝒂𝒓𝒂\x20𝒅𝒆𝒋𝒂𝒓\x20𝒅𝒆\x20𝒔𝒆𝒓\x20𝑩𝒐𝒕\x20𝒑𝒖𝒆𝒅𝒆𝒔\x20𝒖𝒔𝒂𝒓:*\x0a*◉\x20#deletebot*\x0a*⌜⌟\x20𝑷𝒂𝒓𝒂\x20𝒗𝒐𝒍𝒗𝒆𝒓\x20𝒂\x20𝒔𝒆\x20𝑩𝒐𝒕\x20𝒚\x20𝒓𝒆𝒆𝒔𝒄𝒂𝒏𝒆𝒂𝒓\x20𝒆𝒍\x20𝒄𝒐𝒅𝒊𝒈𝒐\x20𝑸𝑹\x20𝒑𝒖𝒆𝒅𝒆𝒔\x20𝒖𝒔𝒂𝒓:*\x0a*◉\x20', '*╭━╴╶╴╶╴╶╴ꖒ╶╴╶╴╶╴╶━╮*\x0a*│🌸\x20S\x20E\x20R\x20B\x20O\x20T\x20-\x20S\x20U\x20B\x20B\x20O\x20T\x20🌸*\x0a*├╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴*\x0a*│\x20𝑈𝑠𝑎\x20𝑒𝑠𝑡𝑒\x20𝐶ó𝑑𝑖𝑔𝑜\x20𝑝𝑎𝑟𝑎\x20𝑐𝑜𝑛𝑣𝑒𝑟𝑡𝑖𝑟𝑡𝑒\x20𝑒𝑛\x20𝑢𝑛\x20𝑆𝑢𝑏\x20𝐵𝑜𝑡*\x0a*├╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴*\x0a*│🌷\x20𝑷𝒂𝒔𝒐𝒔:*\x0a*├╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴*\x0a*│\x20`1`\x20:\x20𝐻𝑎𝑔𝑎\x20𝑐𝑙𝑖𝑐𝑘\x20𝑒𝑛\x20𝑙𝑜𝑠\x203\x20𝑝𝑢𝑛𝑡𝑜𝑠*\x0a*├╶╴╶╴╶╴╶╴╶╴╶╴╶╴*\x0a*│\x20`2`\x20:\x20𝑇𝑜𝑞𝑢𝑒\x20𝑑𝑖𝑠𝑝𝑜𝑠𝑖𝑡𝑖𝑣𝑜𝑠\x20𝑣𝑖𝑛𝑐𝑢𝑙𝑎𝑑𝑜𝑠*\x0a*├╶╴╶╴╶╴╶╴╶╴*\x0a*│\x20`3`\x20:\x20𝑆𝑒𝑙𝑒𝑐𝑐𝑖𝑜𝑛𝑎\x20𝑉𝑖𝑛𝑐𝑢𝑙𝑎𝑟\x20𝑐𝑜𝑛\x20𝑒𝑙\x20𝑛𝑢𝑚𝑒𝑟𝑜\x20𝑑𝑒\x20𝑡𝑒𝑙é𝑓𝑜𝑛𝑜*\x0a*├╶╴╶╴╶╴╶╴╶╴*\x0a*│\x20`4`\x20:\x20𝐸𝑠𝑐𝑟𝑖𝑏𝑎\x20𝑒𝑙\x20𝐶𝑜𝑑𝑖𝑔𝑜*\x0a*├╶╴╶╴╶╴╶╴*\x0a>\x20*𝑵𝒐𝒕𝒂:*\x20𝑬𝒔𝒕𝒆\x20𝑪𝒐𝒅𝒊𝒈𝒐\x20𝒔𝒐𝒍𝒐\x20𝒇𝒖𝒏𝒄𝒊𝒐𝒏𝒂\x20𝒆𝒏\x20𝒆𝒍\x20𝒏𝒖𝒎𝒆𝒓𝒐\x20𝒒𝒖𝒆\x20𝒍𝒐\x20𝒔𝒐𝒍𝒊𝒄𝒊𝒕𝒐.\x0a*╰━╴╶╴╶╴╶╴ꗰ╶╴╶╴╶╴╶━╯*', 'groups.update', '*🌹\x20𝑳𝒂\x20𝒔𝒆𝒔𝒊𝒐𝒏\x20𝒂𝒄𝒕𝒖𝒂𝒍\x20𝒔𝒆\x20𝒄𝒆𝒓𝒓𝒐,\x20𝑺𝒊\x20𝒅𝒆𝒔𝒆𝒂\x20𝒗𝒐𝒍𝒗𝒆𝒓\x20𝒂\x20𝒄𝒐𝒏𝒆𝒄𝒕𝒂𝒓𝒔𝒆\x20𝒕𝒆𝒏𝒅𝒓𝒂\x20𝒒𝒖𝒆\x20𝒊𝒏𝒊𝒄𝒊𝒂𝒓\x20𝒔𝒆𝒔𝒊𝒐𝒏\x20𝒅𝒆\x20𝒏𝒖𝒆𝒗𝒐*', 'fstop', '*🌸\x20𝑪𝒐𝒏𝒆𝒄𝒕𝒂𝒅𝒐\x20𝒄𝒐𝒏\x20𝒆𝒙𝒊𝒕𝒐!!\x20𝑷𝒂𝒓𝒂\x20𝒗𝒐𝒍𝒗𝒆𝒓\x20𝒂\x20𝒄𝒐𝒏𝒆𝒄𝒕𝒂𝒓𝒕𝒆\x20𝒖𝒔𝒂\x20', '\x0a🍧\x20*𝐁𝐨𝐭*\x20»\x20𝙔𝙪𝙠𝙞-𝙎𝙪𝙤𝙪-𝘽𝙤𝙩\x20🌸\x0a⭐\x20*𝐕𝐞𝐫𝐬𝐢𝐨́𝐧\x20𝐝𝐞𝐥\x20𝐛𝐨𝐭*\x20»\x20', '10706TdZNlq', 'trim', 'getTime', 'loadMessage', 'from', 'messages.upsert', '/creds.json', 'existsSync', 'catch', 'indexOf', 'split', '2371495zTyhFN', '*🍧\x20𝑳𝒂\x20𝒄𝒐𝒏𝒆𝒙𝒊𝒐𝒏\x20𝒔𝒆\x20𝒑𝒆𝒓𝒅𝒊𝒐,\x20𝒔𝒆\x20𝒊𝒏𝒕𝒆𝒏𝒕𝒂𝒓𝒂\x20𝒓𝒆𝒄𝒐𝒏𝒆𝒄𝒕𝒂𝒓\x20𝒂𝒖𝒕𝒐𝒎𝒂𝒕𝒊𝒄𝒂𝒎𝒆𝒏𝒕𝒆...*\x0a', '5741048fstmTI', 'mkdirSync', '110.0.5585.95', 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0JydW5vU29icmluby9UaGVNeXN0aWMtQm90LU1EL21hc3Rlci9wbHVnaW5zL21pcGlsb3Qtc2VyYm90Lmpz', 'name', '\x20𝑷𝒐𝒓\x20𝒇𝒂𝒗𝒐𝒓\x20𝒓𝒆𝒑𝒐𝒓𝒕𝒆\x20𝒂\x20𝒍𝒐𝒔\x20𝒅𝒆𝒔𝒂𝒓𝒓𝒐𝒍𝒍𝒂𝒅𝒐𝒓.','creds', 'sender', 'dataconst', 'no\x20se\x20encontro', 'log', 'onDelete', 'serbot\x20code', '🌸\x20𝑶𝒎𝒊𝒕𝒊𝒆𝒏𝒅𝒐\x20𝒎𝒆𝒏𝒔𝒂𝒋𝒆𝒔\x20𝒆𝒏\x20𝒆𝒔𝒑𝒆𝒓𝒂.','./plugins/', 'off', '*🍧\x20𝑳𝒂\x20𝒄𝒐𝒏𝒆𝒙𝒊𝒐𝒏\x20𝒔𝒆\x20𝒄𝒆𝒓𝒓𝒐,\x20𝒔

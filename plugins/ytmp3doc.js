@@ -3,12 +3,19 @@ import fetch from "node-fetch";
 
 const handler = async (m, { text, usedPrefix, command, conn }) => {
     if (!text) {
-        throw await m.reply("✨ Ingresa una consulta o link de *YouTube*");
+        await m.reply("✨ Ingresa una consulta o link de *YouTube* para descargar el audio.");
+        return;
     }
-    await m.react('🕓');
 
+    await m.react('🕓');
+    
     let res = await yts(text);
     let videoList = res.all;
+    if (!videoList || videoList.length === 0) {
+        await m.reply("❌ No se encontraron resultados para esa búsqueda.");
+        return;
+    }
+    
     let videos = videoList[0];
 
     async function ytdl(url) {
@@ -25,15 +32,21 @@ const handler = async (m, { text, usedPrefix, command, conn }) => {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Error al obtener el archivo. Código de estado: ${response.status}`);
         }
 
         const data = await response.json();
         return data;
     }
 
-    let data_play = await ytdl(videos.url);
-    console.log(data_play);
+    let data_play;
+    try {
+        data_play = await ytdl(videos.url);
+    } catch (err) {
+        console.error(err);
+        await m.reply("❌ No se pudo obtener el audio, intenta nuevamente.");
+        return;
+    }
 
     if (data_play && data_play.data && data_play.data.mp3) {
         await conn.sendMessage(m.chat, { 
@@ -41,11 +54,10 @@ const handler = async (m, { text, usedPrefix, command, conn }) => {
             mimetype: 'audio/mp3', 
             fileName: `${videos.title}.mp3`
         }, { quoted: m });
-
         await m.react('✅'); 
     } else {
-        //await m.reply("❌ No se pudo obtener el audio.");
-        await m.react('❌'); 
+        await m.reply("❌ No se pudo obtener el audio.");
+        await m.react('❌');
     }
 };
 

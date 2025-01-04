@@ -31,7 +31,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
     // Mensaje de bienvenida
     if (chat.welcome && m.messageStubType === 27) {
-        let wel = `┌─⪩ TECNO-BOT 🚀\n│「 BIENVENIDO/A 」\n└┬⪩ @${userId.split`@`[0]}\n   │🚀  「 BIENVENIDO ✰ A 」 ${groupMetadata.subject}!\n   │⚙️  Disfruta de *TECNO* .\n   └───────────────`;
+        let wel = `┌─⪩ TECNO-BOT 🚀\n│「 BIENVENIDO 」\n└┬⪩ @${userId.split`@`[0]}\n   │🚀  「 BIENVENIDO ✰ A 」 ${groupMetadata.subject}!\n   │⚙️  Disfruta de *TECNO* .\n   └───────────────`;
         try {
             await conn.sendMessage(m.chat, { 
                 caption: wel, 

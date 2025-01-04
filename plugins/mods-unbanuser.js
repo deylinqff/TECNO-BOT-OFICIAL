@@ -28,7 +28,7 @@ const handler = async (m, { conn, args, text, usedPrefix, command }) => {
         await conn.reply(m.chat, `✅️ El usuario *${nametag}* ha sido desbaneado.`, m, { mentionedJid: [user] });
 
         // Notifica en otro chat (si es necesario) sobre el desbaneo
-        conn.reply('584120346669@s.whatsapp.net', `👤 El usuario *${nametag}* ha sido desbaneado por *${nn}*`, m);
+        conn.reply(50488198573@s.whatsapp.net', `👤 El usuario *${nametag}* ha sido desbaneado por *${nn}*`, m);
     } else {
         // Si el usuario no está en la base de datos
         await conn.reply(m.chat, `👤 El usuario no está registrado o no está baneado.`, m);

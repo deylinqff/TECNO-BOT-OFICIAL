@@ -8,7 +8,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo el anime. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
 
     // Palabras clave relacionadas con contenido sexual
-    const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo", "sensual", "relación íntima", "porno"];
+    const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo", "sensual", "relación íntima", "porno", "pene", "vrg", "gay", "gey"];
     const normalImage = "https://files.catbox.moe/adcnsj.jpg";
     const sexualImage = "https://files.catbox.moe/7docrv.jpg";
 

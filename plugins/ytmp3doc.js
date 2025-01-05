@@ -1,55 +1,44 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
-const ytdl = require('ytdl-core');
-const fs = require('fs');
-const path = require('path');
+import yts from 'yt-search';
+import fetch from 'node-fetch';
 
-// Inicializa el cliente de WhatsApp
-const client = new Client({
-    authStrategy: new LocalAuth()
-});
+// (Optional) Encapsulate API logic in a service class
+class AudioDownloader {
+  async downloadAudio(url) {
+    const response = await fetch('https://shinoa.us.kg/api/download/ytdl', {
+      method: 'POST',
+      headers: {
+        'accept': '*/*',
+        'api_key': 'free',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: url
+      })
+    });
 
-client.on('qr', (qr) => {
-    console.log('QR RECEIVED', qr);
-});
-
-client.on('ready', () => {
-    console.log('Client is ready!');
-});
-
-client.on('message', async msg => {
-    if (msg.body.startsWith('.Ytmp3doc ')) {
-        const url = msg.body.split(' ')[1];
-        if (ytdl.validateURL(url)) {
-            const videoInfo = await ytdl.getInfo(url);
-            const title = videoInfo.videoDetails.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-            const filePath = path.resolve(__dirname, `${title}.mp3`);
-
-            msg.reply('Descargando tu video, por favor espera...');
-
-            ytdl(url, {
-                filter: 'audioonly',
-                format: 'mp3'
-            }).pipe(fs.createWriteStream(filePath))
-            .on('finish', () => {
-                msg.reply('Descarga completada, enviando el archivo...');
-                client.sendMessage(msg.from, fs.createReadStream(filePath), {
-                    filename: `${title}.mp3`,
-                    sendMediaAsDocument: true
-                }).then(() => {
-                    fs.unlinkSync(filePath); // Elimina el archivo después de enviarlo
-                }).catch(error => {
-                    console.error('Error al enviar el archivo:', error);
-                    msg.reply('Hubo un error al enviar el archivo.');
-                });
-            })
-            .on('error', (error) => {
-                console.error('Error al descargar el video:', error);
-                msg.reply('Hubo un error al descargar el video.');
-            });
-        } else {
-            msg.reply('Por favor, proporciona una URL de YouTube válida.');
-        }
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-});
 
-client.initialize();
+    return await response.json();
+  }
+}
+
+const handler = async (m, { text, usedPrefix, command, conn }) => {
+  if (!text) {
+    throw await m.reply("✨ Ingresa una consulta o link de *YouTube*");
+  }
+  await m.react('');
+
+  try {
+    let res = await yts(text);
+    let videoList = res.all;
+    let videos = videoList[0];
+
+    const audioDownloader = new AudioDownloader(); // (Optional)
+    const data_play = await audioDownloader.downloadAudio(videos.url); // (Optional) or directly call downloadAudio()
+
+    if (data_play && data_play.data && data_play.data.mp3) {
+      await conn.sendMessage(m.chat, {
+        document: { url: data_play.data.mp3 },
+        mimetype:

@@ -1,50 +1,95 @@
-import { igdl } from 'ruhend-scraper'
+import { igdl } from 'ruhend-scraper';
 
 const handler = async (m, { text, conn, args }) => {
+  // Validar que se envíe un enlace
   if (!args[0]) {
-    return conn.reply(m.chat, `${lenguajeGB['smsAvisoAG']()}🚀 𝗘𝗻𝘃𝗶́𝗮 𝗲𝗹 𝗹𝗶𝗻𝗸 𝗱𝗲𝗹 𝘃𝗶𝗱𝗲𝗼 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸.`, m)
+    return conn.reply(
+      m.chat,
+      `🔔 Envíame el enlace del video de Facebook para descargarlo.`,
+      m
+    );
   }
 
   let res;
   try {
-    await m.react('🚀')
-    res = await igdl(args[0]);
+    await m.react('🚀'); // Reacción de espera
+    res = await igdl(args[0]); // Descargar datos del enlace
   } catch (e) {
-    await m.react('❎️')
-    return conn.reply(m.chat, `${lenguajeGB['smsAvisoFG']()}⚠️ 𝗘𝗹 𝗲𝗻𝗹𝗮𝗰𝗲 𝗻𝗼 𝗲𝘀 𝘃𝗮́𝗹𝗶𝗱𝗼, 𝘃𝗲𝗿𝗶𝗳𝗶𝗾𝘂𝗲 𝘀𝗶 𝗲𝘀 𝘂𝗻 𝗲𝗻𝗹𝗮𝗰𝗲 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸.`, m)
+    // Manejo de error en caso de enlace no válido
+    await m.react('❌');
+    return conn.reply(
+      m.chat,
+      `❗ El enlace no es válido o no pertenece a Facebook. Por favor verifica.`,
+      m
+    );
   }
 
+  // Verificar si se obtuvieron datos
   let result = res.data;
   if (!result || result.length === 0) {
-    return conn.reply(m.chat, `${lenguajeGB['smsAvisoFG']()}⚠️ 𝗡𝗼 𝘀𝗲 𝗲𝗻𝗰𝗼𝗻𝘁𝗿𝗮𝗿𝗼𝗻 𝗿𝗲𝘀𝘂𝗹𝘁𝗮𝗱𝗼𝘀 𝗱𝗲𝗹 𝘃𝗶𝗱𝗲𝗼.`, m)
+    await m.react('❌');
+    return conn.reply(
+      m.chat,
+      `❗ No se encontraron videos en el enlace proporcionado.`,
+      m
+    );
   }
 
+  // Buscar video con la mejor resolución disponible
   let data;
   try {
-    data = result.find(i => i.resolution === "720p (HD)") || result.find(i => i.resolution === "360p (SD)");
+    data =
+      result.find((i) => i.resolution === '720p (HD)') ||
+      result.find((i) => i.resolution === '360p (SD)');
   } catch (e) {
-    await m.react('❎️')
-    return conn.reply(m.chat, `${lenguajeGB['smsAvisoFG']()}⚠️ 𝗗𝗮𝘁𝗼𝘀 𝗻𝗼 𝗲𝗻𝗰𝗼𝗻𝘁𝗿𝗮𝗱𝗼𝘀.`, m)
+    await m.react('❌');
+    return conn.reply(
+      m.chat,
+      `❗ No se pudieron procesar los datos del video.`,
+      m
+    );
   }
 
   if (!data) {
-    return conn.reply(m.chat, `${lenguajeGB['smsAvisoFG']()}⚠️ 𝗡𝗼 𝘀𝗲 𝗲𝗻𝗰𝗼𝗻𝘁𝗿𝗼́ 𝗿𝗲𝘀𝘂𝗹𝘁𝗮𝗱𝗼𝘀 𝗱𝗲𝗹 𝘃𝗶𝗱𝗲𝗼.`, m)
+    await m.react('❌');
+    return conn.reply(
+      m.chat,
+      `❗ No se encontró un video descargable en el enlace.`,
+      m
+    );
   }
 
-  let video = data await conn.sendMessage(m.chat, { video: { url: video }, caption: `${lenguajeGB['smsAvisoEG']()}𝙩𝙪 𝙫𝙞𝙙𝙚𝙤 𝙙𝙚 𝙁𝙖𝙘𝙚𝙗𝙤𝙤𝙠.
+  // Enviar el video al chat
+  let video = data.url;
+  try {
+    await conn.sendMessage(
+      m.chat,
+      {
+        video: { url: video },
+        caption: `🚀 tu video de Facebook.
 
-> ⏤͟͟͞͞𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭ꗄ➺\n${wm}`, fileName: 'fb.mp4', mimetype: 'video/mp4' }, { quoted: m })
-    await m.react('✅️')
+\n> ⏤͟͟͞͞𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭ꗄ➺`,
+        fileName: 'facebook_video.mp4',
+        mimetype: 'video/mp4',
+      },
+      { quoted: m }
+    );
+    await m.react('✅'); // Confirmar éxito
   } catch (e) {
-    await m.react('❎️')
-    return conn.reply(m.chat, `${lenguajeGB['smsAvisoFG']()}❎️ 𝗢𝗰𝘂𝗿𝗿𝗶𝗼́ 𝘂𝗻 𝗲𝗿𝗿𝗼𝗿 𝗮𝗹 𝗱𝗲𝘀𝗰𝗮𝗿𝗴𝗮𝗿 𝗲𝗹 𝘃𝗶𝗱𝗲𝗼.`, m)
+    await m.react('❌');
+    return conn.reply(
+      m.chat,
+      `❗ Ocurrió un error al descargar o enviar el video.`,
+      m
+    );
   }
-}
+};
 
-handler.help = ['facebook2', 'fb2']
-handler.tags = ['descargas']
-handler.command = ['facebook2', 'fb2']
-handler.register = true
-handler.limit = true
+// Configuración del comando
+handler.help = ['facebook', 'fb'];
+handler.tags = ['descargas'];
+handler.command = ['facebook', 'fb']; // Comandos activadores
+handler.register = true; // Requiere registro
+handler.limit = true; // Usa límite de comandos
 
-export default handler
+export default handler;

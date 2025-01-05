@@ -86,9 +86,9 @@ const handler = async (m, { text, conn, args }) => {
 };
 
 // Configuración del comando
-handler.help = ['facebook', 'fb'];
+handler.help = ['facebook2', 'fb2'];
 handler.tags = ['descargas'];
-handler.command = ['facebook', 'fb']; // Comandos activadores
+handler.command = ['facebook2', 'fb2']; // Comandos activadores
 handler.register = true; // Requiere registro
 handler.limit = true; // Usa límite de comandos
 

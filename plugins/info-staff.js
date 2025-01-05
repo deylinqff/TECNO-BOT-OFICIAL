@@ -33,7 +33,7 @@ let handler = async (m, { conn }) => {
           body: `✨ Staff Oficial`,
           mediaType: 1,
           sourceUrl: global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL", // URL del proyecto
-          thumbnailUrl: global.icono || "https://example.com/miniatura-predeterminada.jpg", // Miniatura
+          thumbnailUrl: global.icono || "https://files.catbox.moe/owl2rl.jpg", // Miniatura
         },
       },
     });

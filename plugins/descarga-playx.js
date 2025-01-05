@@ -13,22 +13,27 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
     let searchUrl = `https://api.example.com/soundcloud/search?query=${encodeURIComponent(text)}`; // Reemplaza 'example' por la API adecuada
     console.log('📡 Fetching search data from:', searchUrl);
     let searchResponse = await axios.get(searchUrl);
-    let searchData = searchResponse.data;
-
-    if (!searchData || searchData.length === 0) {
+    if (!searchResponse.data || searchResponse.data.length === 0) {
       console.log('❌ No search results found.');
       throw new Error('No se encontró información de la música.');
     }
 
-    let { url, title, quality, image } = searchData[0];
+    let { url, title, quality, image } = searchResponse.data[0];
     console.log('🔍 Search results:', { url, title, quality, image });
 
     let downloadUrl = `https://api.example.com/soundcloud/download?url=${url}`; // Reemplaza 'example' por la API adecuada
     console.log('📡 Fetching download data from:', downloadUrl);
     let downloadResponse = await axios.get(downloadUrl);
-    let downloadData = downloadResponse.data;
+    if (!downloadResponse.data || !downloadResponse.data.link) {
+      console.log('❌ Download data not found.');
+      throw new Error('Error al obtener el enlace de descarga.');
+    }
 
-    let audioBuffer = await getBuffer(downloadData.link);
+    let audioBuffer = await getBuffer(downloadResponse.data.link);
+    if (!audioBuffer) {
+      console.log('❌ Audio buffer not found.');
+      throw new Error('Error al descargar la música.');
+    }
     console.log('🎵 Audio buffer obtained.');
 
     let txt = `*\`- S O U N C L O U D - M U S I C -\`*\n\n`
@@ -64,12 +69,13 @@ const getBuffer = async (url, options) => {
     return res.data;
   } catch (e) {
     console.log(`Error : ${e}`);
+    return null;
   }
 };
 
 handler.help = ['soundcloud *<búsqueda>*']
 handler.tags = ['downloader']
-handler.command = ['soundcloud', 'sound', 'playx']
+handler.command = ['soundcloud', 'sound', 'play']
 handler.register = true
 
 export default handler

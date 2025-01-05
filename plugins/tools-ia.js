@@ -14,8 +14,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     // Imágenes relacionadas con las categorías
     const normalImage = "https://files.catbox.moe/g95ury.jpg";
     const sexualImage = "https://files.catbox.moe/7docrv.jpg";
-    const gamesImage = "https://files.catbox.moe/8ab3rf.jpg";
-    const adventureImage = "https://files.catbox.moe/3uv62f.jpg";
+    const gamesImage = "https://files.catbox.moe/ijdc93.jpg";
+    const adventureImage = "https://files.catbox.moe/yewq55.jpg";
 
     if (!text) {
         return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);

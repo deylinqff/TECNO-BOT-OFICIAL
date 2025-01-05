@@ -1,5 +1,4 @@
-/*Codigo creado por Deylin*/
-
+/* Código creado por Deylin */
 
 import axios from 'axios';
 
@@ -7,10 +6,16 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     const username = `${conn.getName(m.sender)}`;
     const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo el anime. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
 
-    // Palabras clave relacionadas con contenido sexual
+    // Palabras clave y categorías
     const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo", "sensual", "relación íntima", "porno", "pene", "vrg", "gay", "gey"];
+    const gamesKeywords = ["juego", "videojuego", "gaming", "consola", "pc", "playstation", "xbox", "nintendo", "gamer"];
+    const adventureKeywords = ["aventura", "explorar", "exploración", "viajar", "mundo", "misión", "acción"];
+
+    // Imágenes relacionadas con las categorías
     const normalImage = "https://files.catbox.moe/g95ury.jpg";
     const sexualImage = "https://files.catbox.moe/7docrv.jpg";
+    const gamesImage = "https://files.catbox.moe/8ab3rf.jpg";
+    const adventureImage = "https://files.catbox.moe/3uv62f.jpg";
 
     if (!text) {
         return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
@@ -24,9 +29,19 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
         const response = await luminsesi(query, username, prompt);
 
-        // Detectar si la pregunta contiene contenido sexual
+        // Detectar la categoría del texto ingresado
         const isSexual = sexualKeywords.some(keyword => query.toLowerCase().includes(keyword));
-        const imageUrl = isSexual ? sexualImage : normalImage;
+        const isGame = gamesKeywords.some(keyword => query.toLowerCase().includes(keyword));
+        const isAdventure = adventureKeywords.some(keyword => query.toLowerCase().includes(keyword));
+
+        let imageUrl = normalImage; // Imagen por defecto
+        if (isSexual) {
+            imageUrl = sexualImage;
+        } else if (isGame) {
+            imageUrl = gamesImage;
+        } else if (isAdventure) {
+            imageUrl = adventureImage;
+        }
 
         // Responder con texto e imagen
         await conn.sendMessage(m.chat, {

@@ -1,53 +1,65 @@
-import ytdl from 'ytdl-core'
-import fetch from 'node-fetch'
-import { getVideoInfo } from 'some-music-api' // Reemplaza 'some-music-api' con el paquete de API adecuado que uses
+import axios from 'axios'
 
-const handler = async (m, { text, conn, args }) => {
-  if (!text) {
-    return conn.reply(m.chat, '💛 *Ingrese el nombre de la música*\n💛 *Ejemplo de uso:* .playx Shape of You', m)
-  }
+const handler = async (m, { conn, command, args, text, usedPrefix }) => {
+  if (!text) return conn.reply(m.chat, `🧑‍💻INGRESE EL NOMBRE DE ALGUNA CANCIÓN *Soundcloud.*`, m, rcanal)
 
-  await m.react('⏱️')
-  conn.reply(m.chat, '⌛ Procesando tu solicitud...', m)
-
-  let info;
+  await m.react('🕒');
+  
   try {
-    info = await getVideoInfo(text) // Obtén la información del video usando la API apropiada
-  } catch (e) {
-    await m.react('❎')
-    return conn.reply(m.chat, '💛 Error: No se pudo obtener la información de la música.', m)
-  }
+    let searchUrl = `https://api.example.com/soundcloud/search?query=${encodeURIComponent(text)}` // Reemplaza 'example' por la API adecuada
+    let searchResponse = await axios.get(searchUrl)
+    let searchData = searchResponse.data
 
-  if (!info) {
-    await m.react('❎')
-    return conn.reply(m.chat, '💛 No se encontró información de la música.', m)
-  }
+    if (!searchData || searchData.length === 0) {
+      throw new Error('No se encontró información de la música.')
+    }
 
-  const { title, uploadDate, artist, image, url } = info
-  conn.reply(m.chat, `💛 *Título:* ${title}\n💛 *Artista:* ${artist}\n💛 *Fecha de subida:* ${uploadDate}\n💛 *Enlace:* ${url}`, m)
+    let { url, title, quality, image } = searchData[0]
 
-  let musicStream;
-  try {
-    musicStream = ytdl(url, { filter: 'audioonly' })
-  } catch (e) {
-    await m.react('❎')
-    return conn.reply(m.chat, '💛 Error: No se pudo descargar la música.', m)
-  }
+    let downloadUrl = `https://api.example.com/soundcloud/download?url=${url}` // Reemplaza 'example' por la API adecuada
+    let downloadResponse = await axios.get(downloadUrl)
+    let downloadData = downloadResponse.data
 
-  try {
-    await conn.sendMessage(m.chat, { audio: musicStream, caption: '🎵 Aquí tienes tu música', mimetype: 'audio/mp4' }, { quoted: m })
-    await conn.sendFile(m.chat, image, 'image.jpg', artist) // Envía la imagen del artista
-    await m.react('✅')
-  } catch (e) {
-    await m.react('❎')
-    return conn.reply(m.chat, '💛 Error: No se pudo enviar la música.', m)
+    let audioBuffer = await getBuffer(downloadData.link)
+
+    let txt = `*\`- S O U N C L O U D - M U S I C -\`*\n\n`
+    txt += `        ✩  *Título* : ${title}\n`
+    txt += `        ✩  *Calidad* : ${quality}\n`
+    txt += `        ✩  *Url* : ${url}\n\n`
+    txt += `> 🚩 *${textbot}*`
+
+    await conn.sendFile(m.chat, image, 'thumbnail.jpg', txt, m, null, rcanal)
+    await conn.sendMessage(m.chat, { audio: audioBuffer, fileName: `${title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
+
+    await m.react('✅');
+  } catch (error) {
+    console.error('Error:', error)
+    await conn.react('❎');
+    conn.reply(m.chat, `🚩 Error al descargar la canción. Por favor, intente de nuevo.`, m)
   }
 }
 
-handler.help = ['playx <nombre de la música>']
-handler.tags = ['música', 'descargas']
-handler.command = ['playx']
+const getBuffer = async (url, options) => {
+  try {
+    const res = await axios({
+      method: 'get',
+      url,
+      headers: {
+        'DNT': 1,
+        'Upgrade-Insecure-Request': 1,
+      },
+      ...options,
+      responseType: 'arraybuffer',
+    });
+    return res.data;
+  } catch (e) {
+    console.log(`Error : ${e}`);
+  }
+};
+
+handler.help = ['soundcloud *<búsqueda>*']
+handler.tags = ['downloader']
+handler.command = ['soundcloud', 'sound', 'playx']
 handler.register = true
-handler.limit = true
 
 export default handler

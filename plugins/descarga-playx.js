@@ -1,105 +1,53 @@
-const { default: makeWASocket, DisconnectReason } = require('@adiwajshing/baileys');
-const ytdl = require('ytdl-core');
-const axios = require('axios');
-const fs = require('fs');
+import ytdl from 'ytdl-core'
+import fetch from 'node-fetch'
+import { getVideoInfo } from 'some-music-api' // Reemplaza 'some-music-api' con el paquete de API adecuado que uses
 
-// Configura tu clave de API de YouTube
-const YOUTUBE_API_KEY = 'TU_CLAVE_DE_API';
+const handler = async (m, { text, conn, args }) => {
+  if (!text) {
+    return conn.reply(m.chat, '💛 *Ingrese el nombre de la música*\n💛 *Ejemplo de uso:* .playx Shape of You', m)
+  }
 
-async function startBot() {
-    const sock = makeWASocket();
+  await m.react('⏱️')
+  conn.reply(m.chat, '⌛ Procesando tu solicitud...', m)
 
-    sock.ev.on('messages.upsert', async ({ messages }) => {
-        const message = messages[0];
-        if (!message.message || message.key.fromMe) return;
+  let info;
+  try {
+    info = await getVideoInfo(text) // Obtén la información del video usando la API apropiada
+  } catch (e) {
+    await m.react('❎')
+    return conn.reply(m.chat, '💛 Error: No se pudo obtener la información de la música.', m)
+  }
 
-        const from = message.key.remoteJid;
-        const text = message.message.conversation || message.message.extendedTextMessage?.text;
+  if (!info) {
+    await m.react('❎')
+    return conn.reply(m.chat, '💛 No se encontró información de la música.', m)
+  }
 
-        // Comando .playx
-        if (text && text.startsWith('.playx ')) {
-            const query = text.slice(7).trim();
-            if (!query) {
-                await sock.sendMessage(from, { text: 'Por favor, indica el nombre o URL de la canción.' });
-                return;
-            }
+  const { title, uploadDate, artist, image, url } = info
+  conn.reply(m.chat, `💛 *Título:* ${title}\n💛 *Artista:* ${artist}\n💛 *Fecha de subida:* ${uploadDate}\n💛 *Enlace:* ${url}`, m)
 
-            try {
-                // Buscar en YouTube
-                const video = await searchYouTube(query);
-                if (!video) {
-                    await sock.sendMessage(from, { text: 'No se encontraron resultados para tu búsqueda.' });
-                    return;
-                }
+  let musicStream;
+  try {
+    musicStream = ytdl(url, { filter: 'audioonly' })
+  } catch (e) {
+    await m.react('❎')
+    return conn.reply(m.chat, '💛 Error: No se pudo descargar la música.', m)
+  }
 
-                const { title, publishedAt, url, channelTitle, description } = video;
-
-                // Enviar detalles de la canción
-                const details = `
-🎵 *Título:* ${title}
-📅 *Publicado el:* ${new Date(publishedAt).toLocaleDateString()}
-⏰ *Hora de publicación:* ${new Date(publishedAt).toLocaleTimeString()}
-📺 *Canal:* ${channelTitle}
-🔗 *Enlace:* ${url}
-
-📝 *Descripción:* ${description.substring(0, 300)}...
-                `;
-                await sock.sendMessage(from, { text: details });
-
-                // Descargar y enviar el audio
-                const fileName = `./downloads/${Date.now()}.mp3`;
-                await downloadAudio(url, fileName);
-                await sock.sendMessage(from, {
-                    audio: { url: fileName },
-                    mimetype: 'audio/mpeg',
-                });
-
-                fs.unlinkSync(fileName); // Elimina el archivo después de enviarlo
-            } catch (error) {
-                console.error(error);
-                await sock.sendMessage(from, { text: 'Ocurrió un error al procesar tu solicitud.' });
-            }
-        }
-    });
-
-    sock.ev.on('connection.update', (update) => {
-        const { connection, lastDisconnect } = update;
-        if (connection === 'close') {
-            const shouldReconnect = lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut;
-            console.log('Conexión cerrada. Reconectando:', shouldReconnect);
-            if (shouldReconnect) startBot();
-        } else if (connection === 'open') {
-            console.log('Conectado a WhatsApp');
-        }
-    });
+  try {
+    await conn.sendMessage(m.chat, { audio: musicStream, caption: '🎵 Aquí tienes tu música', mimetype: 'audio/mp4' }, { quoted: m })
+    await conn.sendFile(m.chat, image, 'image.jpg', artist) // Envía la imagen del artista
+    await m.react('✅')
+  } catch (e) {
+    await m.react('❎')
+    return conn.reply(m.chat, '💛 Error: No se pudo enviar la música.', m)
+  }
 }
 
-// Función para buscar en YouTube
-async function searchYouTube(query) {
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(query)}&key=${YOUTUBE_API_KEY}&maxResults=1`;
-    const response = await axios.get(url);
-    const video = response.data.items[0];
-    if (!video) return null;
+handler.help = ['playx <nombre de la música>']
+handler.tags = ['música', 'descargas']
+handler.command = ['playx']
+handler.register = true
+handler.limit = true
 
-    const videoId = video.id.videoId;
-    const details = {
-        title: video.snippet.title,
-        publishedAt: video.snippet.publishedAt,
-        url: `https://www.youtube.com/watch?v=${videoId}`,
-        channelTitle: video.snippet.channelTitle,
-        description: video.snippet.description,
-    };
-    return details;
-}
-
-// Función para descargar el audio
-function downloadAudio(url, output) {
-    return new Promise((resolve, reject) => {
-        const stream = ytdl(url, { filter: 'audioonly' }).pipe(fs.createWriteStream(output));
-        stream.on('finish', resolve);
-        stream.on('error', reject);
-    });
-}
-
-// Inicia el bot
-startBot();
+export default handler

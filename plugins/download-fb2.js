@@ -7,7 +7,7 @@ const handler = async (m, { text, conn, args }) => {
 
   let res;
   try {
-    await m.react('⏱️')
+    await m.react('🚀')
     res = await igdl(args[0]);
   } catch (e) {
     await m.react('❎️')

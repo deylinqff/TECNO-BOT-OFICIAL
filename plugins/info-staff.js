@@ -1,30 +1,38 @@
 let handler = async (m, { conn }) => {
-  // Información del staff
+  // Información del staff con diseño
   const staff = `
-✨ *EQUIPO DE AYUDANTES*
-🤖 *Bot:* ${global.botname || "Bot Desconocido"}
-🌟 *Versión:* ${global.vs || "1.0"}
-
-👑 *Propietario:*
-• *Nombre:* Deylin
-• *Rol:* Propietario
-• *Número:* wa.me/50433222264
-• *GitHub:* [Repositorio](https://github.com/Deylinel/TECNO-BOT-OFICIAL)
-
-🚀 *Colaboradores:*
-• *Nombre:* Diego
-• *Rol:* Soporte
-• *Número:* wa.me/525539585733
-
-• *Nombre:* Niño Piña
-• *Rol:* Moderador
-• *Número:* wa.me/50557865603
+╭━━━[✨ *EQUIPO DE AYUDANTES* ✨]━━━╮
+┃
+┃ 🤖 *Bot:* ${global.botname || "Bot Desconocido"}
+┃ 🌟 *Versión:* ${global.vs || "1.0"}
+┃
+┣━━━━━👑 *Propietario* ━━━━━┫
+┃ • *Nombre:* 𝐃𝐞𝐲𝐥𝐢𝐧
+┃ • *Rol:* 𝙿𝚛𝚘𝚙𝚒𝚎𝚝𝚊𝚛𝚒𝚘
+┃ • *Número:* wa.me/50433222264
+┃ • *GitHub:* [Repositorio](https://github.com/Deylinel/TECNO-BOT-OFICIAL)
+┃
+┣━━━🚀 *Colaboradores* ━━━┫
+┃ • *Nombre:* 𝐃𝐢𝐞𝐠𝐨
+┃   *Rol:* 𝚂𝚘𝚙𝚘𝚛𝚝𝚎
+┃   *Número:* wa.me/525539585733
+┃
+┃ • *Nombre:* 𝐍𝐢ñ𝐨 𝐏𝐢ñ𝐚
+┃   *Rol:* 𝙼𝚘𝚍𝚎𝚛𝚊𝚍𝚘𝚛
+┃   *Número:* wa.me/50557865603
+┃
+╰━━━━━━━━━━━━━━━━━━━━━━━╯
 `.trim();
 
   try {
-    // Enviar el mensaje con información del staff y una imagen predeterminada
+    // Verificar variables globales con valores predeterminados
+    const imageUrl = global.imageUrl || "https://files.catbox.moe/owl2rl.jpg"; // Imagen predeterminada
+    const sourceUrl = global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL"; // URL del proyecto
+    const thumbnailUrl = global.icono || "https://files.catbox.moe/owl2rl.jpg"; // Miniatura
+
+    // Enviar el mensaje con diseño
     await conn.sendMessage(m.chat, {
-      image: { url: global.imageUrl || "https://example.com/imagen-predeterminada.jpg" }, // Imagen predeterminada
+      image: { url: imageUrl },
       caption: staff,
       contextInfo: {
         externalAdReply: {
@@ -32,8 +40,8 @@ let handler = async (m, { conn }) => {
           title: `🥷 Developers 👑`,
           body: `✨ Staff Oficial`,
           mediaType: 1,
-          sourceUrl: global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL", // URL del proyecto
-          thumbnailUrl: global.icono || "https://files.catbox.moe/owl2rl.jpg", // Miniatura
+          sourceUrl: sourceUrl,
+          thumbnailUrl: thumbnailUrl,
         },
       },
     });
@@ -43,9 +51,12 @@ let handler = async (m, { conn }) => {
       await m.react(global.emoji);
     }
   } catch (error) {
-    // Manejo de errores
-    console.error(error);
-    await m.reply("Ocurrió un error al ejecutar el comando. Por favor, verifica la configuración del bot.");
+    // Manejo de errores con mensaje más claro
+    console.error("Error al ejecutar el comando staff:", error);
+    await m.reply(
+      "⚠️ *Error al ejecutar el comando:*\n" +
+      "Por favor, verifica la configuración del bot o consulta la consola para más detalles."
+    );
   }
 };
 

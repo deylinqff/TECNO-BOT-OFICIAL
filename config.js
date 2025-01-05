@@ -11,9 +11,9 @@ import axios from 'axios';
 //*═══════════✧════════════✧═══════════*
 
 global.owner = [
-  ['525539585733', 'WillZek', true],
-  ['50498409019', 'CrowBot-AI', true],
-  ['584241836217', 'Prak Harper', true],
+  ['525539585733', 'Diego', true],
+  ['50557865603', 'WillZek', true],
+  ['50488198573', 'esperando', true],
   ['50488198573', 'DEYLIN-Support', true]
 ]; // <-- Corchete de cierre y coma añadidos
 

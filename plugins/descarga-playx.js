@@ -69,7 +69,7 @@ const getBuffer = async (url, options) => {
 
 handler.help = ['soundcloud *<búsqueda>*']
 handler.tags = ['downloader']
-handler.command = ['soundcloud', 'sound', 'play']
+handler.command = ['soundcloud', 'sound', 'playx']
 handler.register = true
 
 export default handler

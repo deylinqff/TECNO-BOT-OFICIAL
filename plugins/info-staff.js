@@ -1,7 +1,7 @@
 let handler = async (m, { conn }) => {
   // Información del staff con diseño
   const staff = `
-╭━━━[✨ *EQUIPO DE AYUDANTES* ✨]━━━╮
+╭[🚀 *EQUIPO DE AYUDANTES* 🚀]╮
 ┃
 ┃ 🤖 *Bot:* ${global.botname || "Bot Desconocido"}
 ┃ 🌟 *Versión:* ${global.vs || "1.0"}
@@ -10,7 +10,7 @@ let handler = async (m, { conn }) => {
 ┃ • *Nombre:* 𝐃𝐞𝐲𝐥𝐢𝐧
 ┃ • *Rol:* 𝙿𝚛𝚘𝚙𝚒𝚎𝚝𝚊𝚛𝚒𝚘
 ┃ • *Número:* wa.me/50433222264
-┃ • *GitHub:* [Repositorio](https://github.com/Deylinel/TECNO-BOT-OFICIAL)
+┃ • *GitHub:* (https://github.com/Deylinel/TECNO-BOT-OFICIAL)
 ┃
 ┣━━━🚀 *Colaboradores* ━━━┫
 ┃ • *Nombre:* 𝐃𝐢𝐞𝐠𝐨

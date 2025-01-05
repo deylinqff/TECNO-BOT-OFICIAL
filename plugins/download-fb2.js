@@ -31,7 +31,9 @@ const handler = async (m, { text, conn, args }) => {
     return conn.reply(m.chat, `${lenguajeGB['smsAvisoFG']()}⚠️ 𝗡𝗼 𝘀𝗲 𝗲𝗻𝗰𝗼𝗻𝘁𝗿𝗼́ 𝗿𝗲𝘀𝘂𝗹𝘁𝗮𝗱𝗼𝘀 𝗱𝗲𝗹 𝘃𝗶𝗱𝗲𝗼.`, m)
   }
 
-  let video = data await conn.sendMessage(m.chat, { video: { url: video }, caption: `${lenguajeGB['smsAvisoEG']()}🏖 𝘼𝙦𝙪𝙞́ 𝙩𝙞𝙚𝙣𝙚𝙨 𝙩𝙪 𝙫𝙞𝙙𝙚𝙤 𝙙𝙚 𝙁𝙖𝙘𝙚𝙗𝙤𝙤𝙠.\n${wm}`, fileName: 'fb.mp4', mimetype: 'video/mp4' }, { quoted: m })
+  let video = data await conn.sendMessage(m.chat, { video: { url: video }, caption: `${lenguajeGB['smsAvisoEG']()}𝙩𝙪 𝙫𝙞𝙙𝙚𝙤 𝙙𝙚 𝙁𝙖𝙘𝙚𝙗𝙤𝙤𝙠.
+
+> ⏤͟͟͞͞𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭ꗄ➺\n${wm}`, fileName: 'fb.mp4', mimetype: 'video/mp4' }, { quoted: m })
     await m.react('✅️')
   } catch (e) {
     await m.react('❎️')

@@ -1,5 +1,4 @@
-const ytdl = require('ytdl-core'); // More reliable and secure library
-const fs = require('fs'); // For file system operations
+import yts from 'yt-search';
 
 const handler = async (m, { text, usedPrefix, command, conn }) => {
   if (!text) {
@@ -8,45 +7,54 @@ const handler = async (m, { text, usedPrefix, command, conn }) => {
   await m.react('');
 
   try {
-    // Search for YouTube video using yts (optional)
-    // let res = await yts(text);
-    // let videoList = res.all;
-    // let videos = videoList[0];
+    let res = await yts(text);
+    let videoList = res.all;
+    let videos = videoList[0];
 
-    // Alternatively, extract URL from text directly
-    const url = text.trim(); // Remove leading/trailing spaces
-
-    // Get video info using ytdl-core
-    const info = await ytdl.getInfo(url);
-
-    // Choose the highest quality audio format
-    const format = ytdl.chooseFormat(info.formats, { quality: 'highestaudio' });
-
-    await m.reply('⏳ Descargando tu audio...');
-
-    const writeStream = fs.createWriteStream(`${info.title}.mp3`);
-    const stream = ytdl(url, { format });
-
-    stream.pipe(writeStream);
-
-    await new Promise((resolve, reject) => {
-      writeStream.on('finish', resolve);
-      writeStream.on('error', (error) => {
-        console.error('Error downloading audio:', error);
-        reject(error);
+    async function ytdl(url) {
+      const response = await fetch('https://shinoa.us.kg/api/download/ytdl', {
+        method: 'POST',
+        headers: {
+          'accept': '*/*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text: url
+        })
       });
-    });
 
-    // Send audio using sendAudio (better experience)
-    await conn.sendMessage(m.chat, { audio: { url: `${info.title}.mp3` }, mimetype: 'audio/mp3', fileName: `${info.title}.mp3` }, { quoted: m });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-    await m.react('✅');
+      const data = await response.json();
+      return data;
+    }
+
+    let data_play;
+    try {
+      data_play = await ytdl(videos.url);
+    } catch (error) {
+      console.error("Error fetching audio:", error);
+      return await m.reply("❌ No se pudo obtener el audio. Intenta de nuevo más tarde.");
+    }
+
+    if (data_play && data_play.data && data_play.data.mp3) {
+      await conn.sendMessage(m.chat, { 
+        document: { url: data_play.data.mp3 }, 
+        mimetype: 'audio/mp3', 
+        fileName: `${videos.title}.mp3`
+      }, { quoted: m });
+
+      await m.react('✅'); 
+    } else {
+      await m.react('❌'); 
+      await m.reply("❌ No se pudo encontrar audio en el video.");
+    }
   } catch (error) {
-    console.error('Error:', error);
-    await m.reply('❌ Hubo un problema al descargar el audio. Inténtalo de nuevo más tarde.');
-  } finally {
-    // Clean up downloaded file (optional)
-    // fs.unlinkSync(`${info.title}.mp3`); // Uncomment if you want to delete the file after sending
+    console.error("Error:", error);
+    await m.react('❌'); 
+    await m.reply("❌ Algo salió mal. Intenta de nuevo más tarde.");
   }
 };
 

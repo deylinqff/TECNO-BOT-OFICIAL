@@ -8,12 +8,12 @@ const LimitAud = 725 * 1024 * 1024; //700MB
 const LimitVid = 425 * 1024 * 1024; //425MB
 const handler = async (m, {conn, command, args, text, usedPrefix}) => {
 
-if (command == 'paudio' || command == 'mp3') {
+if (command == 'play' || command == 'mp3') {
 if (!text) return conn.reply(m.chat, `🌸 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, ); 
 await m.react(rwait);
 const yt_play = await search(args.join(' '));
 const ytplay2 = await yts(text);
-const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
+const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐘𝐮𝐤𝐢 𝐒𝐮𝐨𝐮⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
 
 > 📚 *Título:*
 » ${yt_play[0].title}
@@ -31,7 +31,7 @@ const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐓𝐞�
 > 📽️ *Su Audio se está enviando, espere un momento...*`.trim();
 
 await conn.sendMessage(m.chat, {
-image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭🔱', sourceUrl: channel, thumbnail: imagen2 }}, quoted: estilo});
+image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝙔𝙪𝙠𝙞 𝙎𝙪𝙤𝙪🌸', sourceUrl: cn, thumbnail: logo7 }}, quoted: estilo});
 try {
 await m.react(rwait);
 const apiUrl = `https://deliriussapi-oficial.vercel.app/download/ytmp4?url=${encodeURIComponent(yt_play[0].url)}`;
@@ -88,12 +88,12 @@ await m.react(error);
 console.log(e);
 }}}}}}}
 
-if (command == 'pvideo' || command == 'mp4') {
+if (command == 'play2' || command == 'mp4') {
 if (!text) return conn.reply(m.chat, `🌸 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, );
 await m.react(rwait);
 const yt_play = await search(args.join(' '));
 const ytplay2 = await yts(text);
-const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
+const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐘𝐮𝐤𝐢 𝐒𝐮𝐨𝐮⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
 
 > 📚 *Título:*
 » ${yt_play[0].title}
@@ -111,7 +111,7 @@ const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐓𝐞�
 > 📽️ *Su Video se está enviando, espere un momento...*`.trim();
 
 await conn.sendMessage(m.chat, {
-image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭🔱', sourceUrl: channel, thumbnail: imagen2 }}, quoted: estilo});
+image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝙔𝙪𝙠𝙞 𝙎𝙪𝙤𝙪🌸', sourceUrl: cn, thumbnail: logo7 }}, quoted: estilo});
 try {
 await m.react(rwait);
 const apiUrl = `https://deliriussapi-oficial.vercel.app/download/ytmp4?url=${encodeURIComponent(yt_play[0].url)}`;
@@ -183,12 +183,12 @@ await m.react(error);
 console.log(e);
 }}}}}}}}
 
-if (command == 'pdoc' || command == 'playdoc') {
+if (command == 'play3' || command == 'playdoc') {
 if (!text) return conn.reply(m.chat, `🌸 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, );
 await m.react(rwait);
 const yt_play = await search(args.join(' '));
 const ytplay2 = await yts(text);
-const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
+const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐘𝐮𝐤𝐢 𝐒𝐮𝐨𝐮⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
 
 > 📚 *Título:*
 » ${yt_play[0].title}
@@ -206,7 +206,7 @@ const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐓𝐞�
 > 📽️ *Su Audio en documento se está enviando, espere un momento...*`.trim();
 
 await conn.sendMessage(m.chat, {
-image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭🔱', sourceUrl: channel, thumbnail: imagen2 }}, quoted: estilo});
+image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝙔𝙪𝙠𝙞 𝙎𝙪𝙤𝙪🌸', sourceUrl: cn, thumbnail: logo7 }}, quoted: estilo});
 try {
 await m.react(rwait);
 const apiUrl = `https://deliriussapi-oficial.vercel.app/download/ytmp4?url=${encodeURIComponent(yt_play[0].url)}`;
@@ -261,12 +261,12 @@ await m.react(error);
 console.log(e);
 }}}}}}}
 
-if (command == 'pdoc2' || command == 'playdoc2') {
+if (command == 'play4' || command == 'playdoc2') {
 if (!text) return conn.reply(m.chat, `🌸 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, );
 await m.react(rwait);
 const yt_play = await search(args.join(' '));
 const ytplay2 = await yts(text);
-const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
+const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐘𝐮𝐤𝐢 𝐒𝐮𝐨𝐮⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
 
 > 📚 *Título:*
 » ${yt_play[0].title}
@@ -284,7 +284,7 @@ const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐓𝐞�
 > 📽️ *Su video en documento se está enviando, espere un momento...*`.trim();
 
 await conn.sendMessage(m.chat, {
-image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭🔱', sourceUrl: channel, thumbnail: imagen2 }}, quoted: estilo});
+image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝙔𝙪𝙠𝙞 𝙎𝙪𝙤𝙪 🌸', sourceUrl: cn, thumbnail: logo7 }}, quoted: estilo});
 try {
 await m.react(rwait);
 const apiUrl = `https://deliriussapi-oficial.vercel.app/download/ytmp4?url=${encodeURIComponent(yt_play[0].url)}`;
@@ -309,11 +309,10 @@ console.log(e2);
 }}}
 
 }
-handler.help = ['paudio', 'pvideo', 'pdoc', 'pdoc2', 'playdoc'];
+handler.help = ['play', 'play2', 'play3', 'play4', 'playdoc'];
 handler.tags = ['descargas'];
-handler.command = ['paudio', 'pvideo', 'pdoc', 'pdoc2', 'mp32', 'mp42', 'playdoc', 'playdoc2']
-handler.group = false;
-handler.estrellas = 12;
+handler.command = ['play', 'play2', 'play3', 'play4', 'mp3', 'mp4', 'playdoc', 'playdoc2']
+handler.group = true;
 export default handler;
 
 async function search(query, options = {}) {

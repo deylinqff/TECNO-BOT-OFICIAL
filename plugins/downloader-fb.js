@@ -66,7 +66,8 @@ const handler = async (m, { text, conn, args }) => {
       m.chat,
       {
         video: { url: video },
-        caption: `✅ Aquí tienes tu video de Facebook.\nDisfrútalo 🏖`,
+        caption: `✅ Aquí tienes tu video de Facebook.\nDisfrútalo 
+⏤͟͟͞͞𝐓𝐞𝐜𝐧𝐨-𝐁𝐨𝐭ꗄ➺🚀`,
         fileName: 'facebook_video.mp4',
         mimetype: 'video/mp4',
       },

@@ -1,19 +1,58 @@
-const { MessageType } = require('@adiwajshing/baileys'); // Asegúrate de tener esta dependencia instalada
+const ytdl = require('ytdl-core'); // More reliable and secure library
+const fs = require('fs'); // For file system operations
 
 const handler = async (m, { text, usedPrefix, command, conn }) => {
-    if (!text) {
-        return m.reply('¡Por favor, ingresa la URL del video de YouTube después del comando! Por ejemplo: .ytmp3doc https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-    }
+  if (!text) {
+    throw await m.reply("✨ Ingresa una consulta o link de *YouTube*");
+  }
+  await m.react('');
 
-    const [_, url] = text.split(' ');
+  try {
+    // Search for YouTube video using yts (optional)
+    // let res = await yts(text);
+    // let videoList = res.all;
+    // let videos = videoList[0];
 
-    // ... (resto del código, como lo tienes ahora)
+    // Alternatively, extract URL from text directly
+    const url = text.trim(); // Remove leading/trailing spaces
 
-    // En lugar de enviar como documento, puedes usar sendAudio para una mejor experiencia
-    await conn.sendMessage(m.chat, { audio: { url: data_play.data.mp3 }, mimetype: 'audio/mp3', fileName: `${videos.title}.mp3` }, { quoted: m });
+    // Get video info using ytdl-core
+    const info = await ytdl.getInfo(url);
+
+    // Choose the highest quality audio format
+    const format = ytdl.chooseFormat(info.formats, { quality: 'highestaudio' });
+
+    await m.reply('⏳ Descargando tu audio...');
+
+    const writeStream = fs.createWriteStream(`${info.title}.mp3`);
+    const stream = ytdl(url, { format });
+
+    stream.pipe(writeStream);
+
+    await new Promise((resolve, reject) => {
+      writeStream.on('finish', resolve);
+      writeStream.on('error', (error) => {
+        console.error('Error downloading audio:', error);
+        reject(error);
+      });
+    });
+
+    // Send audio using sendAudio (better experience)
+    await conn.sendMessage(m.chat, { audio: { url: `${info.title}.mp3` }, mimetype: 'audio/mp3', fileName: `${info.title}.mp3` }, { quoted: m });
+
+    await m.react('✅');
+  } catch (error) {
+    console.error('Error:', error);
+    await m.reply('❌ Hubo un problema al descargar el audio. Inténtalo de nuevo más tarde.');
+  } finally {
+    // Clean up downloaded file (optional)
+    // fs.unlinkSync(`${info.title}.mp3`); // Uncomment if you want to delete the file after sending
+  }
 };
 
+handler.help = ['ytmp3doc <yt url>'];
+handler.tags = ['downloader'];
 handler.command = ['ytmp3doc'];
-// ... (resto de las propiedades del handler)
+handler.register = true;
 
-module.exports = handler;
+export default handler;

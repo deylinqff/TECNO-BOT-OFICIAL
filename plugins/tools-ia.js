@@ -9,7 +9,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
     // Palabras clave relacionadas con contenido sexual
     const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo", "sensual", "relación íntima", "porno", "pene", "vrg", "gay", "gey"];
-    const normalImage = "https://files.catbox.moe/adcnsj.jpg";
+    const normalImage = "https://files.catbox.moe/g95ury.jpg";
     const sexualImage = "https://files.catbox.moe/7docrv.jpg";
 
     if (!text) {

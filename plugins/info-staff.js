@@ -1,4 +1,4 @@
-let handler = async (m, { conn, command }) => {
+let handler = async (m, { conn }) => {
   // Información del staff
   const staff = `
 ✨ *EQUIPO DE AYUDANTES*
@@ -22,30 +22,21 @@ let handler = async (m, { conn, command }) => {
 `.trim();
 
   try {
-    // Enviar el mensaje con información del staff
-    await conn.sendFile(
-      m.chat,
-      global.icons || null, // Ruta del ícono (asegúrate de definir 'icons' en tus variables globales)
-      "staff.jpg",
-      staff,
-      null,
-      true,
-      {
-        contextInfo: {
-          forwardingScore: 200,
-          isForwarded: false,
-          externalAdReply: {
-            showAdAttribution: true,
-            renderLargerThumbnail: false,
-            title: `🥷 Developers 👑`,
-            body: `✨ Staff Oficial`,
-            mediaType: 1,
-            sourceUrl: global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL", // Asegúrate de definir 'redes' en las globales
-            thumbnailUrl: global.icono || null, // Miniatura (asegúrate de definir 'icono' en las globales)
-          },
+    // Enviar el mensaje con información del staff y una imagen predeterminada
+    await conn.sendMessage(m.chat, {
+      image: { url: global.imageUrl || "https://example.com/imagen-predeterminada.jpg" }, // Imagen predeterminada
+      caption: staff,
+      contextInfo: {
+        externalAdReply: {
+          showAdAttribution: true,
+          title: `🥷 Developers 👑`,
+          body: `✨ Staff Oficial`,
+          mediaType: 1,
+          sourceUrl: global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL", // URL del proyecto
+          thumbnailUrl: global.icono || "https://example.com/miniatura-predeterminada.jpg", // Miniatura
         },
-      }
-    );
+      },
+    });
 
     // Reacción al comando (opcional)
     if (global.emoji) {

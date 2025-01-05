@@ -42,7 +42,7 @@ Object.defineProperty(handler, 'alwaysOn', {
   writable: false, // Protege esta propiedad contra modificaciones
 });
 
-handler.help = ['link'];
-handler.tags = ['enlace'];
-handler.command = ['link'];
+handler.help = ['link2'];
+handler.tags = ['enlace2'];
+handler.command = ['link2'];
 export default handler;

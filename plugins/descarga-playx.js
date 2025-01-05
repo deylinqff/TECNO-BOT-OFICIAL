@@ -2,9 +2,9 @@ import fetch from 'node-fetch';
 import axios from 'axios';
 
 let handler = async (m, { conn, command, args, text, usedPrefix }) => {
-  if (!text) return conn.reply(m.chat, `¡Ingresa el nombre de una canción para escuchar en Soundcloud!`, m);
+  if (!text) return conn.reply(m.chat, '¡Escribe el nombre de la canción que quieres escuchar! Por ejemplo: `.playx Despacito`', m);
 
-  await m.react('⏳'); // Reacción de búsqueda
+  await m.react(''); // Reacción de música
 
   try {
     // Buscar la canción en la API de SoundCloud
@@ -12,7 +12,7 @@ let handler = async (m, { conn, command, args, text, usedPrefix }) => {
     const json = await apiResponse.json();
 
     if (json.length === 0) {
-      return conn.reply(m.chat, `No se encontraron resultados para la búsqueda "${text}". Por favor, intenta con otro nombre.`, m);
+      return conn.reply(m.chat, `No encontré esa canción. ¿Quieres probar con otro nombre?`, m);
     }
 
     // Obtener el enlace de descarga de la primera canción encontrada
@@ -27,11 +27,11 @@ let handler = async (m, { conn, command, args, text, usedPrefix }) => {
     await conn.sendMessage(m.chat, { audio: audioBuffer, fileName: `${firstResult.title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m });
 
     // Enviar un mensaje de confirmación
-    await conn.reply(m.chat, `¡Aquí tienes tu música! Disfrútala. `, m);
+    await conn.reply(m.chat, `¡Listo! Disfruta de tu música. `, m);
 
   } catch (error) {
     console.error('Error al descargar el audio:', error);
-    await conn.reply(m.chat, `¡Ups! Algo salió mal. Por favor, intenta nuevamente más tarde. Si el problema persiste, contacta al administrador.`, m);
+    await conn.reply(m.chat, `¡Oops! Algo salió mal. Intenta de nuevo más tarde.`, m);
   }
 };
 
@@ -43,7 +43,7 @@ async function getBuffer(url) {
       url,
       responseType: 'arraybuffer',
     });
-    return response.data;
+    return response.emoji;
   } catch (error) {
     console.error('Error al descargar el archivo:', error);
     throw error; // Propagar el error para que sea manejado en el bloque catch principal

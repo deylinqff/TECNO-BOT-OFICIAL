@@ -46,7 +46,7 @@ let handler = async (m, { conn, command, args, text }) => {
 
 handler.help = ['soundcloud *<búsqueda>*'];
 handler.tags = ['downloader'];
-handler.command = ['soundcloud', 'sound', 'play'];
+handler.command = ['soundcloud', 'sound', 'playx'];
 
 export default handler;
 

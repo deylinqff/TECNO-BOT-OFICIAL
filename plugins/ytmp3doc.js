@@ -1,44 +1,26 @@
-import yts from 'yt-search';
-import fetch from 'node-fetch';
+const ytdl = require('ytdl-core'); // Reemplaza con la biblioteca que elijas
 
-// (Optional) Encapsulate API logic in a service class
-class AudioDownloader {
-  async downloadAudio(url) {
-    const response = await fetch('https://shinoa.us.kg/api/download/ytdl', {
-      method: 'POST',
-      headers: {
-        'accept': '*/*',
-        'api_key': 'free',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        text: url
-      })
+// ... (resto del código)
+
+async function ytdl(url) {
+  try {
+    const info = await ytdl.getInfo(url);
+    const format = ytdl.chooseFormat(info.formats, { quality: 'highestaudio' });
+
+    await m.reply('⏳ Descargando tu audio...');
+
+    const stream = ytdl(url, { format });
+    const writeStream = fs.createWriteStream(`${videos.title}.mp3`);
+
+    stream.pipe(writeStream);
+
+    return new Promise((resolve, reject) => {
+      writeStream.on('finish', resolve);
+      writeStream.on('error', reject);
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
+  } catch (error) {
+    console.error('Error al descargar el audio:', error);
+    await m.reply('❌ Hubo un problema al descargar el audio. Por favor, inténtalo de nuevo más tarde.');
+    throw error;
   }
 }
-
-const handler = async (m, { text, usedPrefix, command, conn }) => {
-  if (!text) {
-    throw await m.reply("✨ Ingresa una consulta o link de *YouTube*");
-  }
-  await m.react('');
-
-  try {
-    let res = await yts(text);
-    let videoList = res.all;
-    let videos = videoList[0];
-
-    const audioDownloader = new AudioDownloader(); // (Optional)
-    const data_play = await audioDownloader.downloadAudio(videos.url); // (Optional) or directly call downloadAudio()
-
-    if (data_play && data_play.data && data_play.data.mp3) {
-      await conn.sendMessage(m.chat, {
-        document: { url: data_play.data.mp3 },
-        mimetype:

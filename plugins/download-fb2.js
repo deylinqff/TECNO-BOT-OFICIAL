@@ -2,7 +2,7 @@ import { igdl } from 'ruhend-scraper'
 
 const handler = async (m, { text, conn, args }) => {
   if (!args[0]) {
-    return conn.reply(m.chat, `${lenguajeGB['smsAvisoAG']()}🐈 𝗘𝗻𝘃𝗶́𝗮 𝗲𝗹 𝗹𝗶𝗻𝗸 𝗱𝗲𝗹 𝘃𝗶𝗱𝗲𝗼 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸.`, m)
+    return conn.reply(m.chat, `${lenguajeGB['smsAvisoAG']()}🚀 𝗘𝗻𝘃𝗶́𝗮 𝗲𝗹 𝗹𝗶𝗻𝗸 𝗱𝗲𝗹 𝘃𝗶𝗱𝗲𝗼 𝗱𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸.`, m)
   }
 
   let res;
@@ -39,9 +39,9 @@ const handler = async (m, { text, conn, args }) => {
   }
 }
 
-handler.help = ['facebook', 'fb']
+handler.help = ['facebook2', 'fb2']
 handler.tags = ['descargas']
-handler.command = ['facebook', 'fb']
+handler.command = ['facebook2', 'fb2']
 handler.register = true
 handler.limit = true
 

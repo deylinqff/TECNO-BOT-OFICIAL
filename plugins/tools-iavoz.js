@@ -1,5 +1,12 @@
+/* Código creado por Deylin */
+
 import axios from 'axios';
-import googleTTS from 'google-tts-api'; // Importa la biblioteca de Google TTS
+import textToSpeech from '@google-cloud/text-to-speech';
+import { writeFileSync, unlinkSync, readFileSync } from 'fs';
+import { join } from 'path';
+
+const defaultLang = 'es'; // Idioma predeterminado
+const client = new textToSpeech.TextToSpeechClient(); // Cliente de Google TTS
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     const username = `${conn.getName(m.sender)}`;
@@ -42,19 +49,15 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             imageUrl = adventureImage;
         }
 
-        // Convierte el texto de respuesta en un URL de audio usando Google Text-to-Speech
-        const audioUrl = googleTTS.getAudioUrl(response, {
-            lang: 'es', // Idioma español
-            slow: false,
-            host: 'https://translate.google.com',
-        });
+        // Convertir la respuesta a audio
+        const audioContent = await tts(response, defaultLang);
 
-        // Responder con el audio e imagen
+        // Enviar mensaje con imagen y audio
         await conn.sendMessage(m.chat, {
-            audio: { url: audioUrl },
-            mimetype: 'audio/mp4',
-            ptt: true, // Para enviar como mensaje de voz (push-to-talk)
-            caption: response
+            image: { url: imageUrl },
+            audio: audioContent,
+            mimetype: 'audio/mp3',
+            caption: 'Aquí tienes la respuesta en audio'
         }, { quoted: m });
     } catch (error) {
         console.error('⚠️ Error al obtener la respuesta:', error);
@@ -84,5 +87,37 @@ async function luminsesi(q, username, logic) {
     } catch (error) {
         console.error('⚠️ Error al procesar la solicitud:', error);
         throw error;
+    }
+}
+
+// Función para generar TTS con voz masculina
+async function tts(text, lang = 'es') {
+    console.log(`Idioma: ${lang}, Texto: ${text}`);
+    try {
+        const request = {
+            input: { text },
+            voice: {
+                languageCode: lang,
+                name: 'es-ES-Wavenet-B', // Voz masculina específica
+                ssmlGender: 'MALE', // Género masculino
+            },
+            audioConfig: {
+                audioEncoding: 'MP3', // Formato de audio
+            },
+        };
+
+        // Genera el audio con Google TTS
+        const [response] = await client.synthesizeSpeech(request);
+
+        // Guarda el archivo temporalmente
+        const filePath = join(global.__dirname(import.meta.url), '../tmp', `${Date.now()}.mp3`);
+        writeFileSync(filePath, response.audioContent, 'binary');
+
+        // Lee y retorna el contenido del archivo
+        const audioContent = readFileSync(filePath);
+        unlinkSync(filePath); // Elimina el archivo temporal
+        return audioContent;
+    } catch (e) {
+        throw new Error(`Error al generar TTS: ${e.message}`);
     }
 }

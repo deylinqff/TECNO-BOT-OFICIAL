@@ -4,7 +4,7 @@ let handler = async (m, { conn, text }) => {
   m.react('⚙️');
 
   // Número autorizado (sin espacios ni caracteres especiales)
-  const allowedNumber = ${user};
+  const allowedNumber = '50488198573';
 
   // Verifica si el mensaje proviene de tu número
   if (m.sender.split('@')[0] !== allowedNumber) {

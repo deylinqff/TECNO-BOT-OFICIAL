@@ -1,74 +1,88 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
-const { TextToSpeech } = require('@google-cloud/text-to-speech');
-const { Configuration, OpenAIApi } = require("openai");
+import axios from 'axios';
+import googleTTS from 'google-tts-api'; // Importa la biblioteca de Google TTS
 
-// Configuración de WhatsApp Web
-const client = new Client({
-  authStrategy: new LocalAuth()
-});
+let handler = async (m, { conn, usedPrefix, command, text }) => {
+    const username = `${conn.getName(m.sender)}`;
+    const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo el anime. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
 
-// Configuración de Google Cloud Text-to-Speech
-const clientTTS = new TextToSpeech();
+    // Palabras clave y categorías
+    const sexualKeywords = ["sexo", "sexual", "pornografía", "erótico", "erotismo", "sensual", "relación íntima", "porno", "pene", "vrg", "gay", "gey"];
+    const gamesKeywords = ["juego", "videojuego", "gaming", "consola", "pc", "playstation", "xbox", "nintendo", "gamer"];
+    const adventureKeywords = ["aventura", "explorar", "exploración", "viajar", "mundo", "misión", "acción"];
 
-// Configuración de OpenAI
-const configuration = new Configuration({
-  apiKey: "TU_API_KEY_DE_OPENAI",
-});
-const openai = new OpenAIApi(configuration);
+    // Imágenes relacionadas con las categorías
+    const normalImage = "https://files.catbox.moe/g95ury.jpg";
+    const sexualImage = "https://files.catbox.moe/7docrv.jpg";
+    const gamesImage = "https://files.catbox.moe/ijdc93.jpg";
+    const adventureImage = "https://files.catbox.moe/yewq55.jpg";
 
-// Función para generar texto con OpenAI
-async function generateText(prompt) {
-  try {
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: prompt,
-      max_tokens: 1024,
-      n: 1,
-      stop: null,
-      temperature: 0.7,
-    });
-    return response.data.choices[0].text.trim();
-  } catch (error) {
-    console.error("Error al generar texto:", error);
-    return "Lo siento, hubo un error al procesar tu solicitud.";
-  }
-}
-
-// Función para convertir texto a audio
-async function textToSpeech(text) {
-  try {
-    const request = {
-      input: { text: text },
-      voice: { languageCode: 'es-ES', ssmlGender: 'NEUTRAL' },
-      audioConfig: { audioEncoding: 'MP3' },
-    };
-
-    const [response] = await clientTTS.synthesizeSpeech(request);
-    return response.audioContent;
-  } catch (error) {
-    console.error("Error al generar audio:", error);
-    return null;
-  }
-}
-
-// Función para manejar mensajes
-client.on('message', async msg => {
-  if (msg.body.startsWith('.voz texto')) {
-    const textToSpeak = msg.body.slice('.voz texto'.length).trim();
-    try {
-      const audioContent = await textToSpeech(await generateText(textToSpeak));
-      if (audioContent) {
-        client.sendMessage(msg.from, { audio: audioContent, mimetype: 'audio/mpeg' });
-      } else {
-        client.sendMessage(msg.from, "Lo siento, no pude generar el audio.");
-      }
-    } catch (error) {
-      console.error("Error al procesar el mensaje:", error);
-      client.sendMessage(msg.from, "Lo siento, hubo un error. Intenta nuevamente más tarde.");
+    if (!text) {
+        return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
     }
-  } else {
-    // ... (tu lógica para otros comandos o mensajes)
-  }
-});
 
-client.initialize();
+    // Mostrar que está "pensando"
+    await m.react('💭');
+
+    try {
+        const query = text;
+        const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
+        const response = await luminsesi(query, username, prompt);
+
+        // Detectar la categoría del texto ingresado
+        const isSexual = sexualKeywords.some(keyword => query.toLowerCase().includes(keyword));
+        const isGame = gamesKeywords.some(keyword => query.toLowerCase().includes(keyword));
+        const isAdventure = adventureKeywords.some(keyword => query.toLowerCase().includes(keyword));
+
+        let imageUrl = normalImage; // Imagen por defecto
+        if (isSexual) {
+            imageUrl = sexualImage;
+        } else if (isGame) {
+            imageUrl = gamesImage;
+        } else if (isAdventure) {
+            imageUrl = adventureImage;
+        }
+
+        // Convierte el texto de respuesta en un URL de audio usando Google Text-to-Speech
+        const audioUrl = googleTTS.getAudioUrl(response, {
+            lang: 'es', // Idioma español
+            slow: false,
+            host: 'https://translate.google.com',
+        });
+
+        // Responder con el audio e imagen
+        await conn.sendMessage(m.chat, {
+            audio: { url: audioUrl },
+            mimetype: 'audio/mp4',
+            ptt: true, // Para enviar como mensaje de voz (push-to-talk)
+            caption: response
+        }, { quoted: m });
+    } catch (error) {
+        console.error('⚠️ Error al obtener la respuesta:', error);
+        await conn.reply(m.chat, '⚠️ Lo siento, no pude procesar tu solicitud. Por favor, inténtalo más tarde.', m);
+    }
+};
+
+handler.help = ['chatgpt <texto>', 'voz <texto>'];
+handler.tags = ['tools'];
+handler.register = true;
+handler.command = ['voz', 'chatgpt', 'voz', 'chat', 'gpt'];
+
+export default handler;
+
+// Función para interactuar con la IA usando prompts
+async function luminsesi(q, username, logic) {
+    try {
+        const response = await axios.post("https://Luminai.my.id", {
+            content: q,
+            user: username,
+            prompt: logic,
+            webSearchMode: false
+        }, {
+            timeout: 10000
+        });
+        return response.data.result;
+    } catch (error) {
+        console.error('⚠️ Error al procesar la solicitud:', error);
+        throw error;
+    }
+}

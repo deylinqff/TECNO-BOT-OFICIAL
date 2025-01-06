@@ -2,41 +2,37 @@ import fetch from 'node-fetch';
 import axios from 'axios';
 
 let handler = async (m, { conn, command, args, text, usedPrefix }) => {
-    if (!text) return conn.reply(m.chat, `🧑‍💻 Ingrese el nombre de alguna canción de *Soundcloud*.`, m, { quoted: m });
+    if (!text) return conn.reply(m.chat, `🧑‍💻 Ingrese el enlace de YouTube de la canción que desea descargar.`, m, { quoted: m });
 
     await m.react('🕒');
     try {
-        // Fetch the search results from the API
-        let api = await fetch(`https://api.zenkey.my.id/api/download/ytmp3?apikey=zenkey&url=${encodeURIComponent(text)}`);
-        let json = await api.json();
-        if (!json.length) throw new Error('No se encontraron resultados');
+        // Formar la URL con el enlace de YouTube
+        const url = `https://api.zenkey.my.id/api/download/ytmp3?apikey=zenkey&url=${encodeURIComponent(text)}`;
+        
+        // Realizar la solicitud a la API
+        let response = await fetch(url);
+        let json = await response.json();
+        
+        if (json.status !== 'success') throw new Error('No se pudo obtener la información de la canción');
 
-        let { url } = json[0];
+        let { link: dl_url, title, thumbnail } = json.result;
 
-        // Fetch the download link from the API
-        let api2 = await fetch(`https://apis-starlights-team.koyeb.app/starlight/soundcloud?url=${url}`);
-        let json2 = await api2.json();
-        if (!json2.link) throw new Error('No se pudo obtener el enlace de descarga');
-
-        let { link: dl_url, quality, image } = json2;
-
-        // Download the audio file
+        // Descargar el archivo de audio
         let audio = await getBuffer(dl_url);
 
-        // Prepare the message text
-        let txt = `*\`- S O U N C L O U D - M U S I C -\`*\n\n`;
-        txt += `        ✩  *Título* : ${json[0].title}\n`;
-        txt += `        ✩  *Calidad* : ${quality}\n`;
-        txt += `        ✩  *Url* : ${url}\n\n`;
-        txt += `> 🚩 *${textbot}*`;
+        // Preparar el mensaje de texto
+        let txt = `*\`- Y O U T U B E - M U S I C -\`*\n\n`;
+        txt += `        ✩  *Título* : ${title}\n`;
+        txt += `        ✩  *Url* : ${text}\n\n`;
+        txt += `> 🚩 *Descarga completada*`;
 
-        // Send the thumbnail image and message text
-        await conn.sendFile(m.chat, image, 'thumbnail.jpg', txt, m, null, { quoted: m });
+        // Enviar la imagen en miniatura y el mensaje
+        await conn.sendFile(m.chat, thumbnail, 'thumbnail.jpg', txt, m, null, { quoted: m });
 
-        // Send the audio file
-        await conn.sendMessage(m.chat, { audio: audio, fileName: `${json[0].title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m });
+        // Enviar el archivo de audio
+        await conn.sendMessage(m.chat, { audio: audio, fileName: `${title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m });
 
-        // React with a success emoji
+        // Reactuar con un emoji de éxito
         await m.react('✅');
     } catch (error) {
         console.error(error);
@@ -45,13 +41,13 @@ let handler = async (m, { conn, command, args, text, usedPrefix }) => {
     }
 };
 
-handler.help = ['soundcloud *<búsqueda>*'];
+handler.help = ['playx *<enlace de YouTube>*'];
 handler.tags = ['downloader'];
-handler.command = ['playx']; // Cambiado a .playx
+handler.command = ['playx']; // Mantiene el mismo comando
 
 export default handler;
 
-// Helper function to get the audio buffer
+// Función auxiliar para obtener el buffer del archivo de audio
 const getBuffer = async (url, options) => {
     try {
         const res = await axios({

@@ -7,7 +7,7 @@ let handler = async (m, { conn, command, args, text, usedPrefix }) => {
     await m.react('🕒');
     try {
         // Fetch the search results from the API
-        let api = await fetch(`https://apis-starlights-team.koyeb.app/starlight/soundcloud-search?text=${encodeURIComponent(text)}`);
+        let api = await fetch(`https://api.zenkey.my.id/api/download/ytmp3?apikey=zenkey&url=${encodeURIComponent(text)}`);
         let json = await api.json();
         if (!json.length) throw new Error('No se encontraron resultados');
 

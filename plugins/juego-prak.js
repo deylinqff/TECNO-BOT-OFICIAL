@@ -36,9 +36,10 @@ def punk_response():
 
 # Función para escuchar el mensaje del usuario
 def listen_for_messages(contact):
-    print("Escuchando mensaje...")
+    print(f"Escuchando mensaje de {contact}...")
     incoming_message = input(f"Escribe el mensaje de {contact}: ").lower()
 
+    # Lógica de comandos y respuestas
     if "hola" in incoming_message or "hey" in incoming_message:
         return "¡Hola, ser de la oscuridad! ¿Qué quieres de este bot punk?"
     elif "jugar" in incoming_message or "reto" in incoming_message:

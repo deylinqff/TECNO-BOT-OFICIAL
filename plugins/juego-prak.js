@@ -36,8 +36,11 @@ def punk_response():
 
 # Función para escuchar el mensaje del usuario
 def listen_for_messages(contact):
-    print(f"Escuchando mensaje de {contact}...")
+    print(f"Escuchando mensaje de {contact}...")  # Esto se usa para verificar la entrada
     incoming_message = input(f"Escribe el mensaje de {contact}: ").lower()
+
+    # Depuración: muestra lo que el bot escucha
+    print(f"Mensaje recibido: {incoming_message}")
 
     # Lógica de comandos y respuestas
     if "hola" in incoming_message or "hey" in incoming_message:

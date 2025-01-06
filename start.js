@@ -364,7 +364,15 @@ async function filesInit() {
 for (const filename of readdirSync(pluginFolder).filter(pluginFilter)) {
 try {
 const file = global.__filename(join(pluginFolder, filename))
-const module = await import(file)
+try {
+    if (!file) {
+        throw new Error("La variable 'file' está vacía o no es válida.");
+    }
+    console.log("Importando archivo:", file); // Debug: muestra qué archivo intenta importar
+    const module = await import(file);
+} catch (error) {
+    console.error("Error al importar el archivo:", file, error);
+}
 global.plugins[filename] = module.default || module
 } catch (e) {
 conn.logger.error(e)

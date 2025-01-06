@@ -31,6 +31,11 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
         const response = await luminsesi(query, username, prompt);
 
+        // Verificar si la IA devuelve una respuesta válida
+        if (!response || response.trim() === '') {
+            return conn.reply(m.chat, '⚠️ La IA no respondió con un texto válido. Por favor, inténtalo nuevamente.', m);
+        }
+
         // Detectar la categoría del texto ingresado
         const isSexual = sexualKeywords.some(keyword => query.toLowerCase().includes(keyword));
         const isGame = gamesKeywords.some(keyword => query.toLowerCase().includes(keyword));
@@ -61,21 +66,22 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         // Eliminar archivo de audio después de enviarlo
         fs.unlinkSync(audioPath);
     } catch (error) {
-        console.error('⚠️ Error al obtener la respuesta:', error);
+        console.error('⚠️ Error al procesar la solicitud:', error);
         await conn.reply(m.chat, '⚠️ Lo siento, no pude procesar tu solicitud. Por favor, inténtalo más tarde.', m);
     }
 };
 
-handler.help = ['chatgpt <texto>', 'voz <texto>'];
+handler.help = ['chatgpt <texto>', 'ia <texto>'];
 handler.tags = ['tools'];
 handler.register = true;
-handler.command = ['voz', 'chatgpt', 'voz', 'chat', 'gpt'];
+handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
 
 export default handler;
 
 // Función para interactuar con la IA usando prompts
 async function luminsesi(q, username, logic) {
     try {
+        console.log(`Consultando IA con el query: ${q}`);
         const response = await axios.post("https://Luminai.my.id", {
             content: q,
             user: username,
@@ -84,9 +90,16 @@ async function luminsesi(q, username, logic) {
         }, {
             timeout: 10000
         });
+
+        // Asegurarse de que la respuesta de la IA no esté vacía
+        if (!response.data || !response.data.result) {
+            throw new Error('No se recibió una respuesta válida de la IA.');
+        }
+
+        console.log('Respuesta de la IA:', response.data.result);
         return response.data.result;
     } catch (error) {
-        console.error('⚠️ Error al procesar la solicitud:', error);
+        console.error('⚠️ Error al procesar la solicitud con la IA:', error);
         throw error;
     }
 }
@@ -94,6 +107,7 @@ async function luminsesi(q, username, logic) {
 // Función para convertir texto a voz (Google Cloud Text-to-Speech)
 async function textToSpeech(text) {
     try {
+        console.log(`Convirtiendo el texto a voz: ${text}`);
         const response = await axios.post('https://texttospeech.googleapis.com/v1/text:synthesize', {
             input: { text },
             voice: { languageCode: 'es-ES', name: 'es-ES-Standard-A' },
@@ -104,6 +118,11 @@ async function textToSpeech(text) {
             }
         });
 
+        if (!response.data.audioContent) {
+            throw new Error('No se recibió audio de la API de TTS.');
+        }
+
+        console.log('Respuesta de Google TTS:', response.data);
         const audioContent = response.data.audioContent;
         const audioBuffer = Buffer.from(audioContent, 'base64');
         return audioBuffer;

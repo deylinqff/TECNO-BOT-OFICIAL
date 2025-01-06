@@ -55,7 +55,11 @@ async function xnxxSearch(query) {
     }
 }
 
-handler.help = ['xvideosearch']
+// Asegúrate de que 'handler' esté definido
+const handler = handler || {}; // Si 'handler' no existe, lo inicializa como un objeto vacío
+
+// Agrega las propiedades al objeto
+handler.help = ['xvideosearch'];
 handler.tags = ['search']
 handler.command = ['xvideosearch2', 'xvse2'];
 handler.register = true;

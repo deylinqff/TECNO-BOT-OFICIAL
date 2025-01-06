@@ -17,12 +17,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     const gamesKeywords = ["juego", "videojuego", "gaming", "consola", "pc", "playstation", "xbox", "nintendo", "gamer"];
     const adventureKeywords = ["aventura", "explorar", "exploración", "viajar", "mundo", "misión", "acción"];
 
-    // Imágenes relacionadas con las categorías
-    const normalImage = "https://files.catbox.moe/g95ury.jpg";
-    const sexualImage = "https://files.catbox.moe/7docrv.jpg";
-    const gamesImage = "https://files.catbox.moe/ijdc93.jpg";
-    const adventureImage = "https://files.catbox.moe/yewq55.jpg";
-
     if (!text) {
         return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
     }
@@ -35,26 +29,11 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
         const response = await luminsesi(query, username, prompt);
 
-        // Detectar la categoría del texto ingresado
-        const isSexual = sexualKeywords.some(keyword => query.toLowerCase().includes(keyword));
-        const isGame = gamesKeywords.some(keyword => query.toLowerCase().includes(keyword));
-        const isAdventure = adventureKeywords.some(keyword => query.toLowerCase().includes(keyword));
-
-        let imageUrl = normalImage; // Imagen por defecto
-        if (isSexual) {
-            imageUrl = sexualImage;
-        } else if (isGame) {
-            imageUrl = gamesImage;
-        } else if (isAdventure) {
-            imageUrl = adventureImage;
-        }
-
         // Convertir la respuesta a audio
         const audioContent = await tts(response, defaultLang);
 
-        // Enviar mensaje con imagen y audio
+        // Enviar mensaje con solo audio
         await conn.sendMessage(m.chat, {
-            image: { url: imageUrl },
             audio: audioContent,
             mimetype: 'audio/mp3',
             caption: 'Aquí tienes la respuesta en audio'
@@ -65,10 +44,10 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     }
 };
 
-handler.help = ['chatgpt <texto>', 'voz <texto>'];
+handler.help = ['chatgpt <texto>', 'ia <texto>'];
 handler.tags = ['tools'];
 handler.register = true;
-handler.command = ['voz', 'chatgpt', 'voz', 'chat', 'gpt'];
+handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
 
 export default handler;
 

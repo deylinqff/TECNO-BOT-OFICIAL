@@ -1,85 +1,102 @@
 import { sticker } from '../lib/sticker.js';
-//import uploadFile from '../lib/uploadFile.js';
-//import uploadImage from '../lib/uploadImage.js';
-//import { webp2png } from '../lib/webp2mp4.js';
 
-const redes = 'https://tu-enlace-o-dominio.com'; // Define la URL aquí
-const icons = null; // Si "icons" es necesario, define su valor o cámbialo según corresponda
+const redes = 'https://tu-enlace-o-dominio.com';
+const icons = null; // Define un valor si es necesario
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
+let handler = async (m, { conn, args }) => {
   let stiker = false;
+
   try {
-    let q = m.quoted ? m.quoted : m;
+    let q = m.quoted ? m.quoted : m; // Mensaje citado o actual
     let mime = (q.msg || q).mimetype || q.mediaType || '';
+
+    // Verificar si el mensaje incluye imagen, video o sticker webp
     if (/webp|image|video/g.test(mime)) {
-      if (/video/g.test(mime)) 
-        if ((q.msg || q).seconds > 8) 
-          return m.reply(`⚙️ *¡El video no puede durar más de 8 segundos!*`);
+      if (/video/g.test(mime) && (q.msg || q).seconds > 8) {
+        return m.reply(`⚙️ *¡El video no puede durar más de 8 segundos!*`);
+      }
 
-      let img = await q.download?.();
-      if (!img) 
-        return conn.reply(m.chat, `🚀 *_¿Y el video? Intenta enviar primero imagen/video/gif y luego responde con el comando._*`, m);
+      let media = await q.download?.(); // Descargar contenido multimedia
+      if (!media) {
+        return conn.reply(
+          m.chat,
+          `🚀 *_No se pudo descargar el archivo multimedia. Por favor, inténtalo de nuevo._*`,
+          m
+        );
+      }
 
-      let out;
       try {
-        stiker = await sticker(img, false, global.packname, global.author);
+        // Intentar crear el sticker directamente
+        stiker = await sticker(media, false, global.packname, global.author);
       } catch (e) {
-        console.error(e);
-      } finally {
-        if (!stiker) {
-          if (/webp/g.test(mime)) out = await webp2png(img);
-          else if (/image/g.test(mime)) out = await uploadImage(img);
-          else if (/video/g.test(mime)) out = await uploadFile(img);
-          if (typeof out !== 'string') out = await uploadImage(img);
-          stiker = await sticker(false, out, global.packname, global.author);
+        console.error('Error al generar el sticker:', e);
+        // Si falla, intentar subir y convertir el archivo
+        let url;
+        if (/webp/g.test(mime)) {
+          url = await webp2png(media);
+        } else if (/image/g.test(mime)) {
+          url = await uploadImage(media);
+        } else if (/video/g.test(mime)) {
+          url = await uploadFile(media);
         }
+        stiker = await sticker(false, url, global.packname, global.author);
       }
     } else if (args[0]) {
-      if (isUrl(args[0])) 
+      // Procesar si se proporciona un enlace
+      if (isUrl(args[0])) {
         stiker = await sticker(false, args[0], global.packname, global.author);
-      else 
-        return m.reply(`💫 El URL es incorrecto`);
+      } else {
+        return m.reply(`💫 El URL proporcionado no es válido.`);
+      }
     }
   } catch (e) {
-    console.error(e);
-    if (!stiker) stiker = e;
-  } finally {
-    if (stiker) {
-      conn.sendFile(
-        m.chat, 
-        stiker, 
-        'sticker.webp', 
-        '', 
-        m, 
-        true, 
-        { 
-          contextInfo: { 
-            'forwardingScore': 200, 
-            'isForwarded': false, 
-            externalAdReply: { 
-              showAdAttribution: false, 
-              title: global.packname, 
-              body: `botbarboza - Ai 🚀`, 
-              mediaType: 2, 
-              sourceUrl: redes, // Usamos la variable definida
-              thumbnail: icons // Asegúrate de que "icons" tenga un valor definido
-            }
-          }
-        }, 
-        { quoted: m }
-      );
-    } else {
-      return conn.reply(m.chat, '🚀 *_¿Y el video? Intenta enviar primero imagen/video/gif y luego responde con el comando._*', m);
-    }
+    console.error('Error general:', e);
+    return conn.reply(m.chat, '⚠️ Ocurrió un error al crear el sticker.', m);
+  }
+
+  // Enviar el sticker al chat
+  if (stiker) {
+    conn.sendFile(
+      m.chat,
+      stiker,
+      'sticker.webp',
+      '',
+      m,
+      true,
+      {
+        contextInfo: {
+          forwardingScore: 200,
+          isForwarded: false,
+          externalAdReply: {
+            showAdAttribution: false,
+            title: global.packname,
+            body: `botbarboza - Ai 🚀`,
+            mediaType: 2,
+            sourceUrl: redes,
+            thumbnail: icons,
+          },
+        },
+      },
+      { quoted: m }
+    );
+  } else {
+    return conn.reply(m.chat, '⚠️ No se pudo generar el sticker. Intenta de nuevo.', m);
   }
 };
 
-handler.help = ['stiker <img>', 'sticker <url>'];
+// Ayuda y configuración del comando
+handler.help = ['sticker <imagen/video>', 'sticker <url>'];
 handler.tags = ['sticker'];
 handler.command = ['s', 'sticker', 'stiker'];
 
 export default handler;
 
+// Validar si una cadena es una URL válida
 const isUrl = (text) => {
-  return text.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)(jpe?g|gif|png)/, 'gi'));
+  return text.match(
+    new RegExp(
+      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)(jpe?g|gif|png)/,
+      'gi'
+    )
+  );
 };

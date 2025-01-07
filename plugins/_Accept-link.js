@@ -3,15 +3,6 @@ let handler = async (m, { conn, text }) => {
   // No Quites Los Créditos🚀
   m.react('⚙️');
 
-  // Número autorizado (sin espacios ni caracteres especiales)
-  const allowedNumber = '50433191934'
-
-  // Verifica si el mensaje proviene de tu número
-  if (m.sender.split('@')[0] !== allowedNumber) {
-    await conn.sendMessage(m.chat, { text: '❌ *No tienes permiso para realizar esta acción.*' });
-    return;
-  }
-
   // Verifica si el mensaje contiene un enlace de grupo de WhatsApp
   const groupLinkPattern = /chat\.whatsapp\.com\/([a-zA-Z0-9]+)/;
   const match = text.match(groupLinkPattern);

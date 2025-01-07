@@ -1,3 +1,5 @@
+// © Deylin
+
 import fetch from 'node-fetch';
 
 export async function before(m, { conn, participants, groupMetadata }) {

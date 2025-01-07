@@ -1,8 +1,12 @@
 conn.ev.on('group-participants.update', async (update) => {
   console.log('Evento de participantes detectado:', update);
 
+let handler = (m, { conn, usedPrefix, command }) => {
+
+ try {
+
   if (update.action === 'add' && update.participants.includes(conn.user.jid)) {
-    const reglasYPoliticas = `┌───「 *Normas y Políticas del Bot* 」───┐
+     global.reglasYPoliticas = `┌───「 *Normas y Políticas del Bot* 」───┐
 ├ ✨ *1. Uso Responsable:*
 │ - El bot no debe usarse para actividades ilegales, ofensivas o prohibidas.
 │ - No se permite saturar el bot con comandos innecesarios.
@@ -19,14 +23,19 @@ conn.ev.on('group-participants.update', async (update) => {
 │ - Al usar el bot, aceptas estas condiciones.
 │ - El incumplimiento puede llevar al bloqueo del servicio.
 └────────────────────────────────────┈ ⳹
-*Bot administrado por Barboza Bot 🤖*
+*Bot administrado por Deylin 🤖*
 © Código creado por Deyin`;
 
-    try {
-      await conn.sendMessage(update.id, { text: reglasYPoliticas });
+      await conn.sendMessage(m.chat, reglasYPoliticas, rcanal);
       console.log('Mensaje de normas enviado correctamente.');
     } catch (error) {
       console.error('Error al enviar el mensaje:', error);
     }
   }
 });
+
+handler.help = ['terminos'];
+handler.tag = ['main'];
+handler.command = ['terminos'];
+
+export default handler;

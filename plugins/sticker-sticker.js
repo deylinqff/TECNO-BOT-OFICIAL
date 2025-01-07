@@ -1,22 +1,34 @@
 import { sticker } from '../lib/sticker.js';
+import sharp from 'sharp';
 
 const redes = 'https://tu-enlace-o-dominio.com';
-const icons = null; // Define un valor si es necesario
+const icons = null; // Si necesitas un icono, coloca su ruta o URL aquí
+
+// Función para ajustar la resolución del video o imagen a 512x512
+const resizeMedia = async (buffer) => {
+  try {
+    return await sharp(buffer).resize(512, 512, { fit: 'contain' }).toBuffer();
+  } catch (e) {
+    console.error('Error al redimensionar el archivo:', e);
+    throw e;
+  }
+};
 
 let handler = async (m, { conn, args }) => {
   let stiker = false;
 
   try {
-    let q = m.quoted ? m.quoted : m; // Mensaje citado o actual
+    let q = m.quoted ? m.quoted : m; // Obtener mensaje citado o actual
     let mime = (q.msg || q).mimetype || q.mediaType || '';
 
-    // Verificar si el mensaje incluye imagen, video o sticker webp
     if (/webp|image|video/g.test(mime)) {
+      // Validar duración si es un video
       if (/video/g.test(mime) && (q.msg || q).seconds > 8) {
         return m.reply(`⚙️ *¡El video no puede durar más de 8 segundos!*`);
       }
 
-      let media = await q.download?.(); // Descargar contenido multimedia
+      // Descargar contenido multimedia
+      let media = await q.download?.();
       if (!media) {
         return conn.reply(
           m.chat,
@@ -25,24 +37,18 @@ let handler = async (m, { conn, args }) => {
         );
       }
 
+      // Escalar la resolución del archivo
+      media = await resizeMedia(media);
+
       try {
-        // Intentar crear el sticker directamente
+        // Crear el sticker directamente
         stiker = await sticker(media, false, global.packname, global.author);
       } catch (e) {
         console.error('Error al generar el sticker:', e);
-        // Si falla, intentar subir y convertir el archivo
-        let url;
-        if (/webp/g.test(mime)) {
-          url = await webp2png(media);
-        } else if (/image/g.test(mime)) {
-          url = await uploadImage(media);
-        } else if (/video/g.test(mime)) {
-          url = await uploadFile(media);
-        }
-        stiker = await sticker(false, url, global.packname, global.author);
+        return conn.reply(m.chat, '⚠️ Ocurrió un error al procesar el sticker.', m);
       }
     } else if (args[0]) {
-      // Procesar si se proporciona un enlace
+      // Procesar si se proporciona una URL
       if (isUrl(args[0])) {
         stiker = await sticker(false, args[0], global.packname, global.author);
       } else {

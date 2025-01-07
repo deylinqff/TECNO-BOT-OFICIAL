@@ -1,45 +1,72 @@
 // © Deylin
-import { WAMessageStubType } from '@whiskeysockets/baileys';
-import fetch from 'node-fetch';
+import { WAMessageStubType } from '@whiskeysockets/baileys'
+import fetch from 'node-fetch'
 
 export async function before(m, { conn, participants, groupMetadata }) {
   if (!m.messageStubType || !m.isGroup) return !0;
-  let img = imagen1; // Aquí debes reemplazar `imagen1` con la URL de la imagen o variable adecuada
+
+  // Obtención de la imagen de perfil del usuario
+  let pp = await conn.profilePictureUrl(m.messageStubParameters[0], 'image').catch(_ => 'https://qu.ax/jYQH.jpg');
+  let img = await (await fetch(`${pp}`)).buffer();
   let chat = global.db.data.chats[m.chat];
 
-  // **Bienvenida de Usuario**
-  if (chat.welcome && m.messageStubType == WAMessageStubType.NEW_PARTICIPANT) {
+  // Mensaje de bienvenida para los nuevos miembros
+  if (chat.bienvenida && m.messageStubType == 27) {
     let user = `@${m.messageStubParameters[0].split`@`[0]}`;
-    let welcome = `🚀≺ TECNO-BOT 
-「 Bienvenida 」 
-「 ${user} 」
-「 Grupo: ${groupMetadata.subject} 」
-\n  ιαɳαʅҽʝαɳԃɾσσƙ15x`;
+    let bienvenida = chat.sWelcome
+      ? chat.sWelcome
+        .replace('@user', () => user)
+        .replace('@group', () => groupMetadata.subject)
+        .replace('@desc', () => groupMetadata.desc || 'Sin descripción')
+      : `┏━━━━━━━ 💬 Bienvenida 💬 ━━━━━━━
+     │ ✨ **Nuevo miembro: @${m.messageStubParameters[0].split`@`[0]}** ✨
+     │ 
+     │ 📜 **Grupo:** ${groupMetadata.subject}
+     │ 📝 **Descripción:** ${groupMetadata.desc || 'Sin descripción'}
+     │
+     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
-    await conn.sendLuffy(m.chat, packname, textbot, welcome, img, img, redes, fkontak);
+    // Enviar mensaje de bienvenida
+    await conn.sendAi(m.chat, botname, textbot, bienvenida, img, img, canal);
   }
 
-  // **Despedida de Usuario**
-  if (chat.welcome && m.messageStubType == WAMessageStubType.REMOVED) {
+  // Mensaje de despedida para los miembros eliminados
+  if (chat.bienvenida && m.messageStubType == 28) {
     let user = `@${m.messageStubParameters[0].split`@`[0]}`;
-    let bye = `🚀≺ TECNO-BOT 
-「 Adiós 」 
-「 ${user} 」
-「 Hasta pronto 」
-\n  ιαɳαʅҽʝαɳԃɾσσƙ15x`;
+    let despedida = chat.sBye
+      ? chat.sBye
+        .replace('@user', () => user)
+        .replace('@group', () => groupMetadata.subject)
+        .replace('@desc', () => groupMetadata.desc || 'Sin descripción')
+      : `┏━━━━━━━ 👋 Despedida 👋 ━━━━━━━
+     │ 👤 **Adiós @${m.messageStubParameters[0].split`@`[0]}** 👤
+     │ 
+     │ 💔 **Lamentamos tu partida...**
+     │ 😔 **Esperamos que algún día regreses.**
+     │
+     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
-    await conn.sendLuffy(m.chat, packname, textbot, bye, img, img, redes, fkontak);
+    // Enviar mensaje de despedida
+    await conn.sendAi(m.chat, botname, textbot, despedida, img, img, canal);
   }
 
-  // **Expulsión de Usuario**
-  if (chat.welcome && m.messageStubType == WAMessageStubType.KICK) {
+  // Mensaje para los usuarios eliminados por la expulsión
+  if (chat.bienvenida && m.messageStubType == 32) {
     let user = `@${m.messageStubParameters[0].split`@`[0]}`;
-    let kick = `🚀≺ TECNO-BOT 
-「 Expulsado 」 
-「 ${user} 」
-「 No se permite reconexión sin autorización 」
-\n  ιαɳαʅҽʝαɳԃɾσσƙ15x`;
+    let expulsado = chat.sBye
+      ? chat.sBye
+        .replace('@user', () => user)
+        .replace('@group', () => groupMetadata.subject)
+        .replace('@desc', () => groupMetadata.desc || 'Sin descripción')
+      : `┏━━━━━━━ 🚫 Expulsión 🚫 ━━━━━━━
+     │ ⚠️ **@${m.messageStubParameters[0].split`@`[0]} ha sido expulsado** ⚠️
+     │ 
+     │ ❌ **Razón:** Comportamiento inapropiado.
+     │ 🕊️ **Esperamos que puedas mejorar y volver.**
+     │
+     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
-    await conn.sendLuffy(m.chat, packname, textbot, kick, img, img, redes, fkontak);
+    // Enviar mensaje de expulsión
+    await conn.sendAi(m.chat, botname, textbot, expulsado, img, img, canal);
   }
 }

@@ -1,10 +1,7 @@
-import { WAMessageStubType } from '@whiskeysockets/baileys';
+conn.ev.on('group-participants.update', async (update) => {
+  console.log('Evento de participantes detectado:', update);
 
-export async function before(m, { conn, groupMetadata }) {
-  if (!m.messageStubType || !m.isGroup) return !0;
-
-  // Detectar si el bot se unió al grupo
-  if (m.messageStubType == WAMessageStubType.add && m.messageStubParameters.includes(conn.user.jid)) {
+  if (update.action === 'add' && update.participants.includes(conn.user.jid)) {
     const reglasYPoliticas = `┌───「 *Normas y Políticas del Bot* 」───┐
 ├ ✨ *1. Uso Responsable:*
 │ - El bot no debe usarse para actividades ilegales, ofensivas o prohibidas.
@@ -25,6 +22,11 @@ export async function before(m, { conn, groupMetadata }) {
 *Bot administrado por Barboza Bot 🤖*
 © Código creado por Deyin`;
 
-    await conn.sendMessage(m.chat, { text: reglasYPoliticas }, { quoted: m });
+    try {
+      await conn.sendMessage(update.id, { text: reglasYPoliticas });
+      console.log('Mensaje de normas enviado correctamente.');
+    } catch (error) {
+      console.error('Error al enviar el mensaje:', error);
+    }
   }
-}
+});

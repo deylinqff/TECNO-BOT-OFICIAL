@@ -1,4 +1,7 @@
 async function xnxxdl(URL) {
+
+let handler = (m, { conn, usedPrefix, command }) => {
+
     try {
         const response = await axios.get(URL);  // Solicitud HTTP GET
         const html = response.data;  // Obtener el contenido HTML de la página
@@ -7,7 +10,7 @@ async function xnxxdl(URL) {
         // Extraer detalles del video como título y duración
         const title = $('meta[property="og:title"]').attr("content");
         const duration = $('meta[property="og:duration"]').attr("content");
-        
+
         // Extraer el script que contiene las URLs de los videos
         const videoScript = $("#video-player-bg > script:nth-child(6)").html();
 

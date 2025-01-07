@@ -1,70 +1,45 @@
 // © Deylin
+import { WAMessageStubType } from '@whiskeysockets/baileys';
 import fetch from 'node-fetch';
 
 export async function before(m, { conn, participants, groupMetadata }) {
-    const fkontak = { 
-        key: { fromMe: false, participant: '0@s.whatsapp.net' }, 
-        message: { conversation: '¡Hola!' } 
-    };
+  if (!m.messageStubType || !m.isGroup) return !0;
+  let img = imagen1; // Aquí debes reemplazar `imagen1` con la URL de la imagen o variable adecuada
+  let chat = global.db.data.chats[m.chat];
 
-    // Verifica si es un mensaje de tipo "stub" (eventos) y si es un grupo
-    if (!m.isGroup || !m.messageStubType) return true;
+  // **Bienvenida de Usuario**
+  if (chat.welcome && m.messageStubType == WAMessageStubType.NEW_PARTICIPANT) {
+    let user = `@${m.messageStubParameters[0].split`@`[0]}`;
+    let welcome = `🚀≺ TECNO-BOT 
+「 Bienvenida 」 
+「 ${user} 」
+「 Grupo: ${groupMetadata.subject} 」
+\n  ιαɳαʅҽʝαɳԃɾσσƙ15x`;
 
-    // Identifica el ID del usuario
-    const userId = (m.messageStubParameters && m.messageStubParameters[0]) || '';
-    if (!userId) return true;
+    await conn.sendLuffy(m.chat, packname, textbot, welcome, img, img, redes, fkontak);
+  }
 
-    // URLs de imágenes
-    const welcomeImage = 'https://files.catbox.moe/ef2ot0.jpg'; // Imagen de bienvenida
-    const goodbyeImage = 'https://files.catbox.moe/4zvxee.jpg'; // Imagen de despedida
+  // **Despedida de Usuario**
+  if (chat.welcome && m.messageStubType == WAMessageStubType.REMOVED) {
+    let user = `@${m.messageStubParameters[0].split`@`[0]}`;
+    let bye = `🚀≺ TECNO-BOT 
+「 Adiós 」 
+「 ${user} 」
+「 Hasta pronto 」
+\n  ιαɳαʅҽʝαɳԃɾσσƙ15x`;
 
-    let chat = global.db.data.chats[m.chat];
-    let pp;
+    await conn.sendLuffy(m.chat, packname, textbot, bye, img, img, redes, fkontak);
+  }
 
-    // Intenta obtener la foto de perfil del usuario
-    try {
-        pp = await conn.profilePictureUrl(userId, 'image');
-    } catch (error) {
-        pp = null;
-    }
+  // **Expulsión de Usuario**
+  if (chat.welcome && m.messageStubType == WAMessageStubType.KICK) {
+    let user = `@${m.messageStubParameters[0].split`@`[0]}`;
+    let kick = `🚀≺ TECNO-BOT 
+「 Expulsado 」 
+「 ${user} 」
+「 No se permite reconexión sin autorización 」
+\n  ιαɳαʅҽʝαɳԃɾσσƙ15x`;
 
-    // Descargar imagen de perfil o usar imagen predeterminada
-    let img;
-    try {
-        img = await (await fetch(pp || welcomeImage)).buffer();
-    } catch (fetchError) {
-        img = await (await fetch(welcomeImage)).buffer();
-    }
-
-    // Mensaje de bienvenida
-    if (chat.welcome && m.messageStubType === 'GROUP_PARTICIPANT_ADD') {
-        let wel = `┌─⪩ TECNO-BOT 🚀\n│「 BIENVENIDO 」\n└┬⪩ @${userId.split`@`[0]}\n   │🚀  「 BIENVENIDO ✰ A 」 ${groupMetadata.subject}!\n   │⚙️  Disfruta de *TECNO* .\n   └───────────────`;
-
-        try {
-            await conn.sendMessage(m.chat, { 
-                caption: wel, 
-                image: img, 
-                mentions: [userId] 
-            }, { quoted: fkontak });
-        } catch (sendError) {
-            console.error('Error al enviar mensaje de bienvenida:', sendError);
-        }
-    }
-
-    // Mensaje de despedida
-    if (chat.welcome && (m.messageStubType === 'GROUP_PARTICIPANT_REMOVE' || m.messageStubType === 'GROUP_PARTICIPANT_LEAVE')) {
-        let bye = `┌─⪩ TECNO-BOT 🚀\n│「 ADIÓS 」\n└┬⪩ @${userId.split`@`[0]}\n   │👋 ¡Hasta nunca!\n   │🥀 no te extrañaremos.\n   └───────────────`;
-
-        let img2;
-        try {
-            img2 = await (await fetch(goodbyeImage)).buffer();
-            await conn.sendMessage(m.chat, { 
-                caption: bye, 
-                image: img2, 
-                mentions: [userId] 
-            }, { quoted: fkontak });
-        } catch (sendError) {
-            console.error('Error al enviar mensaje de despedida:', sendError);
-        }
-    }
+    await conn.sendLuffy(m.chat, packname, textbot, kick, img, img, redes, fkontak);
+  }
 }

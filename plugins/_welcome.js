@@ -1,5 +1,4 @@
 // © Deylin
-
 import fetch from 'node-fetch';
 
 export async function before(m, { conn, participants, groupMetadata }) {
@@ -8,22 +7,28 @@ export async function before(m, { conn, participants, groupMetadata }) {
         message: { conversation: '¡Hola!' } 
     };
 
-    if (!m.messageStubType || !m.isGroup) return true;
+    // Verifica si es un mensaje de tipo "stub" (eventos) y si es un grupo
+    if (!m.isGroup || !m.messageStubType) return true;
 
-    let userId = m.messageStubParameters[0];
+    // Identifica el ID del usuario
+    const userId = (m.messageStubParameters && m.messageStubParameters[0]) || '';
+    if (!userId) return true;
 
+    // URLs de imágenes
     const welcomeImage = 'https://files.catbox.moe/ef2ot0.jpg'; // Imagen de bienvenida
     const goodbyeImage = 'https://files.catbox.moe/4zvxee.jpg'; // Imagen de despedida
 
     let chat = global.db.data.chats[m.chat];
     let pp;
 
+    // Intenta obtener la foto de perfil del usuario
     try {
         pp = await conn.profilePictureUrl(userId, 'image');
     } catch (error) {
         pp = null;
     }
 
+    // Descargar imagen de perfil o usar imagen predeterminada
     let img;
     try {
         img = await (await fetch(pp || welcomeImage)).buffer();
@@ -32,8 +37,9 @@ export async function before(m, { conn, participants, groupMetadata }) {
     }
 
     // Mensaje de bienvenida
-    if (chat.welcome && m.messageStubType === 27) {
+    if (chat.welcome && m.messageStubType === 'GROUP_PARTICIPANT_ADD') {
         let wel = `┌─⪩ TECNO-BOT 🚀\n│「 BIENVENIDO 」\n└┬⪩ @${userId.split`@`[0]}\n   │🚀  「 BIENVENIDO ✰ A 」 ${groupMetadata.subject}!\n   │⚙️  Disfruta de *TECNO* .\n   └───────────────`;
+
         try {
             await conn.sendMessage(m.chat, { 
                 caption: wel, 
@@ -45,11 +51,11 @@ export async function before(m, { conn, participants, groupMetadata }) {
         }
     }
 
-    // Mensaje de despedida (salida)
-    if (chat.welcome && (m.messageStubType === 28 || m.messageStubType === 32)) {
+    // Mensaje de despedida
+    if (chat.welcome && (m.messageStubType === 'GROUP_PARTICIPANT_REMOVE' || m.messageStubType === 'GROUP_PARTICIPANT_LEAVE')) {
         let bye = `┌─⪩ TECNO-BOT 🚀\n│「 ADIÓS 」\n└┬⪩ @${userId.split`@`[0]}\n   │👋 ¡Hasta nunca!\n   │🥀 no te extrañaremos.\n   └───────────────`;
-        let img2;
 
+        let img2;
         try {
             img2 = await (await fetch(goodbyeImage)).buffer();
             await conn.sendMessage(m.chat, { 

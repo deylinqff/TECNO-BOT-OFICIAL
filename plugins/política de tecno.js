@@ -1,12 +1,12 @@
-conn.ev.on('group-participants.update', async (update) => {
-  console.log('Evento de participantes detectado:', update);
+import { WAMessageStubType } from '@whiskeysockets/baileys';
+import fetch from 'node-fetch';
 
-let handler = (m, { conn, usedPrefix, command }) => {
+export async function before(m, { conn, participants, groupMetadata }) {
+  if (!m.messageStubType || !m.isGroup) return !0;
 
- try {
-
-  if (update.action === 'add' && update.participants.includes(conn.user.jid)) {
-     global.reglasYPoliticas = `┌───「 *Normas y Políticas del Bot* 」───┐
+  const mensajeCompleto = `┌─🚀 *𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕* \n│「 *Bienvenido* 」\n└┬🚀 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │🚀 *Bienvenido a*\n   │🚀 *${groupMetadata.subject}*\n   │🚀 *Disfruta de tu estancia.*\n   └───────────────┈ ⳹
+  
+┌───「 *Normas y Políticas del Bot* 」───┐
 ├ ✨ *1. Uso Responsable:*
 │ - El bot no debe usarse para actividades ilegales, ofensivas o prohibidas.
 │ - No se permite saturar el bot con comandos innecesarios.
@@ -26,16 +26,14 @@ let handler = (m, { conn, usedPrefix, command }) => {
 *Bot administrado por Deylin 🤖*
 © Código creado por Deyin`;
 
-      await conn.sendMessage(m.chat, reglasYPoliticas, rcanal);
-      console.log('Mensaje de normas enviado correctamente.');
-    } catch (error) {
-      console.error('Error al enviar el mensaje:', error);
-    }
+  // Foto de perfil del grupo o imagen predeterminada
+  let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => 'https://i.ibb.co/fNCMzcR/file.jpg');
+  let img = await (await fetch(pp)).buffer();
+
+  // Evento de nuevo participante
+  if (m.messageStubType == WAMessageStubType.GROUP_PARTICIPANT_ADD) {
+    // Enviar mensaje de bienvenida combinado
+    await conn.sendMessage(m.chat, { text: mensajeCompleto, mentions: [m.messageStubParameters[0]], image: img });
+    console.log(`Mensaje de bienvenida y normas enviado correctamente.`);
   }
-});
-
-handler.help = ['terminos'];
-handler.tag = ['main'];
-handler.command = ['terminos'];
-
-export default handler;
+}

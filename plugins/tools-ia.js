@@ -15,17 +15,14 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             return conn.reply(m.chat, '⚠️ Lo siento, no pude descargar la imagen. Por favor, inténtalo de nuevo con otra imagen.', m);
         }
 
-        const content = '🤖 Estoy analizando la imagen que enviaste...';
-
         try {
-            const imageAnalysis = await fetchImageBuffer(content, img);
-            const query = '😊 Descríbeme la imagen y detalla por qué actúan así. También dime quién eres';
-            const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`;
-            const description = await luminsesi(query, username, prompt);
+            const imageAnalysis = await analyzeImage(img); // Reemplazo de la función de análisis
+            const query = '😊 Descríbeme la imagen y detalla por qué actúan así. También dime quién eres.';
+            const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis}`;
+            const description = await askGPT(query, username, prompt);
 
-            // Enviar imagen junto con el texto
             await conn.sendMessage(m.chat, {
-                image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
+                image: { url: 'https://files.catbox.moe/adcnsj.jpg' }, // Puedes cambiar la URL a una imagen específica
                 caption: description
             }, { quoted: m });
         } catch (error) {
@@ -42,11 +39,10 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         try {
             const query = text;
             const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
-            const response = await luminsesi(query, username, prompt);
+            const response = await askGPT(query, username, prompt);
 
-            // Enviar imagen junto con el texto
             await conn.sendMessage(m.chat, {
-                image: { url: 'https://files.catbox.moe/adcnsj.jpg' },
+                image: { url: 'https://files.catbox.moe/adcnsj.jpg' }, // Cambiar si es necesario
                 caption: response
             }, { quoted: m });
         } catch (error) {
@@ -63,39 +59,40 @@ handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
 
 export default handler;
 
-// Función para enviar una imagen y obtener el análisis
-async function fetchImageBuffer(content, imageBuffer) {
+// Función para analizar la imagen con una API (puedes personalizar esta parte)
+async function analyzeImage(imageBuffer) {
+    // Aquí puedes usar una API confiable como Google Vision, AWS Rekognition o Cloudinary.
     try {
-        const response = await axios.post('https://Luminai.my.id', {
-            content: content,
-            imageBuffer: imageBuffer
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            timeout: 10000 // Timeout de 10 segundos
+        // Ejemplo con Cloudinary (requiere configuración previa)
+        const response = await axios.post('https://api.cloudinary.com/v1_1/tu_cuenta/image/upload', {
+            file: imageBuffer,
+            upload_preset: 'preset_configurado'
         });
-        return response.data;
+        return response.data.url;
     } catch (error) {
         console.error('Error al analizar la imagen:', error);
         throw error;
     }
 }
 
-// Función para interactuar con la IA usando prompts
-async function luminsesi(q, username, logic) {
+// Función para interactuar con OpenAI GPT-4
+async function askGPT(q, username, logic) {
+    const openaiApiKey = 'TU_CLAVE_API_OPENAI';
     try {
-        const response = await axios.post("https://Luminai.my.id", {
-            content: q,
-            user: username,
+        const response = await axios.post('https://api.openai.com/v1/completions', {
+            model: 'gpt-4',
             prompt: logic,
-            webSearchMode: false
+            max_tokens: 200,
+            temperature: 0.7
         }, {
-            timeout: 10000 // Timeout de 10 segundos
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${openaiApiKey}`
+            }
         });
-        return response.data.result;
+        return response.data.choices[0].text.trim();
     } catch (error) {
-        console.error('⚠️ Error al procesar la solicitud:', error);
+        console.error('⚠️ Error al procesar la solicitud con OpenAI:', error);
         throw error;
     }
 }

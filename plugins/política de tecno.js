@@ -5,7 +5,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
   if (!m.messageStubType || !m.isGroup) return !0;
 
   const mensajeCompleto = `
-┌───「 *Normas y Políticas del Bot* 」───┐
+┌「 *NORMAS Y POLÍTICAS DE TECNO* 」┐
 ├ ✨ *1. Uso Responsable:*
 │ - El bot no debe usarse para actividades ilegales, ofensivas o prohibidas.
 │ - No se permite saturar el bot con comandos innecesarios.
@@ -21,9 +21,8 @@ export async function before(m, { conn, participants, groupMetadata }) {
 ├ ✨ *5. Términos Generales:*
 │ - Al usar el bot, aceptas estas condiciones.
 │ - El incumplimiento puede llevar al bloqueo del servicio.
-└────────────────────────────────────┈ ⳹
-*Bot administrado por Deylin 🤖*
-© Código creado por Deyin`;
+└───────────────────────┈ ⳹
+*©Bot administrado por Deylin 🤖* `;
 
   // Foto de perfil del grupo o imagen predeterminada
   let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => 'https://i.ibb.co/fNCMzcR/file.jpg');

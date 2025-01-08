@@ -1,10 +1,11 @@
-conn.ev.on('group-participants.update', async (update) => {
-  console.log('Evento de participantes detectado:', update);
+import { WAMessageStubType } from '@whiskeysockets/baileys';
+import fetch from 'node-fetch';
 
-  let handler = (m, { conn, usedPrefix, command }) => {
-    try {
-      if (update.action === 'add' && update.participants.includes(conn.user.jid)) {
-        global.reglasYPoliticas = `┌───「 *Normas y Políticas del Bot* 」───┐
+export async function before(m, { conn, participants, groupMetadata }) {
+  if (!m.messageStubType || !m.isGroup) return !0;
+
+  const mensajeCompleto = `
+┌───「 *Normas y Políticas del Bot* 」───┐
 ├ ✨ *1. Uso Responsable:*
 │ - El bot no debe usarse para actividades ilegales, ofensivas o prohibidas.
 │ - No se permite saturar el bot con comandos innecesarios.
@@ -24,57 +25,14 @@ conn.ev.on('group-participants.update', async (update) => {
 *Bot administrado por Deylin 🤖*
 © Código creado por Deyin`;
 
-        // Enviar las normas y políticas del bot al grupo
-        if (command === 'terminos') {
-          await conn.sendMessage(m.chat, reglasYPoliticas, rcanal);
-          console.log('Mensaje de normas enviado correctamente.');
-        }
+  // Foto de perfil del grupo o imagen predeterminada
+  let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => 'https://i.ibb.co/fNCMzcR/file.jpg');
+  let img = await (await fetch(pp)).buffer();
 
-        // Responder con mensaje de privacidad si se usa el comando 'privacidad'
-        if (command === 'privacidad') {
-          let privacidadMessage = `┌───「 *Política de Privacidad del Bot* 」───┐
-├ ✨ *1. Protección de Datos:*
-│ - El bot no recopila datos personales sensibles de los usuarios.
-│ - Solo se utiliza la información necesaria para operar correctamente.
-├ ✨ *2. Uso de la Información:*
-│ - Los datos del grupo se utilizan para responder a los comandos y mejorar el servicio.
-│ - No se comparte ni se vende ninguna información a terceros.
-├ ✨ *3. Transparencia:*
-│ - Los usuarios pueden solicitar la eliminación de sus datos.
-│ - No se realiza seguimiento fuera del uso de comandos del bot.
-└────────────────────────────────────┈ ⳹
-*Bot administrado por Deylin 🤖*
-© Código creado por Deyin`;
-          
-          await conn.sendMessage(m.chat, privacidadMessage, rcanal);
-          console.log('Mensaje de política de privacidad enviado correctamente.');
-        }
-
-        // Responder con mensaje de políticas si se usa el comando 'politica'
-        if (command === 'politica') {
-          let politicaMessage = `┌───「 *Política del Bot* 」───┐
-├ ✨ *Uso Responsable:*
-│ - No se permite el uso indebido del bot.
-│ - Se debe evitar el abuso de comandos y el envío de mensajes innecesarios.
-├ ✨ *Comportamiento:*
-│ - Los usuarios deben comportarse de manera respetuosa y cordial.
-│ - Cualquier abuso o incumplimiento puede resultar en una sanción.
-└────────────────────────────────────┈ ⳹
-*Bot administrado por Deylin 🤖*
-© Código creado por Deyin`;
-
-          await conn.sendMessage(m.chat, politicaMessage, rcanal);
-          console.log('Mensaje de política enviado correctamente.');
-        }
-      }
-    } catch (error) {
-      console.error('Error al enviar el mensaje:', error);
-    }
-  };
-
-  handler.help = ['terminos', 'politica', 'privacidad'];
-  handler.tag = ['main'];
-  handler.command = ['terminos', 'politica', 'privacidad'];
-
-  export default handler;
-});
+  // Evento de nuevo participante
+  if (m.messageStubType == WAMessageStubType.GROUP_PARTICIPANT_ADD) {
+    // Enviar mensaje de bienvenida combinado
+    await conn.sendMessage(m.chat, { text: mensajeCompleto, mentions: [m.messageStubParameters[0]], image: img });
+    console.log(`Mensaje de bienvenida y normas enviado correctamente.`);
+  }
+}

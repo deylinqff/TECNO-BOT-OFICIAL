@@ -1,98 +1,131 @@
-import axios from 'axios';
-import fetch from 'node-fetch';
+import axios from 'axios'
+
+import fetch from 'node-fetch'
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
-    const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/');
-    const username = `${conn.getName(m.sender)}`;
-    const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explosiones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`;
 
-    if (isQuotedImage) {
-        const q = m.quoted;
-        const img = await q.download?.();
+const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/')
 
-        if (!img) {
-            console.error('⚠️ Error: No se pudo obtener el contenido de la imagen.');
-            return conn.reply(m.chat, '⚠️ Lo siento, no pude descargar la imagen. Por favor, inténtalo de nuevo con otra imagen.', m);
-        }
+const username = `${conn.getName(m.sender)}`
 
-        try {
-            const imageAnalysis = await analyzeImage(img); // Reemplazo de la función de análisis
-            const query = '😊 Descríbeme la imagen y detalla por qué actúan así. También dime quién eres.';
-            const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis}`;
-            const description = await askGPT(query, username, prompt);
+const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explociones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`
 
-            await conn.sendMessage(m.chat, {
-                image: { url: 'https://files.catbox.moe/adcnsj.jpg' }, // Puedes cambiar la URL a una imagen específica
-                caption: description
-            }, { quoted: m });
-        } catch (error) {
-            console.error('⚠️ Error al procesar la imagen:', error);
-            await conn.reply(m.chat, '⚠️ Ocurrió un problema al analizar la imagen. Por favor, inténtalo más tarde.', m);
-        }
-    } else {
-        if (!text) {
-            return conn.reply(m.chat, `⚠️ *Falta texto para procesar tu solicitud.*\n\n📝 Ejemplo de uso: \n${usedPrefix + command} ¿Cómo se hace un avión de papel?`, m);
-        }
+if (isQuotedImage) {
 
-        await m.react('🤔');
+const q = m.quoted
 
-        try {
-            const query = text;
-            const prompt = `${basePrompt}. Responde lo siguiente: ${query}`;
-            const response = await askGPT(query, username, prompt);
+const img = await q.download?.()
 
-            await conn.sendMessage(m.chat, {
-                image: { url: 'https://files.catbox.moe/adcnsj.jpg' }, // Cambiar si es necesario
-                caption: response
-            }, { quoted: m });
-        } catch (error) {
-            console.error('⚠️ Error al obtener la respuesta:', error);
-            await conn.reply(m.chat, '⚠️ Lo siento, no pude procesar tu solicitud. Por favor, inténtalo más tarde.', m);
-        }
-    }
-};
+if (!img) {
 
-handler.help = ['chatgpt <texto>', 'ia <texto>'];
-handler.tags = ['tools'];
-handler.register = true;
-handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt'];
+console.error('💛 Error: No image buffer available')
 
-export default handler;
+return conn.reply(m.chat, '💛 Error: No se pudo descargar la imagen.', m, fake)}
 
-// Función para analizar la imagen con una API (puedes personalizar esta parte)
-async function analyzeImage(imageBuffer) {
-    // Aquí puedes usar una API confiable como Google Vision, AWS Rekognition o Cloudinary.
-    try {
-        // Ejemplo con Cloudinary (requiere configuración previa)
-        const response = await axios.post('https://api.cloudinary.com/v1_1/tu_cuenta/image/upload', {
-            file: imageBuffer,
-            upload_preset: 'preset_configurado'
-        });
-        return response.data.url;
-    } catch (error) {
-        console.error('Error al analizar la imagen:', error);
-        throw error;
-    }
-}
+const content = '💛 ¿Qué se observa en la imagen?'
 
-// Función para interactuar con OpenAI GPT-4
-async function askGPT(q, username, logic) {
-    const openaiApiKey = 'TU_CLAVE_API_OPENAI';
-    try {
-        const response = await axios.post('https://api.openai.com/v1/completions', {
-            model: 'gpt-4',
-            prompt: logic,
-            max_tokens: 200,
-            temperature: 0.7
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${openaiApiKey}`
-            }
-        });
-        return response.data.choices[0].text.trim();
-    } catch (error) {
-        console.error('⚠️ Error al procesar la solicitud con OpenAI:', error);
-        throw error;
-    }
-}
+try {
+
+const imageAnalysis = await fetchImageBuffer(content, img)
+
+const query = '😊 Descríbeme la imagen y detalla por qué actúan así. También dime quién eres'
+
+const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`
+
+const description = await luminsesi(query, username, prompt)
+
+await conn.reply(m.chat, description, m)
+
+} catch (error) {
+
+console.error('💛 Error al analizar la imagen:', error)
+
+await conn.reply(m.chat, '💛 Error al analizar la imagen.', m)}
+
+} else {
+
+if (!text) { return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m, rcanal)}
+
+await m.react('💬')
+
+try {
+
+const query = text
+
+const prompt = `${basePrompt}. Responde lo siguiente: ${query}`
+
+const response = await luminsesi(query, username, prompt)
+
+await conn.reply(m.chat, response, m)
+
+} catch (error) {
+
+console.error('💛 Error al obtener la respuesta:', error)
+
+await conn.reply(m.chat, 'Error: intenta más tarde.', m)}}}
+
+handler.help = ['chatgpt <texto>', 'ia <texto>']
+
+handler.tags = ['tools']
+
+handler.register = true
+
+// handler.estrellas = 1
+
+handler.command = ['ia', 'chatgpt', 'ai', 'chat', 'gpt']
+
+export default handler
+
+// Función para enviar una imagen y obtener el análisis
+
+async function fetchImageBuffer(content, imageBuffer) {
+
+try {
+
+const response = await axios.post('https://Luminai.my.id', {
+
+content: content,
+
+imageBuffer: imageBuffer 
+
+}, {
+
+headers: {
+
+'Content-Type': 'application/json' 
+
+}})
+
+return response.data
+
+} catch (error) {
+
+console.error('Error:', error)
+
+throw error }}
+
+// Función para interactuar con la IA usando prompts
+
+async function luminsesi(q, username, logic) {
+
+try {
+
+const response = await axios.post("https://Luminai.my.id", {
+
+content: q,
+
+user: username,
+
+prompt: logic,
+
+webSearchMode: false
+
+})
+
+return response.data.result
+
+} catch (error) {
+
+console.error('💛 Error al obtener:', error)
+
+throw error }}

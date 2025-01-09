@@ -2,7 +2,7 @@ import { WAMessageStubType } from '@whiskeysockets/baileys';
 import fetch from 'node-fetch';
 
 export async function before(m, { conn, participants, groupMetadata }) {
-  if (!m.messageStubType || !m.isGroup) return !0;
+  if (!m.messageStubType || !m.isGroup) return true;
 
   const mensajeCompleto = `
 ┌「 *NORMAS Y POLÍTICAS DE TECNO* 」┐
@@ -22,16 +22,28 @@ export async function before(m, { conn, participants, groupMetadata }) {
 │ - Al usar el bot, aceptas estas condiciones.
 │ - El incumplimiento puede llevar al bloqueo del servicio.
 └───────────────────────┈ ⳹
-*©Bot administrado por Deylin 🤖* `;
+*©Bot administrado por Deylin 🤖*`;
 
   // Foto de perfil del grupo o imagen predeterminada
-  let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => 'https://i.ibb.co/fNCMzcR/file.jpg');
+  let pp = await conn.profilePictureUrl(m.chat, 'image').catch(() => 'https://i.ibb.co/fNCMzcR/file.jpg');
   let img = await (await fetch(pp)).buffer();
+
+  // Botones interactivos
+  const buttons = [
+    { buttonId: 'audio', buttonText: { displayText: '🎵 Audio' }, type: 1 },
+    { buttonId: 'video', buttonText: { displayText: '🎥 Video' }, type: 1 },
+  ];
 
   // Evento de nuevo participante
   if (m.messageStubType == WAMessageStubType.GROUP_PARTICIPANT_ADD) {
     // Enviar mensaje de bienvenida combinado
-    await conn.sendMessage(m.chat, { text: mensajeCompleto, mentions: [m.messageStubParameters[0]], image: img });
+    await conn.sendMessage(m.chat, {
+      text: mensajeCompleto,
+      mentions: [m.messageStubParameters[0]],
+      image: img,
+      buttons: buttons,
+      footer: 'Selecciona una opción:',
+    });
     console.log(`Mensaje de bienvenida y normas enviado correctamente.`);
   }
 }

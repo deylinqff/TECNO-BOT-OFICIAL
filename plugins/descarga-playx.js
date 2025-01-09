@@ -8,11 +8,11 @@ let handler = async (m, { conn, command, args, text, usedPrefix }) => {
     try {
         // Formar la URL con el enlace de YouTube
         const url = `https://api.zenkey.my.id/api/download/ytmp3?apikey=zenkey&url=${encodeURIComponent(text)}`;
-        
+
         // Realizar la solicitud a la API
         let response = await fetch(url);
         let json = await response.json();
-        
+
         if (json.status !== 'success') throw new Error('No se pudo obtener la información de la canción');
 
         let { link: dl_url, title, thumbnail } = json.result;
@@ -36,7 +36,9 @@ let handler = async (m, { conn, command, args, text, usedPrefix }) => {
         await m.react('✅');
     } catch (error) {
         console.error(error);
-        conn.reply(m.chat, `❌ Ocurrió un error: ${error.message}`, m, { quoted: m });
+        // Enviar el sticker de error
+        const stickerUrl = 'https://files.catbox.moe/yaup2f.webp';
+        await conn.sendMessage(m.chat, { sticker: { url: stickerUrl } }, { quoted: m });
         await m.react('✖️');
     }
 };

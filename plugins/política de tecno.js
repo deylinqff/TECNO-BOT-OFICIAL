@@ -30,8 +30,8 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
   // Botones interactivos
   const buttons = [
-    { buttonId: 'audio', buttonText: { displayText: '🎵 Audio' }, type: 1 },
-    { buttonId: 'video', buttonText: { displayText: '🎥 Video' }, type: 1 },
+    { buttonId: 'audio', buttonText: { displayText: '✅esta bien ' }, type: 1 },
+    { buttonId: 'video', buttonText: { displayText: '❎esta mal' }, type: 1 },
   ];
 
   // Evento de nuevo participante

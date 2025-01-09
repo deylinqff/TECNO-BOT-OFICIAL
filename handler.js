@@ -488,7 +488,7 @@ group: '「🚀」 💬Esta función solo puede ser ejecutada en grupos💬\n\n>
 private: '「🚀」 💬Esta función solo puede ser usada en chat privado💬\n\n> Sigue El Canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 admin: '「🚀」 ⚡Este comando solo puede ser usado por admins⚡\n\n> Sigue El Canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 botAdmin: '「🚀」 ⚡Para usar esta función debo ser admin⚡\n\n> Sigue El Canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
-unreg: 「🚀」 *⚠️No te encuentras registrado, regístrate para usar esta función⚠️*\n\n*/reg nombre.edad*\n\n*Ejemplo* : */reg Crow.18*\n\n> *Sigue El Canal* https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m
+unreg: 「🚀」 *⚠️No te encuentras registrado, regístrate para usar esta función⚠️*\n\n*/reg nombre.edad*\n\n*Ejemplo* : */reg TECNO.15*\n\n> *Sigue El Canal* https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m
 restrict: '「🚀」 ❌Esta característica está desactivada❌\n\n> Sigue El Canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 }[type];
 if (msg) return conn.reply(m.chat, msg, m, rcanal).then(_ => m.react('✖️'))}

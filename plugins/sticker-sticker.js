@@ -1,7 +1,8 @@
+
 import { sticker } from '../lib/sticker.js';
-//import uploadFile from '../lib/uploadFile.js';
-//import uploadImage from '../lib/uploadImage.js';
-//import { webp2png } from '../lib/webp2mp4.js';
+import uploadFile from '../lib/uploadFile.js';
+import uploadImage from '../lib/uploadImage.js';
+import { webp2png } from '../lib/webp2mp4.js';
 
 const redes = 'https://tu-enlace-o-dominio.com'; // Define la URL aquí
 const icons = null; // Si "icons" es necesario, define su valor o cámbialo según corresponda
@@ -81,5 +82,5 @@ handler.command = ['s', 'sticker', 'stiker'];
 export default handler;
 
 const isUrl = (text) => {
-  return text.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)(jpe?t|gif|pno)/, 'gi'));
+  return text.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)(jpe?g|gif|png)/, 'gi'));
 };

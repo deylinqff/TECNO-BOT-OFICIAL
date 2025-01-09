@@ -486,7 +486,7 @@ mods: '「🚀」 🌟Esta función solo puede ser usada por mis desarrolladores
 premium: '「🚀」 💎Esta función solo es para usuarios Premium💎\n\n> Sigue El Canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 group: '「🚀」 💬Esta función solo puede ser ejecutada en grupos💬\n\n> Sigue El Canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 private: '「🚀」 💬Esta función solo puede ser usada en chat privado💬\n\n> Sigue El Canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
-admin: '「🚀」 ⚡Este comando solo puede ser usado por admins⚡\n\n> Sigue El Canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
+admin:'「🚀」 ⚡Este comando solo puede ser usado por admins⚡\n\n> Sigue El Canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 botAdmin: '「🚀」 ⚡Para usar esta función debo ser admin⚡\n\n> Sigue El Canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 unreg: 「🚀」 *⚠️No te encuentras registrado, regístrate para usar esta función⚠️*\n\n*/reg nombre.edad*\n\n*Ejemplo* : */reg TECNO.15*\n\n> *Sigue El Canal* https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m
 restrict: '「🚀」 ❌Esta característica está desactivada❌\n\n> Sigue El Canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'

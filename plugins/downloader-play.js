@@ -1,318 +1,94 @@
-//actualizado por xi_crew
 import { youtubedl, youtubedlv2 } from '@bochilteam/scraper'
-import fetch from 'node-fetch'
-import yts from 'yt-search'
-import ytdl from 'ytdl-core'
-import axios from 'axios'
-const LimitAud = 725 * 1024 * 1024; //700MB
-const LimitVid = 425 * 1024 * 1024; //425MB
-const handler = async (m, {conn, command, args, text, usedPrefix}) => {
-
-if (command == 'play' || command == 'mp3') {
-if (!text) return conn.reply(m.chat, `🌸 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, ); 
-await m.react(rwait);
+import fetch from 'node-fetch';
+import yts from 'yt-search';
+import ytdl from 'ytdl-core';
+import axios from 'axios';
+import fg from 'api-dylux';
+const handler = async (m, { command, usedPrefix, conn, args, text }) => {
+if (!args[0] || !text) throw `${mg}${mid.smsMalused4}\n*${usedPrefix + command} Billie Eilish - Bellyache*`;
 const yt_play = await search(args.join(' '));
 const ytplay2 = await yts(text);
-const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐘𝐮𝐤𝐢 𝐒𝐮𝐨𝐮⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
-
-> 📚 *Título:*
-» ${yt_play[0].title}
-> 📆 *Publicado:* 
-» ${yt_play[0].ago}
-> 🕒 *Duración:* 
-» ${secondString(yt_play[0].duration.seconds)}
-> 👀 *Vistas:* 
-» ${MilesNumber(yt_play[0].views)}
-> 👤 *Autor:* 
-»${yt_play[0].author.name}
-> 🔗 *Enlace:*
-» ${yt_play[0].url}
-
-> 📽️ *Su Audio se está enviando, espere un momento...*`.trim();
-
-await conn.sendMessage(m.chat, {
-image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝙔𝙪𝙠𝙞 𝙎𝙪𝙤𝙪🌸', sourceUrl: cn, thumbnail: logo7 }}, quoted: estilo});
 try {
-await m.react(rwait);
-const apiUrl = `https://deliriussapi-oficial.vercel.app/download/ytmp4?url=${encodeURIComponent(yt_play[0].url)}`;
-const apiResponse = await fetch(apiUrl);
-const delius = await apiResponse.json();
-if (!delius.status) {
-return m.react(error)}
-const downloadUrl = delius.data.download.url;
-await conn.sendMessage(m.chat, { audio: { url: downloadUrl }, mimetype: 'audio/mpeg' }, { quoted: m });
-await m.react(done);
+
+if (command === 'play.1' || command === 'audio') {
+conn.reply(m.chat, lenguajeGB['smsAvisoEG']() + mid.smsAud, m, { contextInfo: { externalAdReply: { mediaUrl: null, mediaType: 1, description: null, title: wm, body: '🚀 𝗧𝗲𝗰𝗻𝗼', previewType: 0, thumbnail: gataImg, sourceUrl: accountsgb }}});
+try {
+const res = await fetch(`https://api.siputzx.my.id/api/d/ytmp3?url=${yt_play[0].url}`);
+let { data } = await res.json();
+await conn.sendMessage(m.chat, { audio: { url: data.dl }, mimetype: 'audio/mpeg' }, { quoted: m ||null });
 } catch (e1) {
-try { 
-await m.react(rwait);
-let q = '128kbps'
-const yt = await youtubedl(yt_play[0].url).catch(async _ => await youtubedlv2(yt_play[0].url))
-const dl_url = await yt.audio[q].download()
-const ttl = await yt.title
-const size = await yt.audio[q].fileSizeH
-await conn.sendFile(m.chat, dl_url, ttl + '.mp3', null, m, false, { mimetype: 'audio/mp4' })
-await m.react(done);
-} catch (e2) {
 try {  
-await m.react(rwait); 
-const downloadUrl = await fetch9Convert(yt_play[0].url); 
-await conn.sendFile(m.chat, downloadUrl, 'audio.mp3', null, m, false, { mimetype: 'audio/mp4' })
-await m.react(done);
-} catch (e3) {
+const axeelUrl = `https://axeel.my.id/api/download/audio?url=${yt_play[0].url}`;
+const axeelResponse = await fetch(axeelUrl);
+const axeelData = await axeelResponse.json();
+if (!axeelData || !axeelData.downloads?.url) throw new Error();
+await conn.sendMessage(m.chat, { audio: { url: axeelData.downloads.url }, mimetype: 'audio/mpeg' }, { quoted: m });
+} catch {
 try {
-await m.react(rwait);
-const downloadUrl = await fetchY2mate(yt_play[0].url);
-await conn.sendFile(m.chat, downloadUrl, 'audio.mp3', null, m, false, { mimetype: 'audio/mp4' })
-await m.react(done);
-} catch (e4) {
-try {
-await m.react(rwait);
-const res = await fetch(`https://api.zenkey.my.id/api/download/ytmp3?apikey=zenkey&url=${yt_play[0].url}`)
-const audioData = await res.json()
-if (audioData.status && audioData.result?.downloadUrl) {
-await conn.sendMessage(m.chat, { audio: { url: audioData.result.downloadUrl }, mimetype: 'audio/mpeg' }, { quoted: m });
-await m.react(done);
-}} catch (e5) {
-try {
-await m.react(rwait);
+const ryzenUrl = `https://api.ryzendesu.vip/api/downloader/ytmp3?url=${yt_play[0].url}`;
+const ryzenResponse = await fetch(ryzenUrl);
+const ryzenData = await ryzenResponse.json();
+if (ryzenData.status === 'tunnel' && ryzenData.url) {
+const downloadUrl = ryzenData.url;
+await conn.sendMessage(m.chat, { audio: { url: downloadUrl }, mimetype: 'audio/mpeg' }, { quoted: m });
+}
+} catch {
+try {          
 let d2 = await fetch(`https://exonity.tech/api/ytdlp2-faster?apikey=adminsepuh&url=${yt_play[0].url}`);
 let dp = await d2.json();
 const audiop = await getBuffer(dp.result.media.mp3);
 const fileSize = await getFileSize(dp.result.media.mp3);
 await conn.sendMessage(m.chat, { audio: { url: audiop }, mimetype: 'audio/mpeg' }, { quoted: m });
-await m.react(done);
-if (fileSize > LimitAud) return await conn.sendMessage(m.chat, { document: { url: audiop }, mimetype: 'audio.mp3', fileName: `${yt_play[0].title}.mp3` }, { quoted: m });
-await m.react(done);
-} catch (e) {    
-await m.react(error);
-console.log(e);
-}}}}}}}
+} catch (e) {
+console.error('Error al obtener el audio:', e);
+await conn.reply(m.chat, `${lenguajeGB['smsMalError3']()}#report ${lenguajeGB['smsMensError2']()} ${usedPrefix + command}\n\n${wm}`, m);
+}}}}}
 
-if (command == 'play2' || command == 'mp4') {
-if (!text) return conn.reply(m.chat, `🌸 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, );
-await m.react(rwait);
-const yt_play = await search(args.join(' '));
-const ytplay2 = await yts(text);
-const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐘𝐮𝐤𝐢 𝐒𝐮𝐨𝐮⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
-
-> 📚 *Título:*
-» ${yt_play[0].title}
-> 📆 *Publicado:* 
-» ${yt_play[0].ago}
-> 🕒 *Duración:* 
-» ${secondString(yt_play[0].duration.seconds)}
-> 👀 *Vistas:* 
-» ${MilesNumber(yt_play[0].views)}
-> 👤 *Autor:* 
-»${yt_play[0].author.name}
-> 🔗 *Enlace:*
-» ${yt_play[0].url}
-
-> 📽️ *Su Video se está enviando, espere un momento...*`.trim();
-
-await conn.sendMessage(m.chat, {
-image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝙔𝙪𝙠𝙞 𝙎𝙪𝙤𝙪🌸', sourceUrl: cn, thumbnail: logo7 }}, quoted: estilo});
+if (command === 'play.2') {
+conn.reply(m.chat, lenguajeGB['smsAvisoEG']() + mid.smsVid, m, { contextInfo: { externalAdReply: { mediaUrl: null, mediaType: 1, description: null, title: wm, body:'🚀𝗧𝗲𝗰𝗻𝗼', previewType: 0, thumbnail: gataImg, sourceUrl: accountsgb }}});
 try {
-await m.react(rwait);
-const apiUrl = `https://deliriussapi-oficial.vercel.app/download/ytmp4?url=${encodeURIComponent(yt_play[0].url)}`;
-const apiResponse = await fetch(apiUrl);
-const delius = await apiResponse.json();
-if (!delius.status) return m.react(error);
-const downloadUrl = delius.data.download.url;
-const fileSize = await getFileSize(downloadUrl);
-if (fileSize > LimitVid) {
-await conn.sendMessage(m.chat, { document: { url: downloadUrl }, fileName: `${yt_play[0].title}.mp4`, caption: `🌷 Aquí está tu video.` }, { quoted: m });
-await m.react(done);
-} else {
-await conn.sendMessage(m.chat, { video: { url: downloadUrl }, fileName: `${yt_play[0].title}.mp4`, caption: `🌷 Aquí está tu video.`, thumbnail: yt_play[0].thumbnail, mimetype: 'video/mp4' }, { quoted: m });
-await m.react(done);
-}} catch (e1) {
-try {  
-await m.react(rwait);  
-let qu = args[1] || '360'
-let q = qu + 'p'
-const yt = await youtubedl(yt_play[0].url).catch(async _ => await youtubedlv2(yt_play[0].url))
-const dl_url = await yt.video[q].download()
-const ttl = await yt.title
-const size = await yt.video[q].fileSizeH
-await await conn.sendMessage(m.chat, { video: { url: dl_url }, fileName: `${ttl}.mp4`, mimetype: 'video/mp4', caption: `🌷 Aquí está tu video.`, thumbnail: await fetch(yt.thumbnail) }, { quoted: m })
-await m.react(done);
-} catch (e2) {
-try {    
-await m.react(rwait);
-const downloadUrl = await fetch9Convert(yt_play[0].url); 
-await conn.sendMessage(m.chat, { video: { url: downloadUrl }, fileName: `${yt_play[0].title}.mp4`, caption: `🌷 Aquí está tu video.`, thumbnail: yt_play[0].thumbnail, mimetype: 'video/mp4' }, { quoted: m });
-await m.react(done);
-} catch (e3) {
-try {
-await m.react(rwait);
-const downloadUrl = await fetchY2mate(yt_play[0].url);
-await conn.sendMessage(m.chat, { video: { url: downloadUrl }, fileName: `${yt_play[0].title}.mp4`, caption: `🌷 Aquí está tu video.`, thumbnail: yt_play[0].thumbnail, mimetype: 'video/mp4' }, { quoted: m });
-await m.react(done);
-} catch (e4) {
-try {
-await m.react(rwait);
-const videoInfo = await fetchInvidious(yt_play[0].url)
-const downloadUrl = videoInfo.videoFormats.find(format => format.mimeType === "audio/mp4").url;
-await conn.sendMessage(m.chat, { video: { url: downloadUrl }, fileName: `${yt_play[0].title}.mp4`, caption: `🌷 Aquí está tu video.`, thumbnail: yt_play[0].thumbnail, mimetype: 'video/mp4' }, { quoted: m });
-await m.react(done);
-} catch (e5) {
-try {
-await m.react(rwait);
-let searchh = await yts(yt_play[0].url)
-let __res = searchh.all.map(v => v).filter(v => v.type == "video")
-let infoo = await ytdl.getInfo('https://youtu.be/' + __res[0].videoId)
-let ress = await ytdl.chooseFormat(infoo.formats, { filter: 'audioonly' })
-conn.sendMessage(m.chat, { video: { url: downloadUrl }, fileName: `${yt_play[0].title}.mp4`, caption: `🌷 Aquí está tu video.`, thumbnail: yt_play[0].thumbnail, mimetype: 'video/mp4' }, { quoted: m });
-await m.react(done);
-} catch (e6) {
-try {
-await m.react(rwait);
-let d2 = await fetch(`https://exonity.tech/api/ytdlp2-faster?apikey=adminsepuh&url=${yt_play[0].url}`);
-let dp = await d2.json();
-const audiop = await getBuffer(dp.result.media.mp4);
-const fileSize = await getFileSize(dp.result.media.mp4);
-if (fileSize > LimitVid) {
-await conn.sendMessage(m.chat, { document: { url: audiop }, fileName: `${yt_play[0].title}.mp4`, caption: `🌷 Aquí está tu video.` }, { quoted: m });
-await m.react(done);
-} else {
-await conn.sendMessage(m.chat, { video: { url: audiop }, fileName: `${yt_play[0].title}.mp4`, caption: `🌷 Aquí está tu video.`, thumbnail: yt_play[0].thumbnail, mimetype: 'video/mp4' }, { quoted: m });
-await m.react(done);
-}} catch (e) {    
-await m.react(error);
-console.log(e);
-}}}}}}}}
-
-if (command == 'play3' || command == 'playdoc') {
-if (!text) return conn.reply(m.chat, `🌸 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, );
-await m.react(rwait);
-const yt_play = await search(args.join(' '));
-const ytplay2 = await yts(text);
-const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐘𝐮𝐤𝐢 𝐒𝐮𝐨𝐮⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
-
-> 📚 *Título:*
-» ${yt_play[0].title}
-> 📆 *Publicado:* 
-» ${yt_play[0].ago}
-> 🕒 *Duración:* 
-» ${secondString(yt_play[0].duration.seconds)}
-> 👀 *Vistas:* 
-» ${MilesNumber(yt_play[0].views)}
-> 👤 *Autor:* 
-»${yt_play[0].author.name}
-> 🔗 *Enlace:*
-» ${yt_play[0].url}
-
-> 📽️ *Su Audio en documento se está enviando, espere un momento...*`.trim();
-
-await conn.sendMessage(m.chat, {
-image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝙔𝙪𝙠𝙞 𝙎𝙪𝙤𝙪🌸', sourceUrl: cn, thumbnail: logo7 }}, quoted: estilo});
-try {
-await m.react(rwait);
-const apiUrl = `https://deliriussapi-oficial.vercel.app/download/ytmp4?url=${encodeURIComponent(yt_play[0].url)}`;
-const apiResponse = await fetch(apiUrl);
-const delius = await apiResponse.json();
-if (!delius.status) {
-return m.react(error)}
-const downloadUrl = delius.data.download.url;
-await conn.sendMessage(m.chat, { document: { url: downloadUrl }, mimetype: 'audio/mpeg', fileName: `${yt_play[0].title}.mp3` }, { quoted: m });
-await m.react(done);
+const res = await fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${yt_play[0].url}`);
+let { data } = await res.json();
+await conn.sendFile(m.chat, data.dl, 'error.mp4', `${gt}`, m)
 } catch (e1) {
-try {    
-await m.react(rwait);
-let q = '128kbps'
-const yt = await youtubedl(yt_play[0].url).catch(async _ => await youtubedlv2(yt_play[0].url))
-const dl_url = await yt.audio[q].download()
-const ttl = await yt.title
-const size = await yt.audio[q].fileSizeH
-await conn.sendMessage(m.chat, { document: { url: dl_url }, mimetype: 'audio/mpeg', fileName: `${ttl}.mp3` }, { quoted: m });
-await m.react(done);
-} catch (e2) {
-try { 
-await m.react(rwait);  
-const downloadUrl = await fetch9Convert(yt_play[0].url); 
-await conn.sendMessage(m.chat, { document: { url: downloadUrl }, mimetype: 'audio/mpeg', fileName: `${yt_play[0].title}.mp3` }, { quoted: m });
-await m.react(done);
-} catch (e3) {
+try {  
+const axeelUrl = `https://axeel.my.id/api/download/audio?url=${yt_play[0].url}`;
+const axeelResponse = await fetch(axeelUrl);
+const axeelData = await axeelResponse.json();
+if (!axeelData || !axeelData.downloads?.url) throw new Error();
+await conn.sendFile(m.chat, axeelData.downloads.url, 'error.mp4', `${gt}`, m)
+} catch {
 try {
-await m.react(rwait);
-const downloadUrl = await fetchY2mate(yt_play[0].url);
-await conn.sendMessage(m.chat, { document: { url: downloadUrl }, mimetype: 'audio/mpeg', fileName: `${yt_play[0].title}.mp3` }, { quoted: m });
-await m.react(done);
-} catch (e4) {
-try {
-await m.react(rwait);
-const res = await fetch(`https://api.zenkey.my.id/api/download/ytmp3?apikey=zenkey&url=${yt_play[0].url}`)
-const audioData = await res.json()
-if (audioData.status && audioData.result?.downloadUrl) {
-await conn.sendMessage(m.chat, { document: { url: audioData.result.downloadUrl }, mimetype: 'audio/mpeg', fileName: `${yt_play[0].title}.mp3` }, { quoted: m });
-await m.react(done);
-}} catch (e5) {
-try {
-await m.react(rwait);
+const ryzenUrl = `https://api.ryzendesu.vip/api/downloader/ytmp3?url=${yt_play[0].url}`;
+const ryzenResponse = await fetch(ryzenUrl);
+const ryzenData = await ryzenResponse.json();
+if (ryzenData.status === 'tunnel' && ryzenData.url) {
+const downloadUrl = ryzenData.url;
+await conn.sendFile(m.chat, downloadUrl, 'error.mp4', `${gt}`, m)
+}
+} catch {
+try {          
 let d2 = await fetch(`https://exonity.tech/api/ytdlp2-faster?apikey=adminsepuh&url=${yt_play[0].url}`);
 let dp = await d2.json();
 const audiop = await getBuffer(dp.result.media.mp3);
 const fileSize = await getFileSize(dp.result.media.mp3);
-await conn.sendMessage(m.chat, { document: { url: audioData.result.downloadUrl }, mimetype: 'audio/mpeg', fileName: `${yt_play[0].title}.mp3` }, { quoted: m });
-await m.react(done);
-} catch (e) {    
-await m.react(error);
+await conn.sendFile(m.chat, audiop, 'error.mp4', `${gt}`, m)
+} catch (e) {
+console.error('Error al obtener el audio:', e);
+await conn.reply(m.chat, `${lenguajeGB['smsMalError3']()}#report ${lenguajeGB['smsMensError2']()} ${usedPrefix + command}\n\n${wm}`, m);
+}}}}}
+
+} catch (e) {
+await conn.reply(m.chat, `${lenguajeGB['smsMalError3']()}#report ${lenguajeGB['smsMensError2']()} ${usedPrefix + command}\n\n${wm}`, m);
+console.log(`❗❗ ${lenguajeGB['smsMensError2']()} ${usedPrefix + command} ❗❗`);
 console.log(e);
-}}}}}}}
+handler.limit = 0; // No gastar límite si fallas
+}};
+handler.help = ['play.1', 'play.2'].map(v => v + ' <texto>');
+handler.tags = ['downloader'];
+handler.command = ['play.1', 'play.2'];
+handler.limit = 1;
 
-if (command == 'play4' || command == 'playdoc2') {
-if (!text) return conn.reply(m.chat, `🌸 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, !${command} Enemy Tommoee Profitt`,  m, rcanal, );
-await m.react(rwait);
-const yt_play = await search(args.join(' '));
-const ytplay2 = await yts(text);
-const texto1 = `*_𔓕꯭  ꯭ ꯭ ꯭ 𓏲꯭֟፝੭ ꯭⌑𝐘𝐮𝐤𝐢 𝐒𝐮𝐨𝐮⌑꯭ 𓏲꯭֟፝੭ ꯭  ꯭ ꯭ ꯭𔓕_*
-
-> 📚 *Título:*
-» ${yt_play[0].title}
-> 📆 *Publicado:* 
-» ${yt_play[0].ago}
-> 🕒 *Duración:* 
-» ${secondString(yt_play[0].duration.seconds)}
-> 👀 *Vistas:* 
-» ${MilesNumber(yt_play[0].views)}
-> 👤 *Autor:* 
-»${yt_play[0].author.name}
-> 🔗 *Enlace:*
-» ${yt_play[0].url}
-  
-> 📽️ *Su video en documento se está enviando, espere un momento...*`.trim();
-
-await conn.sendMessage(m.chat, {
-image: { url: yt_play[0].thumbnail }, caption: texto1, contextInfo: { externalAdReply: { title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ', body: '<(✿◠‿◠)> 𝙔𝙪𝙠𝙞 𝙎𝙪𝙤𝙪 🌸', sourceUrl: cn, thumbnail: logo7 }}, quoted: estilo});
-try {
-await m.react(rwait);
-const apiUrl = `https://deliriussapi-oficial.vercel.app/download/ytmp4?url=${encodeURIComponent(yt_play[0].url)}`;
-const apiResponse = await fetch(apiUrl);
-const delius = await apiResponse.json();
-if (!delius.status) return m.react(error);
-const downloadUrl = delius.data.download.url;
-//const fileSize = await getFileSize(downloadUrl);
-await conn.sendMessage(m.chat, { document: { url: downloadUrl }, fileName: `${yt_play[0].title}.mp4`, caption: `${wm}`, thumbnail: yt_play[0].thumbnail, mimetype: 'video/mp4' }, { quoted: m })    
-await m.react(done);
-} catch (e1) {
-try {
-await m.react(rwait);
-let d2 = await fetch(`https://exonity.tech/api/ytdlp2-faster?apikey=adminsepuh&url=${yt_play[0].url}`);
-let dp = await d2.json();
-const audiop = await getBuffer(dp.result.media.mp4);
-await conn.sendMessage(m.chat, { document: { url: audiop }, fileName: `${yt_play[0].title}.mp4`, caption: null, thumbnail: yt_play[0].thumbnail, mimetype: 'video/mp4' }, { quoted: m })    
-await m.react(done); 
-} catch (e2) {    
-await m.react(error);
-console.log(e2);
-}}}
-
-}
-handler.help = ['play', 'play2', 'play3', 'play4', 'playdoc'];
-handler.tags = ['descargas'];
-handler.command = ['play', 'play2', 'play3', 'play4', 'mp3', 'mp4', 'playdoc', 'playdoc2']
-handler.group = true;
 export default handler;
 
 async function search(query, options = {}) {
@@ -339,70 +115,185 @@ const hDisplay = h > 0 ? h + (h == 1 ? ' hora, ' : ' horas, ') : '';
 const mDisplay = m > 0 ? m + (m == 1 ? ' minuto, ' : ' minutos, ') : '';
 const sDisplay = s > 0 ? s + (s == 1 ? ' segundo' : ' segundos') : '';
 return dDisplay + hDisplay + mDisplay + sDisplay;
-  }
-
-const getBuffer = async (url) => {
-  try {
-    const response = await fetch(url);
-    const buffer = await response.arrayBuffer();
-    return Buffer.from(buffer);
-  } catch (error) {
-    console.error("Error al obtener el buffer", error);
-    throw new Error("Error al obtener el buffer");
-  }
 }
 
-async function getFileSize(url) {
-    try {
-        const response = await fetch(url, { method: 'HEAD' });
-        const contentLength = response.headers.get('content-length');
-        return contentLength ? parseInt(contentLength, 10) : 0;
-    } catch (error) {
-        console.error("Error al obtener el tamaño del archivo", error);
-        return 0;
-    }
+ /*import fetch from 'node-fetch';
+import yts from 'yt-search';
+import ytdl from 'ytdl-core';
+import axios from 'axios';
+import fg from 'api-dylux';
+
+const handler = async (m, {command, usedPrefix, conn, text}) => {
+if (!text) throw `${mg}${mid.smsMalused4}\n*${usedPrefix + command} Billie Eilish - Bellyache*`
+try {
+if (command == 'play.1') {
+conn.reply(m.chat, lenguajeGB['smsAvisoEG']() + mid.smsAud, m, { contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: wm, body: '🚀𝗧𝗲𝗰𝗻𝗼', previewType: 0, thumbnail: gataImg, sourceUrl: accountsgb }}})
+try {
+const mediaa = await ytPlay(text);
+const audiocore = mediaa.result2?.[0]?.audio || mediaa.result2?.[1]?.audio || mediaa.result2?.[2]?.audio || null;
+const aa = await conn.sendMessage(m.chat, {audio: {url: audiocore}, fileName: `error.mp3`, mimetype: 'audio/mp4'}, {quoted: m});
+if (!aa) {
+throw new Error();
+}} catch {
+try{const res = await fetch(`https://skizo.tech/api/y2mate?apikey=GataDios&url=${text}`);
+const json = await res.json();
+const aa_1 = await conn.sendMessage(m.chat, {audio: {url: json.result.audio}, fileName: `error.mp3`, mimetype: 'audio/mp4'}, {quoted: m});
+if (!aa_1) aa_1 = await conn.sendFile(m.chat, json.result.audio, 'error.mp3', null, m, false, {mimetype: 'audio/mp4'});
+}catch {
+try{
+let res = await yts(text)
+res=res.videos[0]
+let yt = await fg.yta(res.url,'128kbps')
+await conn.sendMessage(m.chat, {audio: {url: yt.dl_url}, fileName: `error.mp3`, mimetype: 'audio/mp4'}, {quoted: m});
+}catch(e){ 
+await conn.reply(m.chat, `${lenguajeGB['smsMalError3']()}#report ${lenguajeGB['smsMensError2']()} ${usedPrefix + command}\n\n${wm}`, m)
+console.log(`❗❗ ${lenguajeGB['smsMensError2']()} ${usedPrefix + command} ❗❗`)
+console.log(e)
+handler.limit = 0 //No gastada limite si fallas
+}}}}
+if (command == 'play.2') {
+conn.reply(m.chat, lenguajeGB['smsAvisoEG']() + mid.smsVid, m, {contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: wm, body: '🚀 𝗧𝗲𝗰𝗻𝗼', previewType: 0, thumbnail: gataImg, sourceUrl: accountsgb }}}) 
+try {
+const mediaa = await ytPlayVid(text);
+const aa_2 = await conn.sendMessage(m.chat, {video: {url: mediaa.result}, fileName: `error.mp4`, caption: `${wm}`, thumbnail: mediaa.thumb, mimetype: 'video/mp4'}, {quoted: m});
+if (!aa_2) {
+throw new Error();
+}} catch {
+try
+{
+let res0 = await yts(text)
+res0=res0.videos[0]
+let yt0 = await fg.ytv(res0.url,'360p')
+await conn.sendFile(m.chat, yt0.dl_url, 'error.mp4', `${wm}`, m);
 }
-
-async function fetchY2mate(url) {
-  const baseUrl = 'https://www.y2mate.com/mates/en60';
-  const videoInfo = await fetch(`${baseUrl}/analyze/ajax`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ url, q_auto: 0 })
-  }).then(res => res.json());
-
-  const id = videoInfo.result.id;
-  const downloadInfo = await fetch(`${baseUrl}/convert`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ type: 'youtube', _id: id, v_id: url, token: '', ftype: 'mp4', fquality: '360p' })
-  }).then(res => res.json());
-
-  return downloadInfo.result.url;
+catch{
+const res = await fetch(`https://skizo.tech/api/y2mate?apikey=GataDios&url=${text}`);
+const json = await res.json();
+await conn.sendFile(m.chat, json.result.video, 'error.mp4', `${wm}`, m);  
 }
+}}} catch (e) {
+await conn.reply(m.chat, `${lenguajeGB['smsMalError3']()}#report ${lenguajeGB['smsMensError2']()} ${usedPrefix + command}\n\n${wm}`, m)
+console.log(`❗❗ ${lenguajeGB['smsMensError2']()} ${usedPrefix + command} ❗❗`)
+console.log(e)
+handler.limit = 0 //No gastada limite si fallas
+}}
+handler.help = ['play.1' , 'play.2'].map(v => v + ' <texto>')
+handler.tags = ['downloader']
+handler.command = ['play.1', 'play.2']
+handler.limit = 1
+export default handler
 
-async function fetchInvidious(url) {
-  const apiUrl = `https://invidious.io/api/v1/get_video_info`;
+function bytesToSize(bytes) {
+return new Promise((resolve, reject) => {
+const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+if (bytes === 0) return 'n/a';
+const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+if (i === 0) resolve(`${bytes} ${sizes[i]}`);
+resolve(`${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`);
+})}
 
-const response = await fetch(`${apiUrl}?url=${encodeURIComponent(url)}`);
-const data = await response.json();
+async function ytMp3(url) {
+return new Promise((resolve, reject) => {
+ytdl.getInfo(url).then(async (getUrl) => {
+const result = [];
+for (let i = 0; i < getUrl.formats.length; i++) {
+const item = getUrl.formats[i];
+if (item.mimeType == 'audio/webm; codecs=\"opus\"') {
+const {contentLength} = item;
+const bytes = await bytesToSize(contentLength);
+result[i] = {audio: item.url, size: bytes};
+}}
+const resultFix = result.filter((x) => x.audio != undefined && x.size != undefined);
+const tiny = await axios.get(`https://skizo.tech/api/y2mate?apikey=GataDios&url=${resultFix[0].audio}`);
+const tinyUrl = tiny.data;
+const title = getUrl.videoDetails.title;
+const thumb = getUrl.player_response.microformat.playerMicroformatRenderer.thumbnail.thumbnails[0].url;
+resolve({title, result: tinyUrl, result2: resultFix, thumb});
+}).catch(reject);
+})}
 
-if (data && data.video) {
-const videoInfo = data.video;
-return videoInfo; 
-} else {
-throw new Error("No se pudo obtener información del video desde Invidious");
-  }
+async function ytMp4(url) {
+return new Promise(async (resolve, reject) => {
+ytdl.getInfo(url).then(async (getUrl) => {
+const result = [];
+for (let i = 0; i < getUrl.formats.length; i++) {
+const item = getUrl.formats[i];
+if (item.container == 'mp4' && item.hasVideo == true && item.hasAudio == true) {
+const {qualityLabel, contentLength} = item;
+const bytes = await bytesToSize(contentLength);
+result[i] = {video: item.url, quality: qualityLabel, size: bytes};
+}}
+const resultFix = result.filter((x) => x.video != undefined && x.size != undefined && x.quality != undefined);
+const tiny = await axios.get(`https://skizo.tech/api/y2mate?apikey=GataDios&url=${resultFix[0].video}`);
+const tinyUrl = tiny.data;
+const title = getUrl.videoDetails.title;
+const thumb = getUrl.player_response.microformat.playerMicroformatRenderer.thumbnail.thumbnails[0].url;
+resolve({title, result: tinyUrl, rersult2: resultFix[0].video, thumb});
+}).catch(reject);
+})}
+
+async function ytPlay(query) {
+return new Promise((resolve, reject) => {
+yts(query).then(async (getData) => {
+const result = getData.videos.slice( 0, 5 );
+const url = [];
+for (let i = 0; i < result.length; i++) {
+url.push(result[i].url);
 }
+const random = url[0];
+const getAudio = await ytMp3(random);
+resolve(getAudio);
+}).catch(reject);
+})}
 
-async function fetch9Convert(url) {
-const apiUrl = `https://9convert.com/en429/api`;
-const response = await fetch(`${apiUrl}?url=${encodeURIComponent(url)}`);
-const data = await response.json();
+async function ytPlayVid(query) {
+return new Promise((resolve, reject) => {
+yts(query).then(async (getData) => {
+const result = getData.videos.slice( 0, 5 );
+const url = [];
+for (let i = 0; i < result.length; i++) {
+url.push(result[i].url);
+}
+const random = url[0];
+const getVideo = await ytMp4(random);
+resolve(getVideo);
+}).catch(reject);
+})} */
 
-if (data.status === 'ok') {
-    return data.result.mp3;
-  } else {
-    throw new Error("No se pudo obtener la descarga desde 9Convert");
-  }
-}                      
+/*import fs from 'fs'
+import fetch from 'node-fetch'
+let handler = async (m, {command, conn, text, usedPrefix }) => {
+if (!text) throw `${mg}𝙀𝙎𝘾𝙍𝙄𝘽𝘼 𝙀𝙇 𝙉𝙊𝙈𝘽𝙍𝙀 𝙊 𝙏𝙄𝙏𝙐𝙇𝙊\n𝙀𝙅𝙀𝙈𝙋𝙇𝙊\n*${usedPrefix + command} Billie Eilish - Bellyache*\n\n𝙒𝙍𝙄𝙏𝙀 𝙏𝙃𝙀 𝙉𝘼𝙈𝙀 𝙊𝙍 𝙏𝙄𝙏𝙇𝙀\n𝙀𝙓𝘼𝙈𝙋𝙇𝙀\n*${usedPrefix + command} Billie Eilish - Bellyache*`
+try {
+if (command == 'play.1') {
+conn.reply(m.chat, `${eg}𝙀𝙎𝙋𝙀𝙍𝙀 𝙐𝙉 𝙈𝙊𝙈𝙀𝙉𝙏𝙊 𝙀𝙇 𝘼𝙐𝘿𝙄𝙊 𝙋𝙊𝙍 𝙁𝘼𝙑𝙊𝙍\n\n𝙒𝘼𝙄𝙏 𝘼 𝙈𝙊𝙈𝙀𝙉𝙏 𝙁𝙊𝙍 𝙏𝙃𝙀 𝘼𝙐𝘿𝙄𝙊 𝙋𝙇𝙀𝘼𝙎𝙀`, m, {
+contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
+title: '𝗧𝗲𝗰𝗻𝗼 | 𝗕𝗼𝘁',
+body: 'Super Bot WhatsApp',         
+previewType: 0, thumbnail: fs.readFileSync("./media/menus/Menu3.jpg"),
+sourceUrl: `https://github.com/GataNina-Li/GataBot-MD`}}}) 
+  
+let res = await fetch("https://violetics.pw/api/media/youtube-play?apikey=beta&query="+text)
+//https://leyscoders-api.herokuapp.com/api/playmp3?q=lebih%20baik%20darinya&apikey=Your_Key
+  //("https://api.dhamzxploit.my.id/api/ytplaymp3?text="+text)
+let json = await res.json()
+conn.sendFile(m.chat, json.result.url, 'error.mp3', null, m, false, { mimetype: 'audio/mp4' })}
+if (command == 'play.2') {
+conn.reply(m.chat, `${eg}𝙀𝙎𝙋𝙀𝙍𝙀 𝙐𝙉 𝙈𝙊𝙈𝙀𝙉𝙏𝙊 𝙀𝙇 𝙑𝙄𝘿𝙀𝙊 𝙋𝙊𝙍 𝙁𝘼𝙑𝙊𝙍\n\n𝙒𝘼𝙄𝙏 𝘼 𝙈𝙊𝙈𝙀𝙉𝙏 𝙁𝙊𝙍 𝙏𝙃𝙀 𝙑𝙄𝘿𝙀𝙊 𝙋𝙇𝙀𝘼𝙎𝙀`, m, {
+contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
+title: '𝗧𝗲𝗰𝗻𝗼 | 𝗕𝗼𝘁',
+body: 'Super Bot WhatsApp',         
+previewType: 0, thumbnail: fs.readFileSync("./media/menus/Menu3.jpg"),
+sourceUrl: `https://github.com/GataNina-Li/GataBot-MD`}}})
+  
+let res = await fetch("https://violetics.pw/api/media/youtube-play?apikey=beta&query="+text) 
+let json = await res.json()
+conn.sendFile(m.chat, json.result.url, 'error.mp4', `${wm}`, m)}
+}catch(e){
+m.reply(`${fg}𝙄𝙉𝙏𝙀𝙉𝙏𝙀 𝘿𝙀 𝙉𝙐𝙀𝙑𝙊\n𝙏𝙍𝙔 𝘼𝙂𝘼𝙄𝙉`)
+console.log(e)
+}}
+handler.help = ['play.1' , 'play.2'].map(v => v + ' <texto>')
+handler.tags = ['downloader']
+handler.command = ['play.1', 'play.2']
+export default handler*/

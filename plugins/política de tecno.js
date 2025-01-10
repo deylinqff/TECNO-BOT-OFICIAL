@@ -1,10 +1,9 @@
 import fetch from 'node-fetch';
 
+let handler = async(m, { conn, usedPrefix, command } ) => {
+
 export async function before(m, { conn }) {
   if (!m.isGroup) return true;
-
-  // Verifica si el mensaje es un comando
-  const command = m.text.toLowerCase().trim();
 
   // Respuesta al comando `info` o `normas`
   if (command === '!info' || command === '!normas') {
@@ -49,3 +48,9 @@ export async function before(m, { conn }) {
     console.log(`Normas enviadas automáticamente en respuesta al comando.`);
   }
 }
+
+handler.help = ['normas'];
+handler.tag = ['main'];
+handler.command = ['normas'];
+
+export default handler;

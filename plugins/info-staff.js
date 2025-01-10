@@ -1,3 +1,5 @@
+const client = require('twilio')(accountSid, authToken);
+
 let handler = async (m, { conn }) => {
   // Información del staff con diseño
   const staff = `
@@ -21,7 +23,7 @@ let handler = async (m, { conn }) => {
 ┃   *Rol:* 𝙼𝚘𝚍𝚎𝚛𝚊𝚍𝚘𝚛
 ┃   *Número:* wa.me/50557865603
 ┃
-╰━━━━━━━━━━━━━━━━━━━━━╯
+╰━━━━━━━━━━━━━━━━━━━━━━━╯
 `.trim();
 
   try {
@@ -30,13 +32,8 @@ let handler = async (m, { conn }) => {
     const sourceUrl = global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL"; // URL del proyecto
     const thumbnailUrl = global.icono || "https://files.catbox.moe/owl2rl.jpg"; // Miniatura
 
-    // Crear botones interactivos
-    const buttons = [
-      { buttonId: 'github', buttonText: { displayText: 'Ver GitHub' }, type: 1 },
-      { buttonId: 'soporte', buttonText: { displayText: 'Contactar Soporte' }, type: 1 },
-    ];
-
-    const buttonMessage = {
+    // Enviar el mensaje con diseño
+    await conn.sendMessage(m.chat, {
       image: { url: imageUrl },
       caption: staff,
       contextInfo: {
@@ -49,12 +46,30 @@ let handler = async (m, { conn }) => {
           thumbnailUrl: thumbnailUrl,
         },
       },
-      buttons: buttons,
-      headerType: 4,
-    };
+    });
 
-    // Enviar el mensaje con diseño y botones
-    await conn.sendMessage(m.chat, buttonMessage);
+    // Enviar mensaje con opciones rápidas usando Twilio
+    client.messages.create({
+      body: 'Selecciona una opción:',
+      from: 'whatsapp:+14155238886', // Tu número de WhatsApp de Twilio
+      to: 'whatsapp:+521234567890', // Número del destinatario
+      mediaUrl: ['https://example.com/image.jpg'],
+      quickReplies: {
+        type: 'list',
+        options: [
+          {
+            "title": "Audio",
+            "payload": "audio"
+          },
+          {
+            "title": "Video",
+            "payload": "video"
+          }
+        ]
+      }
+    })
+    .then(message => console.log(message.sid))
+    .catch(error => console.log(error));
 
     // Reacción al comando (opcional)
     if (global.emoji) {

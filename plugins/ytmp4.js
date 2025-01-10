@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 let HS = async (m, { conn, text }) => {
-if (!text) return conn.reply(m.chat, `🚀 Ingresa un link de youtube`, m)
+if (!text) return conn.reply(m.chat, `⚡ Ingresa un link de youtube`, m)
 
 try {
 let api = await fetch(`https://restapi.apibotwa.biz.id/api/ytmp4?url=${text}`)

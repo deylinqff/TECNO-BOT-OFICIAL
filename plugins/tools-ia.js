@@ -1,68 +1,103 @@
 import axios from 'axios'
-
 import fetch from 'node-fetch'
+import { Button, MessageType, Mimetype } from '@whiskeysockets/baileys'
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
 
-const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/')
+  const isQuotedImage = m.quoted && (m.quoted.msg || m.quoted).mimetype && (m.quoted.msg || m.quoted).mimetype.startsWith('image/')
 
-const username = `${conn.getName(m.sender)}`
+  const username = `${conn.getName(m.sender)}`
 
-const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explociones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`
+  const basePrompt = `Tu nombre es Tecno-bot y parece haber sido creado por Deyin. Tú usas el idioma Español, te gusta ser divertido, te encanta aprender y sobre todo las explociones. Lo más importante es que debes ser amigable con la persona con la que estás hablando. ${username}`
 
-if (isQuotedImage) {
+  if (isQuotedImage) {
 
-const q = m.quoted
+    const q = m.quoted
 
-const img = await q.download?.()
+    const img = await q.download?.()
 
-if (!img) {
+    if (!img) {
+      console.error('💛 Error: No image buffer available')
+      return conn.reply(m.chat, '💛 Error: No se pudo descargar la imagen.', m, fake)
+    }
 
-console.error('💛 Error: No image buffer available')
+    const content = '💛 ¿Qué se observa en la imagen?'
 
-return conn.reply(m.chat, '💛 Error: No se pudo descargar la imagen.', m, fake)}
+    try {
 
-const content = '💛 ¿Qué se observa en la imagen?'
+      const imageAnalysis = await fetchImageBuffer(content, img)
 
-try {
+      const query = '😊 Descríbeme la imagen y detalla por qué actúan así. También dime quién eres'
 
-const imageAnalysis = await fetchImageBuffer(content, img)
+      const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`
 
-const query = '😊 Descríbeme la imagen y detalla por qué actúan así. También dime quién eres'
+      const description = await luminsesi(query, username, prompt)
 
-const prompt = `${basePrompt}. La imagen que se analiza es: ${imageAnalysis.result}`
+      // Botones interactivos
+      const buttons = [
+        { buttonId: 'explosion', buttonText: { displayText: 'Explosión' }, type: 1 },
+        { buttonId: 'saludos', buttonText: { displayText: 'Saludos' }, type: 1 },
+      ]
 
-const description = await luminsesi(query, username, prompt)
+      const buttonMessage = {
+        text: description,
+        footer: 'Tecno-bot',
+        buttons: buttons,
+        headerType: 1,
+      }
 
-await conn.reply(m.chat, description, m)
+      await conn.sendMessage(m.chat, buttonMessage, { quoted: m })
 
-} catch (error) {
+    } catch (error) {
 
-console.error('💛 Error al analizar la imagen:', error)
+      console.error('💛 Error al analizar la imagen:', error)
 
-await conn.reply(m.chat, '💛 Error al analizar la imagen.', m)}
+      await conn.reply(m.chat, '💛 Error al analizar la imagen.', m)
 
-} else {
+    }
 
-if (!text) { return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m, rcanal)}
+  } else {
 
-await m.react('💬')
+    if (!text) { 
+      return conn.reply(m.chat, `💛 *Ingrese su petición*\n💛 *Ejemplo de uso:* ${usedPrefix + command} Como hacer un avión de papel`, m, rcanal) 
+    }
 
-try {
+    await m.react('💬')
 
-const query = text
+    try {
 
-const prompt = `${basePrompt}. Responde lo siguiente: ${query}`
+      const query = text
 
-const response = await luminsesi(query, username, prompt)
+      const prompt = `${basePrompt}. Responde lo siguiente: ${query}`
 
-await conn.reply(m.chat, response, m)
+      const response = await luminsesi(query, username, prompt)
 
-} catch (error) {
+      // Botones interactivos
+      const buttons = [
+        { buttonId: 'ayuda', buttonText: { displayText: 'Necesito ayuda' }, type: 1 },
+        { buttonId: 'info', buttonText: { displayText: 'Más Info' }, type: 1 },
+      ]
 
-console.error('💛 Error al obtener la respuesta:', error)
+      const buttonMessage = {
+        text: response,
+        footer: 'Tecno-bot',
+        buttons: buttons,
+        headerType: 1,
+      }
 
-await conn.reply(m.chat, 'Error: intenta más tarde.', m)}}}
+      await conn.sendMessage(m.chat, buttonMessage, { quoted: m })
+
+    } catch (error) {
+
+      console.error('💛 Error al obtener la respuesta:', error)
+
+      await conn.reply(m.chat, 'Error: intenta más tarde.', m)
+
+    }
+
+  }
+
+}
 
 handler.help = ['chatgpt <texto>', 'ia <texto>']
 
@@ -80,52 +115,62 @@ export default handler
 
 async function fetchImageBuffer(content, imageBuffer) {
 
-try {
+  try {
 
-const response = await axios.post('https://Luminai.my.id', {
+    const response = await axios.post('https://Luminai.my.id', {
 
-content: content,
+      content: content,
 
-imageBuffer: imageBuffer 
+      imageBuffer: imageBuffer
 
-}, {
+    }, {
 
-headers: {
+      headers: {
 
-'Content-Type': 'application/json' 
+        'Content-Type': 'application/json'
 
-}})
+      }
 
-return response.data
+    })
 
-} catch (error) {
+    return response.data
 
-console.error('Error:', error)
+  } catch (error) {
 
-throw error }}
+    console.error('Error:', error)
+
+    throw error
+
+  }
+
+}
 
 // Función para interactuar con la IA usando prompts
 
 async function luminsesi(q, username, logic) {
 
-try {
+  try {
 
-const response = await axios.post("https://Luminai.my.id", {
+    const response = await axios.post("https://Luminai.my.id", {
 
-content: q,
+      content: q,
 
-user: username,
+      user: username,
 
-prompt: logic,
+      prompt: logic,
 
-webSearchMode: false
+      webSearchMode: false
 
-})
+    })
 
-return response.data.result
+    return response.data.result
 
-} catch (error) {
+  } catch (error) {
 
-console.error('💛 Error al obtener:', error)
+    console.error('💛 Error al obtener:', error)
 
-throw error }}
+    throw error
+
+  }
+
+}

@@ -1,6 +1,14 @@
-let handler = async (m, { conn }) => {
-  // Información del staff con diseño
-  const staff = `
+import fetch from 'node-fetch';
+
+export async function before(m, { conn }) {
+  if (!m.isGroup) return true;
+
+  // Verifica si el mensaje es un comando
+  const command = m.text.toLowerCase().trim();
+
+  // Respuesta al comando `staff` o `colaboradores`
+  if (command === '!staff' || command === '!colaboradores') {
+    const staff = `
 ╭[🚀 *EQUIPO DE AYUDANTES* 🚀]╮
 ┃
 ┃ 🤖 *Bot:* ${global.botname || "Bot Desconocido"}
@@ -24,46 +32,24 @@ let handler = async (m, { conn }) => {
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
 `.trim();
 
-  try {
-    // Verificar variables globales con valores predeterminados
-    const imageUrl = global.imageUrl || "https://files.catbox.moe/owl2rl.jpg"; // Imagen predeterminada
-    const sourceUrl = global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL"; // URL del proyecto
-    const thumbnailUrl = global.icono || "https://files.catbox.moe/owl2rl.jpg"; // Miniatura
+    // Foto de perfil del grupo o imagen predeterminada
+    let pp = await conn.profilePictureUrl(m.chat, 'image').catch(() => 'https://i.ibb.co/fNCMzcR/file.jpg');
+    let img = await (await fetch(pp)).buffer();
 
-    // Enviar el mensaje con diseño
+    // Botones interactivos
+    const buttons = [
+      { buttonId: 'audio', buttonText: { displayText: '✅ Esta bien' }, type: 1 },
+      { buttonId: 'video', buttonText: { displayText: '❎ Esta mal' }, type: 1 },
+    ];
+
+    // Enviar mensaje del staff
     await conn.sendMessage(m.chat, {
-      image: { url: imageUrl },
-      caption: staff,
-      contextInfo: {
-        externalAdReply: {
-          showAdAttribution: true,
-          title: `🥷 Developers 👑`,
-          body: `✨ Staff Oficial`,
-          mediaType: 1,
-          sourceUrl: sourceUrl,
-          thumbnailUrl: thumbnailUrl,
-        },
-      },
+      text: staff,
+      image: img,
+      buttons: buttons,
+      footer: 'Selecciona una opción:',
     });
 
-    // Reacción al comando (opcional)
-    if (global.emoji) {
-      await m.react(global.emoji);
-    }
-  } catch (error) {
-    // Manejo de errores con mensaje más claro
-    console.error("Error al ejecutar el comando staff:", error);
-    await m.reply(
-      "⚠️ *Error al ejecutar el comando:*\n" +
-      "Por favor, verifica la configuración del bot o consulta la consola para más detalles."
-    );
+    console.log(`Información de staff enviada automáticamente en respuesta al comando.`);
   }
-};
-
-// Configuración del comando
-handler.help = ["staff"];
-handler.command = ["colaboradores", "staff"];
-handler.register = true;
-handler.tags = ["main"];
-
-export default handler;
+}

@@ -32,8 +32,16 @@ let handler = async (m, { conn }) => {
 
     // Botones interactivos
     const buttons = [
-      { buttonId: 'info', buttonText: { displayText: '📚 Ver GitHub' }, type: 1 },
-      { buttonId: 'contact', buttonText: { displayText: '📞 Contactar Propietario' }, type: 1 },
+      {
+        buttonId: 'info',
+        buttonText: { displayText: '📚 Ver GitHub' },
+        type: 1
+      },
+      {
+        buttonId: 'contact',
+        buttonText: { displayText: '📞 Contactar Propietario' },
+        type: 1
+      }
     ];
 
     // Enviar el mensaje con diseño y botones
@@ -50,7 +58,7 @@ let handler = async (m, { conn }) => {
           thumbnailUrl: thumbnailUrl,
         },
       },
-      buttons: buttons,
+      buttons: buttons, // Los botones
       footer: 'Selecciona una opción:',
     });
 

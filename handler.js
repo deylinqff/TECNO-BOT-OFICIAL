@@ -407,19 +407,28 @@ conn: this,
 
 global.dfail = (type, m, conn, usedPrefix) => {
     let msg = {
-    rowner: "> _*`⚙️Perdon, Este comando es solo para mi Owner únete a mi canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`*_",
-    owner: "> _*`🚀Perdon, Solo mi creador puede usar este comando únete a mi canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`*_",
-    mods: "> _*`⚙️Perdon, Este comando solo es para mods únete a mi canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`*_",
-    premium: "> _*`⚙️No eres un usuario Premium, Habla con mi owner únete a mi canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`*_",
-    group: "> _*`⚙️Perdon, Este comando solo es para grupos únete a mi canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`*_",
-    private: "> _*`🚀Ve a mi chat privado y usa este comando únete a mi canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`*_",
-    admin: "> _*`🚀Quien eres?, tu no eres admin únete a mi canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`*_",
-    botAdmin: "> _*`🌐Es necesario que sea admin primero para usar esta función únete a mi canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`*_",
-    unreg: "> _*`🖥️𝑼𝑺𝑼𝑨𝑹𝑰𝑶 𝑵𝑶 𝑹𝑬𝑮𝑰𝑺𝑻𝑹𝑨𝑫𝑶🧑‍💻`*_\n\n`Para registrarse:`\n\n> .reg nombre.edad\n\n`Ejemplo:`\n\n> .reg 𝑫𝒆𝒚𝒍𝒊. 15 únete a mi canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m",
-    restrict: "> _*`⚙️Comando desactivado por mi Owner únete a mi canal https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`*_" 
-}[type]
+    rowner: `⛔ *¡Este comando es solo para mi Owner!*`,
+    owner: `🚀 *¡Solo mi creador puede usar este comando!*`,
+    mods: `⚙️ *¡Este comando es exclusivo para los mods!*`,
+    premium: `⚙️ *¡No eres un usuario Premium! Habla con mi Owner.*`,
+    group: `⚙️ *¡Este comando solo está disponible para grupos!*`,
+    private: `🚀 *¡Ve a mi chat privado y usa este comando!*`,
+    admin: `🚫 *¡No eres admin! Solo los admins pueden usar este comando.*`,
+    botAdmin: `🌐 *¡Es necesario ser admin para usar esta función!*`,
+    unreg: `🖥️ *Usuario no registrado* 🧑‍💻
 
-if (msg) return conn.reply(m.chat, msg, m, rcanal).then(_ => m.react('✖️'))
+    *Para registrarte usa:*
+    
+    *.\`reg nombre.edad\`*
+    
+    *Ejemplo:*
+    
+    *.\`reg 𝑫𝒆𝒚𝒍𝒊. 15\`*`,
+    restrict: `⚙️ *¡Este comando ha sido desactivado por mi Owner!*`
+}[type];
+
+if (msg) {
+    return conn.reply(m.chat, msg, m, rcanal).then(_ => m.react('✖️'));
 }
 
 let file = global.__filename(import.meta.url, true)

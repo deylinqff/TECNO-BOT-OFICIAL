@@ -1,37 +1,26 @@
-
 import { createHash } from 'crypto'
-import fs from 'fs'
 import fetch from 'node-fetch'
 
-let Reg = /\|?(.*)([.|] *?)([0-9]*)$/i
 let handler = async function (m, { conn, text, usedPrefix, command }) {
   let user = global.db.data.users[m.sender]
   let name2 = conn.getName(m.sender)
-  if (user.registered === true) return m.reply(`🧑‍💻 YA ESTAS REGISTRADO.\n\n*¿QUIERES HACERLO DE NUEVO?*\n\nUSE ESTE COMANDO PARA ELIMINAR SU REGISTRO.\n*${usedPrefix}unreg* `)
-  if (!Reg.test(text)) return m.reply(`🤖 FORMATO INCORRECTO.\n\nUSO DEL COMANDO: *${usedPrefix + command} nombre.edad*\nEjemplo : *${usedPrefix + command} ${name2}.16*`)
-  let [_, name, splitter, age] = text.match(Reg)
-  if (!name) return m.reply('👻 El NOMBRE NO PUEDE ESTAR VACÍO.')
-  if (!age) return m.reply('👻 LA EDAD NO PUEDE ESTAR VACÍA.')
-  if (name.length >= 100) return m.reply('🫥 El NOMBRE ESTA MUY LARGO.' )
-  age = parseInt(age)
-  if (age > 100) return m.reply('👴🏻 WOW EL ABUELO QUIERE JUGAR AL BOT.')
-  if (age < 5) return m.reply('🚼 EL BEBE QUIERE JUGAR JAJA. ')
-  user.name = name.trim()
-  user.age = age
-  user.regTime = + new Date
-  user.registered = true
-  let sn = createHash('md5').update(m.sender).digest('hex')
-  let img = await (await fetch(`https://files.catbox.moe/g95ury.jpg`)).buffer()
-  let txt = ` –  *R E G I S T R O  -  T E C N O*\n\n`
-      txt += `╔  🚀  *NOMBRE* : ${name}\n`
-      txt += `╠  ⚡  *EDAD* : ${age} años\n`
-      txt += `╚  ✎𝑫𝒊𝒔𝒇𝒓𝒖𝒕𝒂 𝒅𝒆 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 𝑽𝒆𝒓𝒔𝒊𝒐𝒏: 𝑩𝒆𝒕𝒂\n`
-await conn.sendAi(m.chat, botname, textbot, txt, img, img, canal, m)
-await m.react('✅')
+
+  // Verificar si el usuario ya está registrado
+  if (user.registered === true) {
+    return m.reply(`🧑‍💻 YA ESTÁS REGISTRADO.\n\n*¿QUIERES HACERLO DE NUEVO?*\n\nUSA ESTE COMANDO PARA ELIMINAR TU REGISTRO:\n*${usedPrefix}unreg* `)
+  }
+
+  // Verificar si el usuario no está registrado y no está en el canal
+  if (!user.registered) {
+    let channelLink = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m' // Enlace del canal
+
+    // Mensaje solicitando unirse al canal
+    return m.reply(`🤖 PARA USAR EL BOT, ÚNETE A NUESTRO CANAL:\n${channelLink}\n\n*Al unirte, tu registro será automático.*\n¡Gracias por tu apoyo! 🎉`)
+  }
 }
+
 handler.help = ['reg'].map(v => v + ' *<nombre.edad>*')
 handler.tags = ['rg']
-
-handler.command = ['verify', 'reg', 'register', 'registrar'] 
+handler.command = ['verify', 'reg', 'register', 'registrar']
 
 export default handler

@@ -17,7 +17,7 @@ export async function before(m, {conn, participants, groupMetadata}) {
         .replace('@desc', () => groupMetadata.desc || 'sin descripción');
       await conn.sendAi(m.chat, botname, textbot, welcome, img, img, canal)
     } else {
-      let bienvenida = `┌─🚀 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n│「 Bienvenido 」\n└┬🚀 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │🚀  Bienvenido a\n   │🚀  ${groupMetadata.subject}\n   │  Disfruta de tecno\n     └───────────────┈ ⳹`
+      let bienvenida = `┌─🚀 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n│「 Bienvenido 」\n└┬🚀 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │🚀  Bienvenido a\n   │🚀  ${groupMetadata.subject}\n   └───────────────┈ ⳹`
       await conn.sendAi(m.chat, botname, textbot, bienvenida, img, img)
     }
   }
@@ -45,7 +45,7 @@ export async function before(m, {conn, participants, groupMetadata}) {
         .replace('@desc', () => groupMetadata.desc || 'sin descripción');
       await conn.sendAi(m.chat, botname, textbot, bye, img, img)
     } else {
-      let kick = `┌─🚀 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕  \n│「 BAYY 👋 」\n└┬🚀 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │🚀  Largate\n   │🚀 Jamás te quisimos aquí\n   └───────────────┈ ⳹`
+      let kick = `┌─🚀 𝑻𝒓𝒄𝒏𝒐-𝑩𝒐𝒕  \n│「 BAYY 👋 」\n└┬🚀 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │🚀  Largate\n   │🚀 Jamás te quisimos aquí\n   └───────────────┈ ⳹`
       await conn.sendAi(m.chat, botname, textbot, kick, img, img)
     }
 }}

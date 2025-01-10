@@ -1,8 +1,19 @@
-const client = require('twilio')(accountSid, authToken);
 
-let handler = async (m, { conn }) => {
-  // Información del staff con diseño
-  const staff = `
+import { Client, Buttons } from 'whatsapp-web.js';
+const client = new Client();
+
+client.on('message', async message => {
+  if (message.body === 'menu') {
+    let button = new Buttons(
+      'Selecciona una opción', 
+      [{ body: 'Audio' }, { body: 'Video' }], 
+      'Opciones', 
+      'Elige una opción'
+    );
+    client.sendMessage(message.from, button);
+  } else if (message.body === '!staff') {
+    // Información del staff con diseño
+    const staff = `
 ╭[🚀 *EQUIPO DE AYUDANTES* 🚀]╮
 ┃
 ┃ 🤖 *Bot:* ${global.botname || "Bot Desconocido"}
@@ -26,80 +37,47 @@ let handler = async (m, { conn }) => {
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
 `.trim();
 
-  try {
-    // Verificar variables globales con valores predeterminados
-    const imageUrl = global.imageUrl || "https://files.catbox.moe/owl2rl.jpg"; // Imagen predeterminada
-    const sourceUrl = global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL"; // URL del proyecto
-    const thumbnailUrl = global.icono || "https://files.catbox.moe/owl2rl.jpg"; // Miniatura
+    try {
+      // Verificar variables globales con valores predeterminados
+      const imageUrl = global.imageUrl || "https://files.catbox.moe/owl2rl.jpg"; // Imagen predeterminada
+      const sourceUrl = global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL"; // URL del proyecto
+      const thumbnailUrl = global.icono || "https://files.catbox.moe/owl2rl.jpg"; // Miniatura
 
-    // Enviar el mensaje con diseño
-    await conn.sendMessage(m.chat, {
-      image: { url: imageUrl },
-      caption: staff,
-      contextInfo: {
-        externalAdReply: {
-          showAdAttribution: true,
-          title: `🥷 Developers 👑`,
-          body: `✨ Staff Oficial`,
-          mediaType: 1,
-          sourceUrl: sourceUrl,
-          thumbnailUrl: thumbnailUrl,
-        },
-      },
-    });
-
-    const client = require('twilio')(accountSid, authToken);
-
-let handler = async (m, { conn }) => {
-  // ... (your existing code for generating the staff message)
-
-  try {
-    // Send a message with image, text, and buttons
-    await client.messages.create({
-      body: staff,
-      from: 'whatsapp:+14155238886', // Replace with your Twilio number
-      to: 'whatsapp:+521234567890', // Replace with recipient's number
-      mediaUrl: ['https://files.catbox.moe/owl2rl.jpg'],
-      quickReplies: {
-        type: 'list',
-        options: [
-          {
-            title: 'Audio ',
-            payload: 'audio'
+      // Enviar el mensaje con diseño
+      await client.sendMessage(message.from, {
+        image: { url: imageUrl },
+        caption: staff,
+        contextInfo: {
+          externalAdReply: {
+            showAdAttribution: true,
+            title: `🥷 Developers 👑`,
+            body: `✨ Staff Oficial`,
+            mediaType: 1,
+            sourceUrl: sourceUrl,
+            thumbnailUrl: thumbnailUrl,
           },
-          {
-            title: 'Video ',
-            payload: 'video'
-          }
-        ]
+        },
+      });
+
+      // Reacción al comando (opcional)
+      if (global.emoji) {
+        await message.react(global.emoji);
       }
-    })
-    .then(message => console.log(message.sid))
-    .catch(error => console.log(error));
-  } catch (error) {
-    // ... (your error handling code)
-  }
-};
-
-
-    // Reacción al comando (opcional)
-    if (global.emoji) {
-      await m.react(global.emoji);
+    } catch (error) {
+      // Manejo de errores con mensaje más claro
+      console.error("Error al ejecutar el comando staff:", error);
+      await client.sendMessage(
+        message.from,
+        "⚠️ *Error al ejecutar el comando:*\n" +
+        "Por favor, verifica la configuración del bot o consulta la consola para más detalles."
+      );
     }
-  } catch (error) {
-    // Manejo de errores con mensaje más claro
-    console.error("Error al ejecutar el comando staff:", error);
-    await m.reply(
-      "⚠️ *Error al ejecutar el comando:*\n" +
-      "Por favor, verifica la configuración del bot o consulta la consola para más detalles."
-    );
   }
-};
+});
 
 // Configuración del comando
-handler.help = ["staff"];
-handler.command = ["colaboradores", "staff"];
-handler.register = true;
-handler.tags = ["main"];
+client.on('ready', () => {
+  console.log('Client is ready!');
+});
 
-export default handler;
+client.initialize();

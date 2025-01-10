@@ -30,22 +30,13 @@ let handler = async (m, { conn }) => {
     const sourceUrl = global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL"; // URL del proyecto
     const thumbnailUrl = global.icono || "https://files.catbox.moe/owl2rl.jpg"; // Miniatura
 
-    // Botones interactivos
+    // Crear botones interactivos
     const buttons = [
-      {
-        buttonId: 'info',
-        buttonText: { displayText: '📚 Ver GitHub' },
-        type: 1
-      },
-      {
-        buttonId: 'contact',
-        buttonText: { displayText: '📞 Contactar Propietario' },
-        type: 1
-      }
+      { buttonId: 'botón1', buttonText: { displayText: 'Ver GitHub' }, type: 1 },
+      { buttonId: 'botón2', buttonText: { displayText: 'Contactar Soporte' }, type: 1 },
     ];
 
-    // Enviar el mensaje con diseño y botones
-    await conn.sendMessage(m.chat, {
+    const buttonMessage = {
       image: { url: imageUrl },
       caption: staff,
       contextInfo: {
@@ -58,9 +49,12 @@ let handler = async (m, { conn }) => {
           thumbnailUrl: thumbnailUrl,
         },
       },
-      buttons: buttons, // Los botones
-      footer: 'Selecciona una opción:',
-    });
+      buttons: buttons,
+      headerType: 4,
+    };
+
+    // Enviar el mensaje con diseño y botones
+    await conn.sendMessage(m.chat, buttonMessage);
 
     // Reacción al comando (opcional)
     if (global.emoji) {

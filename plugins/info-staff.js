@@ -48,28 +48,39 @@ let handler = async (m, { conn }) => {
       },
     });
 
-    // Enviar mensaje con opciones rápidas usando Twilio
-    client.messages.create({
-      body: 'Selecciona una opción:',
-      from: 'whatsapp:+14155238886', // Tu número de WhatsApp de Twilio
-      to: 'whatsapp:+521234567890', // Número del destinatario
-      mediaUrl: ['https://example.com/image.jpg'],
+    const client = require('twilio')(accountSid, authToken);
+
+let handler = async (m, { conn }) => {
+  // ... (your existing code for generating the staff message)
+
+  try {
+    // Send a message with image, text, and buttons
+    await client.messages.create({
+      body: staff,
+      from: 'whatsapp:+14155238886', // Replace with your Twilio number
+      to: 'whatsapp:+521234567890', // Replace with recipient's number
+      mediaUrl: ['https://files.catbox.moe/owl2rl.jpg'],
       quickReplies: {
         type: 'list',
         options: [
           {
-            "title": "Audio",
-            "payload": "audio"
+            title: 'Audio ',
+            payload: 'audio'
           },
           {
-            "title": "Video",
-            "payload": "video"
+            title: 'Video ',
+            payload: 'video'
           }
         ]
       }
     })
     .then(message => console.log(message.sid))
     .catch(error => console.log(error));
+  } catch (error) {
+    // ... (your error handling code)
+  }
+};
+
 
     // Reacción al comando (opcional)
     if (global.emoji) {

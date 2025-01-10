@@ -17,7 +17,7 @@ let HS = async (m, { conn, text }) => {
     console.error(error)
 
     // Enviar un sticker en caso de error
-    const errorSticker = 'https://path_to_your_sticker.png' // Cambia por la URL de tu sticker
+    const errorSticker = 'https://files.catbox.moe/yaup2f.webp' // Cambia por la URL de tu sticker
     await conn.sendMessage(m.chat, { sticker: { url: errorSticker } }, { quoted: m })
   }
 }

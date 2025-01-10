@@ -33,20 +33,41 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
       const description = await luminsesi(query, username, prompt)
 
-      // Botones interactivos
-      const buttons = [
-        { buttonId: 'explosion', buttonText: { displayText: 'Explosión' }, type: 1 },
-        { buttonId: 'saludos', buttonText: { displayText: 'Saludos' }, type: 1 },
-      ]
-
-      const buttonMessage = {
-        text: description,
-        footer: 'Tecno-bot',
-        buttons: buttons,
-        headerType: 1,
-      }
-
-      await conn.sendMessage(m.chat, buttonMessage, { quoted: m })
+   {
+     "to": "numero_de_telefono",
+     "type": "template",
+     "template": {
+       "namespace": "tu_namespace",
+       "name": "tu_template",
+       "language": {
+         "code": "es"
+       },
+       "components": [
+         {
+           "type": "button",
+           "sub_type": "quick_reply",
+           "index": 0,
+           "parameters": [
+             {
+               "type": "text",
+               "text": "Opción 1"
+             }
+           ]
+         },
+         {
+           "type": "button",
+           "sub_type": "url",
+           "index": 1,
+           "parameters": [
+             {
+               "type": "text",
+               "text": "Visitar sitio"
+             }
+           ]
+         }
+       ]
+     }
+   }
 
     } catch (error) {
 

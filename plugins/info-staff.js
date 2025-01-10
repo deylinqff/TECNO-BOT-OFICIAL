@@ -21,7 +21,7 @@ let handler = async (m, { conn }) => {
 ┃   *Rol:* 𝙼𝚘𝚍𝚎𝚛𝚊𝚍𝚘𝚛
 ┃   *Número:* wa.me/50557865603
 ┃
-╰━━━━━━━━━━━━━━━━━━━━╯
+╰━━━━━━━━━━━━━━━━━━━━━╯
 `.trim();
 
   try {
@@ -32,8 +32,8 @@ let handler = async (m, { conn }) => {
 
     // Crear botones interactivos
     const buttons = [
-      { buttonId: 'botón1', buttonText: { displayText: 'Ver GitHub' }, type: 1 },
-      { buttonId: 'botón2', buttonText: { displayText: 'Contactar Soporte' }, type: 1 },
+      { buttonId: 'github', buttonText: { displayText: 'Ver GitHub' }, type: 1 },
+      { buttonId: 'soporte', buttonText: { displayText: 'Contactar Soporte' }, type: 1 },
     ];
 
     const buttonMessage = {

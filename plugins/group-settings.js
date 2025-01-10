@@ -7,7 +7,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         return conn.reply(`🚩 Elija una opción.\n\n*${usedPrefix + command}* abrir\n${usedPrefix + command}* cerrar`, m, rcanal)
     await conn.groupSettingUpdate(m.chat, isClose)
 }
-handler.help = ['group *abrir/cerrar*']
+handler.help = ['group *abierto/cerrado*']
 handler.tags = ['group']
 handler.command = ['group', 'grupo'] 
 handler.admin = true

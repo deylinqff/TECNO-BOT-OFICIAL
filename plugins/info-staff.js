@@ -1,7 +1,4 @@
-Entiendo, parece que necesitamos ajustar el código para incluir los botones correctamente. Aquí tienes una versión corregida que debería enviar los botones junto con el mensaje de staff.
-
-```javascript
-import { Client, Buttons } from 'whatsapp-web.js';
+import { Client, Buttons, MessageMedia } from 'whatsapp-web.js';
 const client = new Client();
 
 client.on('message', async message => {
@@ -33,31 +30,21 @@ client.on('message', async message => {
 
     // Verificar variables globales con valores predeterminados
     const imageUrl = global.imageUrl || "https://files.catbox.moe/owl2rl.jpg"; // Imagen predeterminada
-    const sourceUrl = global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL"; // URL del proyecto
-    const thumbnailUrl = global.icono || "https://files.catbox.moe/owl2rl.jpg"; // Miniatura
+    const media = MessageMedia.fromUrl(imageUrl); // Convertir la URL a MessageMedia
 
-    let button = new Buttons(staff, [{ body: 'Propietario' }, { body: 'Soporte' }, { body: 'Moderador' }], '✨ Staff Oficial', 'Elige una opción');
+    // Crear botones
+    const buttons = new Buttons(
+      media,
+      [
+        { body: 'Contacto Propietario', id: 'contacto_propietario' },
+        { body: 'GitHub Proyecto', id: 'github_proyecto' }
+      ],
+      'Staff Oficial',
+      staff
+    );
 
-    // Enviar el mensaje con diseño y botones
-    await client.sendMessage(message.from, button, {
-      image: { url: imageUrl },
-      caption: staff,
-      contextInfo: {
-        externalAdReply: {
-          showAdAttribution: true,
-          title: `🥷 Developers 👑`,
-          body: `✨ Staff Oficial`,
-          mediaType: 1,
-          sourceUrl: sourceUrl,
-          thumbnailUrl: thumbnailUrl,
-        },
-      },
-    });
-
-    // Reacción al comando (opcional)
-    if (global.emoji) {
-      await message.react(global.emoji);
-    }
+    // Enviar mensaje con botones
+    await client.sendMessage(message.from, buttons);
   }
 });
 
@@ -67,21 +54,3 @@ client.on('ready', () => {
 });
 
 client.initialize();
-```
-
-Este código ahora incluye botones junto con el mensaje de staff. Los botones ofrecerán opciones para seleccionar "Propietario", "Soporte" o "Moderador".
-
-*Pasos adicionales:*
-1. *Instala `whatsapp-web.js`*:
-    ```bash
-    npm install whatsapp-web.js
-    ```
-
-2. *Configura el cliente*: Asegúrate de que tu cliente de WhatsApp Web esté configurado y escaneado el código QR cuando se inicie el bot.
-
-3. *Ejecuta el código*: Guarda el código en un archivo `.js` y ejecútalo con Node.js:
-    ```bash
-    node tuarchivo.js
-    ```
-
-Espero que esto te ayude a enviar el mensaje con los botones correctamente. Si tienes más preguntas o necesitas más ayuda, aquí estoy para asistirte. 😊

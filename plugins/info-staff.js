@@ -1,17 +1,11 @@
+Entiendo, parece que necesitamos ajustar el código para incluir los botones correctamente. Aquí tienes una versión corregida que debería enviar los botones junto con el mensaje de staff.
 
+```javascript
 import { Client, Buttons } from 'whatsapp-web.js';
 const client = new Client();
 
 client.on('message', async message => {
-  if (message.body === 'menu') {
-    let button = new Buttons(
-      'Selecciona una opción', 
-      [{ body: 'Audio' }, { body: 'Video' }], 
-      'Opciones', 
-      'Elige una opción'
-    );
-    client.sendMessage(message.from, button);
-  } else if (message.body === '!staff') {
+  if (message.body === '!staff') {
     // Información del staff con diseño
     const staff = `
 ╭[🚀 *EQUIPO DE AYUDANTES* 🚀]╮
@@ -37,40 +31,32 @@ client.on('message', async message => {
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
 `.trim();
 
-    try {
-      // Verificar variables globales con valores predeterminados
-      const imageUrl = global.imageUrl || "https://files.catbox.moe/owl2rl.jpg"; // Imagen predeterminada
-      const sourceUrl = global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL"; // URL del proyecto
-      const thumbnailUrl = global.icono || "https://files.catbox.moe/owl2rl.jpg"; // Miniatura
+    // Verificar variables globales con valores predeterminados
+    const imageUrl = global.imageUrl || "https://files.catbox.moe/owl2rl.jpg"; // Imagen predeterminada
+    const sourceUrl = global.redes || "https://github.com/Deylinel/TECNO-BOT-OFICIAL"; // URL del proyecto
+    const thumbnailUrl = global.icono || "https://files.catbox.moe/owl2rl.jpg"; // Miniatura
 
-      // Enviar el mensaje con diseño
-      await client.sendMessage(message.from, {
-        image: { url: imageUrl },
-        caption: staff,
-        contextInfo: {
-          externalAdReply: {
-            showAdAttribution: true,
-            title: `🥷 Developers 👑`,
-            body: `✨ Staff Oficial`,
-            mediaType: 1,
-            sourceUrl: sourceUrl,
-            thumbnailUrl: thumbnailUrl,
-          },
+    let button = new Buttons(staff, [{ body: 'Propietario' }, { body: 'Soporte' }, { body: 'Moderador' }], '✨ Staff Oficial', 'Elige una opción');
+
+    // Enviar el mensaje con diseño y botones
+    await client.sendMessage(message.from, button, {
+      image: { url: imageUrl },
+      caption: staff,
+      contextInfo: {
+        externalAdReply: {
+          showAdAttribution: true,
+          title: `🥷 Developers 👑`,
+          body: `✨ Staff Oficial`,
+          mediaType: 1,
+          sourceUrl: sourceUrl,
+          thumbnailUrl: thumbnailUrl,
         },
-      });
+      },
+    });
 
-      // Reacción al comando (opcional)
-      if (global.emoji) {
-        await message.react(global.emoji);
-      }
-    } catch (error) {
-      // Manejo de errores con mensaje más claro
-      console.error("Error al ejecutar el comando staff:", error);
-      await client.sendMessage(
-        message.from,
-        "⚠️ *Error al ejecutar el comando:*\n" +
-        "Por favor, verifica la configuración del bot o consulta la consola para más detalles."
-      );
+    // Reacción al comando (opcional)
+    if (global.emoji) {
+      await message.react(global.emoji);
     }
   }
 });
@@ -81,3 +67,21 @@ client.on('ready', () => {
 });
 
 client.initialize();
+```
+
+Este código ahora incluye botones junto con el mensaje de staff. Los botones ofrecerán opciones para seleccionar "Propietario", "Soporte" o "Moderador".
+
+*Pasos adicionales:*
+1. *Instala `whatsapp-web.js`*:
+    ```bash
+    npm install whatsapp-web.js
+    ```
+
+2. *Configura el cliente*: Asegúrate de que tu cliente de WhatsApp Web esté configurado y escaneado el código QR cuando se inicie el bot.
+
+3. *Ejecuta el código*: Guarda el código en un archivo `.js` y ejecútalo con Node.js:
+    ```bash
+    node tuarchivo.js
+    ```
+
+Espero que esto te ayude a enviar el mensaje con los botones correctamente. Si tienes más preguntas o necesitas más ayuda, aquí estoy para asistirte. 😊

@@ -1,11 +1,5 @@
-import { Client, Buttons, MessageMedia } from 'whatsapp-web.js';
-const client = new Client();
-
-client.on('message', async message => {
-  if (message.body === '!staff') {
-    // Información del staff con diseño
-    const staff = `
-╭[🚀 *EQUIPO DE AYUDANTES* 🚀]╮
+let handler = async (m, { conn, command, usedPrefix }) => {
+let staff = `╭[🚀 *EQUIPO DE AYUDANTES* 🚀]╮
 ┃
 ┃ 🤖 *Bot:* ${global.botname || "Bot Desconocido"}
 ┃ 🌟 *Versión:* ${global.vs || "1.0"}
@@ -26,31 +20,27 @@ client.on('message', async message => {
 ┃   *Número:* wa.me/50557865603
 ┃
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
-`.trim();
+`
+await conn.sendFile(m.chat, icons, 'yaemori.jpg', staff.trim(), fkontak, true, {
+contextInfo: {
+'forwardingScore': 200,
+'isForwarded': false,
+externalAdReply: {
+showAdAttribution: true,
+renderLargerThumbnail: false,
+title: `🥷 Developers 👑`,
+body: `✨ Staff Oficial`,
+mediaType: 1,
+sourceUrl: redes,
+thumbnailUrl: icono
+}}
+}, { mentions: m.sender })
+m.react(emoji)
 
-    // Verificar variables globales con valores predeterminados
-    const imageUrl = global.imageUrl || "https://files.catbox.moe/owl2rl.jpg"; // Imagen predeterminada
-    const media = MessageMedia.fromUrl(imageUrl); // Convertir la URL a MessageMedia
+}
+handler.help = ['staff']
+handler.command = ['colaboradores', 'staff']
+handler.register = true
+handler.tags = ['main']
 
-    // Crear botones
-    const buttons = new Buttons(
-      media,
-      [
-        { body: 'Contacto Propietario', id: 'contacto_propietario' },
-        { body: 'GitHub Proyecto', id: 'github_proyecto' }
-      ],
-      'Staff Oficial',
-      staff
-    );
-
-    // Enviar mensaje con botones
-    await client.sendMessage(message.from, buttons);
-  }
-});
-
-// Configuración del comando
-client.on('ready', () => {
-  console.log('Client is ready!');
-});
-
-client.initialize();
+export default handler

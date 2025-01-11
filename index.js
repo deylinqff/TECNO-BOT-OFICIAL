@@ -1,27 +1,25 @@
 // Código creado por Deyin
 // TECNO-BOT ©®
 
-// Importaciones necesarias
 import { join, dirname } from 'path';
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
 import { setupMaster, fork } from 'cluster';
-import { watchFile, unwatchFile } from 'fs';
+import { watchFile, unwatchFile, readdirSync } from 'fs';
 import cfonts from 'cfonts';
 import { createInterface } from 'readline';
 import yargs from 'yargs';
 import chalk from 'chalk';
 
-// Mensaje de inicio
+// Mensajes iniciales
 console.log(chalk.blueBright('\n✰ Iniciando TECNO ✰'));
 
-// Definición de variables de entorno
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(__dirname);
 const { name, description, author, version } = require(join(__dirname, './package.json'));
-
-// Configuración gráfica de inicio
 const { say } = cfonts;
+const rl = createInterface(process.stdin, process.stdout);
+
 say('TECNO\nBOT', {
   font: 'block',
   align: 'center',
@@ -38,68 +36,83 @@ say(`Developed By • Deylin`, {
   colors: ['magenta'],
 });
 
-// Inicialización del bot
+// Cargar comandos desde la carpeta 'commands/'
+const commands = new Map();
+const commandsPath = join(__dirname, 'commands');
+const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+  const command = require(join(commandsPath, file));
+  commands.set(command.name, command);
+  console.log(`Comando cargado: ${command.name}`);
+}
+
 let isRunning = false;
+
+// Función principal para iniciar el bot
 function start(file) {
   if (isRunning) return;
   isRunning = true;
 
-  // Configuración del archivo principal y argumentos
-  const args = [join(__dirname, file), ...process.argv.slice(2)];
+  let args = [join(__dirname, file), ...process.argv.slice(2)];
   say([process.argv[0], ...args].join(' '), {
     font: 'console',
     align: 'center',
     colors: ['green'],
   });
 
-  // Configuración de procesos maestro e hijo
   setupMaster({
     exec: args[0],
     args: args.slice(1),
   });
 
-  const processChild = fork();
+  let p = fork();
 
-  // Manejo de mensajes desde el proceso hijo
-  processChild.on('message', (data) => {
-    switch (data) {
+  p.on('message', async (data) => {
+    switch (data.command) {
       case 'reset':
-        processChild.process.kill();
+        p.process.kill();
         isRunning = false;
         start.apply(this, arguments);
         break;
-      case 'uptime':
-        processChild.send(process.uptime());
+      case 'executeCommand': {
+        const { commandName, message } = data;
+        const command = commands.get(commandName);
+        if (command) {
+          try {
+            await command.execute(message);
+          } catch (err) {
+            console.error('Error ejecutando el comando:', err);
+          }
+        }
         break;
+      }
     }
   });
 
-  // Manejo de salida del proceso hijo
-  processChild.on('exit', (code) => {
+  p.on('exit', (_, code) => {
     isRunning = false;
     console.error(chalk.red('🚩 Error:\n'), code);
+    process.exit();
     if (code === 0) return;
 
-    // Reiniciar automáticamente en caso de cambios en el archivo
     watchFile(args[0], () => {
       unwatchFile(args[0]);
       start(file);
     });
   });
 
-  // Configuración de línea de comandos interactiva
   const opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse());
   if (!opts['test']) {
-    const rl = createInterface(process.stdin, process.stdout);
     if (!rl.listenerCount()) {
-      rl.on('line', (line) => {
-        processChild.emit('message', line.trim());
+      rl.on('line', line => {
+        p.emit('message', { command: 'executeCommand', commandName: line.trim() });
       });
     }
   }
 }
 
-// Manejo de advertencias de Node.js
+// Manejo de advertencias
 process.on('warning', (warning) => {
   if (warning.name === 'MaxListenersExceededWarning') {
     console.warn(chalk.yellow('🚩 Se excedió el límite de Listeners en:'));
@@ -107,5 +120,5 @@ process.on('warning', (warning) => {
   }
 });
 
-// Iniciar el bot
+// Inicia el bot
 start('start.js');

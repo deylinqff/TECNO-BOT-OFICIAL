@@ -30,11 +30,6 @@
 <!-- RAINBOW LINE BOT -->
 <img src="https://github.com/AnderMendoza/AnderMendoza/raw/main/assets/line-neon.gif" width="100%">
 
-### **`✫𝚃𝙴𝙰𝙼  乂 𝚂𝚃𝙰𝚁𝙲𝙾𝚁𝙴✫】`**
-
-![StarCore](https://i.ibb.co/r62XGfr/StarCore.jpg)
-<details>
-<summary><b> 👉 Canal Del Team</b></summary>
 
 - **StarCore:** [`Aquí`](https://whatsapp.com/channel/0029VankMyeBadmR9Ou0So3t)
 

@@ -25,14 +25,14 @@ global.prems = []; // Usuarios premium
 //*═══════════✧════════════✧═══════════*
 
 global.packname = `⟢⧫ TECNO BOT ⦾ System Core AI ⧫⟣`;
-global.author = '⚙️ TECNO BOT by DEYLIN ⚙️';
+global.author = '© TECNO BOT by DEYLIN ®';
 global.stickpack = '© TECNO - BOT ⚡';
 global.stickauth = '🔧 Powered by DEYLIN ';
 global.wait = '⏳ *Procesando solicitud... conectando a la red.* ⏳';
 global.botname = '⟢🚀 TECNO BOT 🚀⟣';
-global.textbot = `🌐 *TECNO BOT - Desarrollado por DEYLIN* 🌐`;
+global.textbot = `©® *TECNO BOT - Desarrollado por DEYLIN* `;
 global.listo = '✔️ *¡Tarea completada con éxito!* 🚀';
-global.namechannel = '📡 *TECNO BOT Channel* 🌠';
+global.namechannel = '© *TECNO BOT Channel* 🚀';
 
 //*═══════════✧════════════✧═══════════*
 

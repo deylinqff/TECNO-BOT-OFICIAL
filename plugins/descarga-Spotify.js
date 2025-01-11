@@ -2,92 +2,6 @@ import axios from 'axios'
 import fetch from 'node-fetch'
 import { youtubedl, youtubedlv2 } from '@bochilteam/scraper'
 import search from 'yt-search'
-
-let handler = async (m, { conn, text, usedPrefix, command }) => {
-if (!text) throw `${lenguajeGB.smsMalused2()} ⊱ *${usedPrefix + command} Bellyache*`
-m.react('⌛️')
-try {
-let songInfo = await spotifyxv(text);
-if (!songInfo.length) throw `*No se encontró la canción.*`;
-let song = songInfo[0]; 
-const res = await fetch(`${apis}/download/spotifydl?url=${song.url}`);
-const data = await res.json();
-if (!data || !data.data || !data.data.url) throw "No se pudo obtener el enlace de descarga.";
-const info = `✨ *${mid.smsYT1}:*
-_${song.name}_
-
-🗣️ *${mid.smsYT13}:*
-» _${song.artista.join(', ')}_
-
-🌐 *${mid.smsYT4}*:
-» _${song.url}_
-
-🎶 *${mid.smsSpoti}*
-${wm}`
-await conn.sendMessage(m.chat, {text: info, contextInfo: { forwardingScore: 9999999, isForwarded: true, 
-externalAdReply: {
-showAdAttribution: true,
-containsAutoReply: true,
-renderLargerThumbnail: true,
-title: wm,
-mediaType: 1,
-thumbnailUrl: data.data.image,
-mediaUrl: data.data.url,
-sourceUrl: data.data.url
-}}}, { quoted: m });
-conn.sendMessage(m.chat, { audio: { url: data.data.url }, fileName: `${song.name}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m });
-m.react('✅️');
-handler.limit = 1
-} catch (e1) {
-try {
-let songInfo = await spotifyxv(text)
-if (!songInfo.length) throw `*No se encontró una canción.*`
-let res = songInfo[0]
-let fileSizeInMB = (await getBuffer(res.url)).length / (1024 * 1024)
-let shortURL = await getTinyURL(res.url)
-const info = `✨ *${mid.smsYT1}:*
-_${res.name}_
-
-🗣️ *${mid.smsYT13}:*
-» _${res.artista.join(', ')}_
-
-🌐 *${mid.smsYT4}*:
-» _${shortURL}_
-
-🎶 *${mid.smsSpoti}*
-${wm}`
-let resImg = await fetch(res.imagen)
-let thumbb = await resImg.buffer()
-let { videos } = await search(res.name)
-let q = '128kbps'
-let v = videos[0].url
-let yt = await youtubedl(v).catch(async (_) => await youtubedlv2(v))
-let dl_url = await yt.audio[q].download()
-let ttl = await yt.title
-let size = await yt.audio[q].fileSizeH
-let img = await getBuffer(res.imagen)
-await conn.sendMessage(m.chat, {text: info, contextInfo: { forwardingScore: 9999999, isForwarded: true, 
-externalAdReply: {
-showAdAttribution: true,
-containsAutoReply: true,
-renderLargerThumbnail: true,
-title: wm,
-mediaType: 1,
-thumbnail: img,
-thumbnailUrl: img,
-mediaUrl: dl_url,
-sourceUrl: dl_url
-}}}, { quoted: m });
-conn.sendMessage(m.chat, { audio: { url: dl_url }, fileName: `${ttl}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
-m.react('✅️')
-handler.limit = 1
-} catch (error) {
-console.log(error) 
-m.react('❌')
-}}}
-handler.command = /^(spotify|music)$/i
-export default handler
-
 async function spotifyxv(query) {
 let token = await tokens();
 let response = await axios({
@@ -150,4 +64,49 @@ return response.data;
 } catch (error) {
 return text;
 }}
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+if (!text) throw `╰⊱❗️⊱ *ACCIÓN MAL USADA* ⊱❗️⊱╮\n\n🍟 *DEBE DE USAR EL COMANDO COMO EN ESTE EJEMPLO:*\n${usedPrefix + command} *tu foto*`
+try {
+conn.reply(m.chat, '🚩 *Enviando su música de Spotify*', m, {
+contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, showAdAttribution: true,
+title: packname,
+body: dev,
+previewType: 0, thumbnail: icons,
+sourceUrl: channel }}})
+await m.react(rwait)
+let songInfo = await spotifyxv(text)
+if (!songInfo.length) throw `*No se encontró la canción*`
+let res = songInfo[0]
+let fileSizeInMB = (await getBuffer(res.url)).length / (1024 * 1024)
+let shortURL = await getTinyURL(res.url)
+const info = `🍟 *TITULO:*
+_${res.name}_
 
+🚩 *ARTISTA:*
+» ${res.artista.join(', ')}
+
+🔗 *LINK:*
+» ${shortURL}
+
+✨️ *Enviando Canción....*
+${global.packname}`
+
+let resImg = await fetch(res.imagen)
+let thumbb = await resImg.buffer()
+let { videos } = await search(res.name)
+let q = '128kbps'
+let v = videos[0].url
+let yt = await youtubedl(v).catch(async (_) => await youtubedlv2(v))
+let dl_url = await yt.audio[q].download()
+let ttl = await yt.title
+let size = await yt.audio[q].fileSizeH
+let img = await getBuffer(res.imagen)
+conn.sendMessage(m.chat, { audio: { url: dl_url }, fileName: `${ttl}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
+await conn.sendMessage(m.chat, {text: info, contextInfo: {forwardingScore: 9999999, isForwarded: true, "externalAdReply": {"showAdAttribution": true, "containsAutoReply": true, "renderLargerThumbnail": true, "title": global.wm, "containsAutoReply": true, "mediaType": 1, "thumbnail": img, "thumbnailUrl": img, "mediaUrl": shortURL, "sourceUrl": shortURL}}}, {quoted: fkontak});
+await m.react(done)
+} catch (error) {
+}}
+handler.tags = ['descargas']
+handler.help = ['spotify']
+handler.command = ['spotify', 'music']
+export default handler

@@ -2,7 +2,24 @@ import { promises } from 'fs'
 import { join } from 'path'
 import fetch from 'node-fetch'
 import { xpRange } from '../lib/levelling.js'
-
+let Styles = (text, style = 1) => {
+  var xStr = 'abcdefghijklmnopqrstuvwxyz1234567890'.split('');
+  var yStr = Object.freeze({
+    1: 'ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘqʀꜱᴛᴜᴠᴡxʏᴢ1234567890'
+  });
+  var replacer = [];
+  xStr.map((v, i) => replacer.push({
+    original: v,
+    convert: yStr[style].split('')[i]
+  }));
+  var str = text.toLowerCase().split('');
+  var output = [];
+  str.map(v => {
+    const find = replacer.find(x => x.original == v);
+    find ? output.push(find.convert) : output.push(v);
+  });
+  return output.join('');
+};
 let tags = {
   'main': 'INFO',
   'buscador': 'BUSQUEDAS',
@@ -61,6 +78,8 @@ Hola *%name* soy *Ian*
 
 let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
   try {
+     let tag = `@${m.sender.split("@")[0]}`
+    let mode = global.opts["self"] ? "Privado" : "Publico"
     let _package = JSON.parse(await promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
     let { exp, limit, level } = global.db.data.users[m.sender]
     let { min, xp, max } = xpRange(level, global.multiplier)
@@ -124,8 +143,8 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
           ...help.filter(menu => menu.tags && menu.tags.includes(tag) && menu.help).map(menu => {
             return menu.help.map(help => {
               return body.replace(/%cmd/g, menu.prefix ? help : '%p' + help)
-                .replace(/%islimit/g, menu.limit ? '' : '')
-                .replace(/%isPremium/g, menu.premium ? '' : '')
+                .replace(/%islimit/g, menu.limit ? '◜⭐◞' : '')
+                .replace(/%isPremium/g, menu.premium ? '◜🪪◞' : '')
                 .trim()
             }).join('\n')
           }),
@@ -135,47 +154,65 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
       after
     ].join('\n')
     let text = typeof conn.menu == 'string' ? conn.menu : typeof conn.menu == 'object' ? _text : ''
-    let replace = {
-      '%': '%',
-      p: _p, uptime, muptime,
-      taguser: '@' + m.sender.split("@s.whatsapp.net")[0],
-      wasp: '@0',
-      me: conn.getName(conn.user.jid),
-      npmname: _package.name,
-      version: _package.version,
-      npmdesc: _package.description,
-      npmmain: _package.main,
-      author: _package.author.name,
-      license: _package.license,
-      exp: exp - min,
-      maxexp: xp,
-      totalexp: exp,
-      xp4levelup: max - exp,
-      github: _package.homepage ? _package.homepage.url || _package.homepage : '[unknown github url]',
-      level, limit, name, weton, week, date, dateIslamic, time, totalreg, rtotalreg,
-      readmore: readMore
-    }
+   let replace = {
+ "%": "%",
+ p: _p,
+ uptime,
+ muptime,
+ me: conn.getName(conn.user.jid),
+ npmname: _package.name,
+ npmdesc: _package.description,
+ version: _package.version,
+ exp: exp - min,
+ maxexp: xp,
+ totalexp: exp,
+ xp4levelup: max - exp,
+ github: _package.homepage ? _package.homepage.url || _package.homepage : "[unknown github url]",
+ mode,
+ _p,
+ tag,
+ name,
+ level,
+ limit,
+ name,
+ totalreg,
+ readmore: readMore
+   }
     text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
 
-let urls = [
-"https://i.ibb.co/qnKQgny/file.jpg",
-"https://i.ibb.co/qnKQgny/file.jpg",
-];
-let gifUrl = urls[Math.floor(Math.random() * urls.length)];
-await conn.sendMessage(m.chat, {video: {url: gifUrl}, gifPlayback: true, caption: text.trim(), mentions: [m.sender]}, {quoted: m});
-
+    let pp = 'https://i.ibb.co/CPVcnqH/file.jpg'
+    let pp2 = 'https://i.ibb.co/9WrytGt/file.jpg'
+    let pp3 = 'https://i.ibb.co/CPVcnqH/file.jpg'
+    let pp4 = 'https://i.ibb.co/9WrytGt/file.jpg'
+    let pp5 = 'https://i.ibb.co/CPVcnqH/file.jpg'
+    let pp6 = 'https://i.ibb.co/9WrytGt/file.jpg'
+    let pp7 = 'https://i.ibb.co/CPVcnqH/file.jpg'
+    let pp8 = 'https://i.ibb.co/9WrytGt/file.jpg'
+    let pp9 = 'https://i.ibb.co/JmcS3kv/Sylph.jpg'
+    let pp10 = 'https://i.ibb.co/CPVcnqH/file.jpg'
+    let pp11 = 'https://i.ibb.co/JmcS3kv/Sylph.jpg'
+    let pp12 = 'https://i.ibb.co/CPVcnqH/file.jpg'
+    let pp13 = 'https://i.ibb.co/Cs6Tt9V/Sylph.jpg'
+    let pp14 = 'https://i.ibb.co/JmcS3kv/Sylph.jpg'
+    let pp15 = 'https://i.ibb.co/Cs6Tt9V/Sylph.jpg'
+    let img = 'https://files.catbox.moe/pz9ba0.jpg'
+    await m.react('🚀')
+   // await conn.sendMessage(m.chat, { video: { url: [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11, pp12, pp13, pp14, pp15].getRandom() }, gifPlayback: true, caption: text.trim(), mentions: [m.sender] }, { quoted: estilo })
+    await conn.sendFile(m.chat, img, 'thumbnail.jpg', text.trim(), m, null, rcanal)
+   //await conn.sendAi(m.chat, botname, textbot, text.trim(), img, img, canal, estilo)
 
   } catch (e) {
-    conn.reply(m.chat, 'Lo sentimos, el menú tiene un error.', m)
+    conn.reply(m.chat, '❎ Lo sentimos, el menú tiene un error.', m)
     throw e
   }
 }
 
-handler.help = ['menu']
+handler.help = ['allmenu']
 handler.tags = ['main']
-handler.command = ['menu', 'help','allmenu', 'menú'] 
+handler.command = ['allmenu', 'menucompleto', 'menúcompleto', 'menú', 'menu'] 
 handler.register = true 
 export default handler
+
 
 const more = String.fromCharCode(8206)
 const readMore = more.repeat(4001)
@@ -190,29 +227,29 @@ function clockString(ms) {
   var ase = new Date();
   var hour = ase.getHours();
 switch(hour){
-  case 0: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌙'; break;
-  case 1: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 💤'; break;
-  case 2: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🦉'; break;
-  case 3: hour = 'Bᴜᴇɴᴏs Dɪᴀs ✨'; break;
-  case 4: hour = 'Bᴜᴇɴᴏs Dɪᴀs 💫'; break;
-  case 5: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌅'; break;
-  case 6: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌄'; break;
-  case 7: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌅'; break;
-  case 8: hour = 'Bᴜᴇɴᴏs Dɪᴀs 💫'; break;
-  case 9: hour = 'Bᴜᴇɴᴏs Dɪᴀs ✨'; break;
-  case 10: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌞'; break;
-  case 11: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌨'; break;
-  case 12: hour = 'Bᴜᴇɴᴏs Dɪᴀs ❄'; break;
-  case 13: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌤'; break;
-  case 14: hour = 'Bᴜᴇɴᴀs Tᴀʀᴅᴇs 🌇'; break;
-  case 15: hour = 'Bᴜᴇɴᴀs Tᴀʀᴅᴇs 🥀'; break;
-  case 16: hour = 'Bᴜᴇɴᴀs Tᴀʀᴅᴇs 🌹'; break;
-  case 17: hour = 'Bᴜᴇɴᴀs Tᴀʀᴅᴇs 🌆'; break;
-  case 18: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌙'; break;
-  case 19: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌃'; break;
-  case 20: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌌'; break;
-  case 21: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌃'; break;
-  case 22: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌙'; break;
-  case 23: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌃'; break;
+  case 0: hour = 'una linda noche 🌙'; break;
+  case 1: hour = 'una linda noche 💤'; break;
+  case 2: hour = 'una linda noche 🦉'; break;
+  case 3: hour = 'una linda mañana ✨'; break;
+  case 4: hour = 'una linda mañana 💫'; break;
+  case 5: hour = 'una linda mañana 🌅'; break;
+  case 6: hour = 'una linda mañana 🌄'; break;
+  case 7: hour = 'una linda mañana 🌅'; break;
+  case 8: hour = 'una linda mañana 💫'; break;
+  case 9: hour = 'una linda mañana ✨'; break;
+  case 10: hour = 'un lindo dia 🌞'; break;
+  case 11: hour = 'un lindo dia 🌨'; break;
+  case 12: hour = 'un lindo dia ❄'; break;
+  case 13: hour = 'un lindo dia 🌤'; break;
+  case 14: hour = 'una linda tarde 🌇'; break;
+  case 15: hour = 'una linda tarde 🥀'; break;
+  case 16: hour = 'una linda tarde 🌹'; break;
+  case 17: hour = 'una linda tarde 🌆'; break;
+  case 18: hour = 'una linda noche 🌙'; break;
+  case 19: hour = 'una linda noche 🌃'; break;
+  case 20: hour = 'una linda noche 🌌'; break;
+  case 21: hour = 'una linda noche 🌃'; break;
+  case 22: hour = 'una linda noche 🌙'; break;
+  case 23: hour = 'una linda noche 🌃'; break;
 }
-  var greeting = hour;
+  var greeting = "espero que tengas " + hour; 

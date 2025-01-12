@@ -7,26 +7,26 @@ import cfonts from 'cfonts';
 import { createInterface } from 'readline';
 import yargs from 'yargs';
 import chalk from 'chalk';
-console.log('\n✰ Iniciando TECNO-BOT✰');
+console.log('\n✰ Iniciando IaBot ✰');
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(__dirname);
 const { name, description, author, version } = require(join(__dirname, './package.json'));
 const { say } = cfonts;
 const rl = createInterface(process.stdin, process.stdout);
-say('TECNO-BOT', {
+say('Tecno\nBot', {
 font: 'block',
 align: 'center',
 colors: ['white']
 });
-say(`Bot Multi Device `, {
+say(`Multi Device`, {
 font: 'chrome',
 align: 'center',
 colors: ['red']
 });
-say(`Developed By • Deyin`, {
+say(`Developed By • Deylin`, {
 font: 'console',
 align: 'center',
-colors: ['yellow']
+colors: ['magenta']
 });
 var isRunning = false;
 function start(file) {

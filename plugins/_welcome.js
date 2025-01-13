@@ -1,51 +1,22 @@
-// © Deylin
 import {WAMessageStubType} from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
 
 export async function before(m, {conn, participants, groupMetadata}) {
   if (!m.messageStubType || !m.isGroup) return !0;
-  let pp = await conn.profilePictureUrl(m.messageStubParameters[0], 'image').catch(_ => 'https://i.ibb.co/fNCMzcR/file.jpg')
-  let img = await (await fetch(`${pp}`)).buffer()
+  let img = imagen1
   let chat = global.db.data.chats[m.chat]
 
-  if (chat.bienvenida && m.messageStubType == 27) {
-    if (chat.sWelcome) {
-      let user = `@${m.messageStubParameters[0].split`@`[0]}`
-      let welcome = chat.sWelcome
-        .replace('@user', () => user)
-        .replace('@group', () => groupMetadata.subject)
-        .replace('@desc', () => groupMetadata.desc || 'sin descripción');
-      await conn.sendAi(m.chat, botname, textbot, welcome, img, img, canal)
-    } else {
-      let bienvenida = `┌─🚀 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 \n│「 Bienvenido 」\n└┬🚀 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │🚀  Bienvenido a\n   │🚀  ${groupMetadata.subject}\n   └───────────────┈ ⳹`
-      await conn.sendAi(m.chat, botname, textbot, bienvenida, img, img)
-    }
+  if (chat.welcome && m.messageStubType == 27) {
+    let welcome = ` 𝑻𝒆𝒄𝒏𝒐-𝑷𝒍𝒖𝒔-𝑩𝒐𝒕 \n「 𝔹𝕚𝕖𝕟𝕧𝕖𝕟𝕚𝕕𝕠 」\n「 @${m.messageStubParameters[0].split`@`[0]} 」\n「 𝔹𝕚𝕖𝕟𝕧𝕖𝕟𝕚𝕕𝕠/𝔸 」\n「 ${groupMetadata.subject} 」\n\n> 𝕯𝖊𝖞𝖑𝖎𝖓`
+await conn.sendLuffy(m.chat, packname, textbot, welcome, img, img, redes, fkontak)
   }
 
-  if (chat.bienvenida && m.messageStubType == 28) {
-    if (chat.sBye) {
-      let user = `@${m.messageStubParameters[0].split`@`[0]}`
-      let bye = chat.sBye
-        .replace('@user', () => user)
-        .replace('@group', () => groupMetadata.subject)
-        .replace('@desc', () => groupMetadata.desc || 'sin descripción');
-      await conn.sendAi(m.chat, botname, textbot, bye, img, img)
-    } else {
-      let bye = `┌─🚀 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕  \n│「 BAYY 👋 」\n└┬🚀 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │🚀  Largate\n   │🚀 Jamás te quisimos aquí\n   └───────────────┈ ⳹`
-      await conn.sendAi(m.chat, botname, textbot, bye, img, img)
-    }
+  if (chat.welcome && m.messageStubType == 28) {
+    let bye = ` 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕-𝑷𝒍𝒖𝒔 \n「 𝔸𝕕𝕚𝕠𝕤 」\n「 @${m.messageStubParameters[0].split`@`[0]} 」\n「 𝕊𝕖 𝔽𝕦𝕖 」\n「 ℕ𝕦𝕟𝕔𝕒 𝕋𝕖 ℚ𝕦𝕚𝕤𝕚𝕞𝕠𝕤 𝔸𝕢𝕦𝕚 」\n\n> 𝕯𝖊𝖞𝖑𝖎𝖓`
+await conn.sendLuffy(m.chat, packname, textbot, bye, img, img, redes, fkontak)
   }
 
-  if (chat.bienvenida && m.messageStubType == 32) {
-    if (chat.sBye) {
-      let user = `@${m.messageStubParameters[0].split`@`[0]}`
-      let bye = chat.sBye
-        .replace('@user', () => user)
-        .replace('@group', () => groupMetadata.subject)
-        .replace('@desc', () => groupMetadata.desc || 'sin descripción');
-      await conn.sendAi(m.chat, botname, textbot, bye, img, img)
-    } else {
-      let kick = `┌─🚀 𝑻𝒓𝒄𝒏𝒐-𝑩𝒐𝒕  \n│「 BAYY 👋 」\n└┬🚀 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │🚀  Largate\n   │🚀 Jamás te quisimos aquí\n   └───────────────┈ ⳹`
-      await conn.sendAi(m.chat, botname, textbot, kick, img, img)
-    }
+  if (chat.welcome && m.messageStubType == 32) {
+    let kick = ` 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕-𝑷𝒍𝒖𝒔 \n「 Aԃισʂ 」\n「 @${m.messageStubParameters[0].split`@`[0]} 」\n「 𝕊𝕖 𝔽𝕦𝕖 」\n「 ℕ𝕦𝕟𝕔𝕒 𝕋𝕖 ℚ𝕦𝕚𝕤𝕚𝕞𝕠𝕤 𝔸𝕢𝕦𝕚 」\n\n> 𝕯𝖊𝖞𝖑𝖎𝖓`
+await conn.sendLuffy(m.chat, packname, textbot, kick, img, img, redes, fkontak)
 }}

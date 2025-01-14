@@ -405,20 +405,20 @@ conn: this,
   }
 }
 
-global.dfail = (type, m, conn) => {
-const msg = {
-rowner: '「👑」 *Esta función solo puede ser usada por mi creador*\n\n> 𝕯𝖊𝖞𝖑𝖎𝖓', 
-owner: '「👑」 *Esta función solo puede ser usada por mi desarrollador.', 
-mods: '「🤴🏻」 *Esta función solo puede ser usada por mis desarrolladores.*', 
-premium: '「🚀」 *Esta función solo es para usuarios Premium.', 
-group: '「⚠️」 *Esta funcion solo puede ser ejecutada en grupos.*', 
-private: '「💬」 *Esta función solo puede ser usada en chat privado.*', 
-admin: '「👑」 *Este comando solo puede ser usado por admins.*', 
-botAdmin: '「🍁」 *Para usar esta función debo ser admin.*', 
-unreg: '「🚀」 *No te encuentras registrado, registrese para usar esta función*\n\n*/reg nombre.edad*\n\n*Ejemplo* : */reg 𝕯𝖊𝖞𝖑𝖎𝖓.15*',
-restrict: '「💫」 *Esta característica esta desactivada.*'
-}[type];
-if (msg) return conn.reply(m.chat, msg, m, rcanal).then(_ => m.react('✖️'))}
+global.dfail = (type, m, conn, usedPrefix) => {
+    let msg = {
+        rowner: "「👑」 *Esta función solo puede ser usada por mi creador*\n\n> 𝕯𝖊𝖞𝖑𝖎𝖓',
+        owner: "「👑」 *Esta función solo puede ser usada por mi desarrollador.',
+        mods: "「🚀」 *Esta función solo es para usuarios Premium.', 
+        premium:「🚀」 *Esta función solo es para usuarios Premium.', 
+        group: "> _*`⚙️Perdon, Este comando solo es para grupos`*_",
+        private: "> _*`🚀Ve a mi chat privado y usa este comando`*_",
+        admin: "> _*`🚀Quien eres?, tu no eres admin`*_",
+        botAdmin: "> _*`🌐Es necesario que sea admin primero para usar esta función`*_",
+        unreg: "> _*`🖥️𝑼𝑺𝑼𝑨𝑹𝑰𝑶 𝑵𝑶 𝑹𝑬𝑮𝑰𝑺𝑻𝑹𝑨𝑫𝑶🧑‍💻`*_\n\n`Para registrarse:`\n\n> .reg nombre.edad\n\n`Ejemplo:`\n\n> .reg 𝑫𝒆𝒚𝒍𝒊. 15",
+        restrict: "> _*`⚙️Comando desactivado por mi Owner`*_" 
+    }[type]
+    if (msg) return conn.reply(m.chat, msg, m, rcanal).then(_ => m.react('✖️'))
 }
 
 let file = global.__filename(import.meta.url, true)

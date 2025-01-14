@@ -16,7 +16,7 @@ export async function before(m, {conn, participants, groupMetadata}) {
         .replace('@desc', () => groupMetadata.desc || 'sin descripción');
       await conn.sendAi(m.chat, botname, textbot, welcome, img, img, canal)
     } else {
-      let bienvenida = `┌─✦〘 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 〙\n│「 🄱🄸🄴🄽🅅🄴🄽🄸🄳🄾 」\n└┬✎ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │✎  🄱🄸🄴🄽🅅🄴🄽🄸🄳🄾 🄰\n   │✎  ${groupMetadata.subject}\n> 𝑼𝒏𝒆𝒕𝒆 𝒂𝒎𝒊 𝒄𝒂𝒏𝒂𝒍\n ${chanel}\n      └───────────────┈ ⳹`
+      let bienvenida = `┌─✦〘 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 〙\n│「 🄱🄸🄴🄽🅅🄴🄽🄸🄳🄾 」\n└┬✎ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │✎  🄱🄸🄴🄽🅅🄴🄽🄸🄳🄾 🄰\n   │✎  ${groupMetadata.subject}\n      └───────────────┈ ⳹\n> 𝒖𝒏𝒆𝒕𝒆 𝒂𝒎𝒊 𝒄𝒂𝒏𝒂𝒍 https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m`
       await conn.sendAi(m.chat, botname, textbot, bienvenida, img, img)
     }
   }

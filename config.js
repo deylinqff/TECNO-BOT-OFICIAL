@@ -30,9 +30,9 @@ global.stickpack = '© TECNO - BOT ⚡';
 global.stickauth = '🔧 Powered by DEYLIN ';
 global.wait = '⏳ *Procesando solicitud... conectando a la red.* ⏳';
 global.botname = '⟢🚀 TECNO BOT 🚀⟣';
-global.textbot = `🌐 *TECNO BOT - Desarrollado por DEYLIN* 🌐`;
+global.textbot = ` *TECNO BOT - Desarrollado por DEYLIN* `;
 global.listo = '✔️ *¡Tarea completada con éxito!* 🚀';
-global.namechannel = '📡 *TECNO BOT Channel* 🌠';
+global.namechannel = '📡 *TECNO BOT Channel* ';
 
 //*═══════════✧════════════✧═══════════*
 
@@ -58,7 +58,7 @@ global.estilo = {
       status: 1, 
       surface: 1, 
       message: botname, 
-      orderTitle: '⚡ CrowBot System ⚡', 
+      orderTitle: '⚡ Tecno-bot System ⚡', 
       thumbnail: catalogo, 
       sellerJid: '0@s.whatsapp.net' 
     }

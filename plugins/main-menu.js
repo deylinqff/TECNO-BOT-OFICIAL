@@ -69,14 +69,13 @@ Hola *%name* soy *TECNO*
 %readmore
 *─ׄ─ׄ─⭒─ׄ─ׅ─ׄ⭒─ׄ─ׄ─⭒─ׄ─ׄ─⭒─ׄ─ׅ─*
  %readmore
-\t\t\t⚙️_*𝐋𝐈𝐒𝐓𝐀 𝐃𝐄 𝐂𝐎𝐌𝐀𝐍𝐃𝐎𝐒*_ 🚀
+\t*L I S T A  -  D E  -  C O M A N D O S* 
 `.trimStart(),
-  header: '*╔═══❖〘 *%category* 〙❖═══╗*',
-  body: '║🚀›〘 %cmd %islimit %isPremium\n',
-  footer: '*╚═══❖•ೋ° °ೋ•❖═══╝*',
-  after: `© ${textbot}`,
+    header: ' ᳇「 MENU ✯ %category 」᳇\n ',
+  body: '> ☣>%cmd',
+  footer: '*─ׄ─ׅ─⭒─ׄ─ׄ─⭒─ׅ─ׄ─⭒─ׄ─ׄ─⭒─ׄ─ׄ─*\n',
+  after: `> ${dev}`,
 }
-
 let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
   try {
      let tag = `@${m.sender.split("@")[0]}`

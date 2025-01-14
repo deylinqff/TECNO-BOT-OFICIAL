@@ -247,7 +247,7 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
     break
     default:
       if (!/[01]/.test(command)) return conn.reply(m.chat, `
-*[🌠] Funciones Solo Para Owner*
+*[🚀] Funciones Solo Para Owner*
 
 ${usedPrefix + command} antispam
 ${usedPrefix + command} antiprivado
@@ -256,7 +256,7 @@ ${usedPrefix + command} status
 ${usedPrefix + command} restrict
 ${usedPrefix + command} autoread
 
-*[🌠] Funciones De Grupos*
+*[🌐] Funciones De Grupos*
 
 ${usedPrefix + command} welcome 
 ${usedPrefix + command} antibot
@@ -275,7 +275,7 @@ ${usedPrefix + command} antilink`, m, rcanal)
 
       throw false
   }
-  conn.reply(m.chat, `[🌠] La función *${type}* se *${isEnable ? 'activó' : 'desactivó'}* ${isAll ? 'para este Bot' : isUser ? '' : 'para este chat'}`, m, rcanal)
+  conn.reply(m.chat, `[🚀] La función *${type}* se *${isEnable ? 'activó' : 'desactivó'}* ${isAll ? 'para este Bot' : isUser ? '' : 'para este chat'}`, m, rcanal)
 }
 
 handler.help = ['enable', 'disable']

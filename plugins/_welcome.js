@@ -53,7 +53,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
       const user = m.messageStubParameters[0].split`@`[0];
       const kickMessage = `
         𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕-𝑷𝒍𝒖𝒔
-        「 𝔸𝕕𝕚𝕠𝕤 」
+        「 Aԃισʂ 」
         「 @${user} 」
         「 𝕊𝕖 𝔽𝕦𝕖 」
         「 ℕ𝕦𝕟𝕔𝕒 𝕋𝕖 ℚ𝕦𝕚𝕤𝕚𝕞𝕠𝕤 𝔸𝕢𝕦𝕚 」

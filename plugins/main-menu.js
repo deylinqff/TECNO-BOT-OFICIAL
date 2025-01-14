@@ -52,28 +52,28 @@ Hola *%name* soy *TECNO*
 ┏━━━━━━━━ CREADOR
 ┃  ♛ 𝑫𝒆𝒚𝒍𝒊𝒏
 ┗━━━━━━━━━━━━━━
-%readmore
+
 ┏━━━━━━━━ INFO - BOT
 ┃  ✎ Cliente: %name
 ┃  ✎ Exp: %exp
 ┃  ✎ Nivel: %level
 ┗━━━━━━━━━━━━━━
-%readmore
+
 ┏━━━━━━━━━ INFO - USER
 ┃  ✎ Bot: ©Tecno-Bot-Plus®
 ┃  ✎ Modo Público
 ┃  ✎ Baileys: Multi Device
 ┃  ✎ Tiempo Activo: %muptime
-┃  ☣ Usuarios: %totalreg 
+┃  ✎ Usuarios: %totalreg 
 ┗━━━━━━━━━━━━━━
-%readmore
+
 *─ׄ─ׄ─⭒─ׄ─ׅ─ׄ⭒─ׄ─ׄ─⭒─ׄ─ׄ─⭒─ׄ─ׅ─*
  %readmore
 \t\t\t⚙️_*𝐋𝐈𝐒𝐓𝐀 𝐃𝐄 𝐂𝐎𝐌𝐀𝐍𝐃𝐎𝐒*_ 🚀
 `.trimStart(),
-  header: '*╔═══❖〘 *%category* 〙❖═══╗*',
-  body: '║🚀›〘 %cmd %islimit %isPremium\n',
-  footer: '*╚═══❖•ೋ° °ೋ•❖═══╝*',
+  header: '*╭╍╍╍╍❖【 *%category* 】❖╍╍╍╍╮*',
+  body: '┋✎›【 %cmd %islimit %isPremium\n',
+  footer: '*╰╍╍╍╍❖•ೋ° °ೋ•❖╍╍╍╍╯*',
   after: `© ${textbot}`,
 }
 

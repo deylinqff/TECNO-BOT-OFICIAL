@@ -1,33 +1,27 @@
 import { pinterest } from '@bochilteam/scraper';
+import axios from 'axios';
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-  if (!text) throw `✳️ Ejemplo de uso: ${usedPrefix + command} Miku Nakano`;
+  if (!text) throw `✳️ ${mssg.example}: ${usedPrefix + command} Lil Peep`;
 
   try {
-    // Realiza la búsqueda en Pinterest
-    const results = await pinterest(text);
+    const json = await pinterest(text);
+    const imageUrl = json.getRandom();
 
-    // Verifica si hay resultados
-    if (!results || results.length === 0) throw '⚠️ No se encontraron imágenes relacionadas.';
+    // Verificar si la URL es válida y obtener el contenido de la imagen
+    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
 
-    // Selecciona una imagen al azar
-    const imageUrl = results.getRandom();
-
-    // Enviar la imagen al chat
-    await conn.sendFile(
-      m.chat,
-      imageUrl,
-      'pinterest.jpg',
-      `
-*❖  Pinterest:* ${text}
-`.trim(),
-      m,
-      false,
-      { mimetype: 'image/jpeg' } // Asegura el envío en formato JPEG
-    );
-  } catch (error) {
-    console.error(error);
-    throw '❌ Ocurrió un error al obtener las imágenes. Intenta nuevamente.';
+    // Verificar el tamaño de la imagen para garantizar la calidad
+    if (response.status === 200) {
+      const buffer = Buffer.from(response.data, 'binary');
+      conn.sendFile(m.chat, buffer, 'pinterest.jpg', `
+*❖  Pinterest:*  ${text}
+`.trim(), m);
+    } else {
+      throw 'No se pudo obtener una imagen de buena calidad. Intenta de nuevo.';
+    }
+  } catch (e) {
+    throw `❌ Error: ${e.message || e}`;
   }
 };
 

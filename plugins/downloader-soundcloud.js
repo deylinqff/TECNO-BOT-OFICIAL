@@ -5,7 +5,7 @@ let handler = async (m, { conn, command, args, text, usedPrefix }) => {
   if (!text) {
     return conn.reply(
       m.chat,
-      `🧑‍💻 INGRESE EL NOMBRE DE ALGUNA CANCIÓN *Soundcloud.*`,
+      `🧑‍💻 INGRESE EL NOMBRE DE ALGUNA CANCIÓN *Soundcloud o YouTube.*`,
       m,
       rcanal
     );
@@ -13,33 +13,51 @@ let handler = async (m, { conn, command, args, text, usedPrefix }) => {
 
   await m.react('🕒');
   try {
-    let api = await fetch(
-      `https://apis-starlights-team.koyeb.app/starlight/soundcloud-search?text=${encodeURIComponent(
+    // Nueva API: Realizar búsqueda en YouTube
+    let searchApi = await fetch(
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(
         text
-      )}`
+      )}&key=TU_CLAVE_DE_API`
     );
-    let json = await api.json();
-    let { url } = json[0];
+    let searchJson = await searchApi.json();
+    if (!searchJson.items || !searchJson.items.length) {
+      throw new Error('No se encontraron resultados para la búsqueda.');
+    }
+    let videoId = searchJson.items[0].id.videoId;
 
-    let api2 = await fetch(
-      `https://apis-starlights-team.koyeb.app/starlight/soundcloud?url=${url}`
+    // Descargar el audio usando la API de Siputzx
+    let downloadApi = await fetch(
+      `https://api.siputzx.my.id/api/d/ytmp3?url=https://www.youtube.com/watch?v=${videoId}`
     );
-    let json2 = await api2.json();
+    let downloadJson = await downloadApi.json();
 
-    let { link: dl_url, quality, image } = json2;
+    if (!downloadJson.data || !downloadJson.data.dl) {
+      throw new Error('Error al descargar el audio.');
+    }
 
-    let audio = await getBuffer(dl_url);
+    let audioUrl = downloadJson.data.dl;
 
-    let txt = `*\`- S O U N D C L O U D - M U S I C -\`*\n\n`;
-    txt += `        ✩  *Título* : ${json[0].title}\n`;
-    txt += `        ✩  *Calidad* : ${quality}\n`;
-    txt += `        ✩  *Url* : ${url}\n\n`;
+    // Enviar el archivo al usuario
+    let audio = await getBuffer(audioUrl);
+
+    let txt = `*\`- Y O U T U B E - M U S I C -\`*\n\n`;
+    txt += `        ✩  *Título* : ${searchJson.items[0].snippet.title}\n`;
+    txt += `        ✩  *Canal* : ${searchJson.items[0].snippet.channelTitle}\n`;
+    txt += `        ✩  *Url* : https://www.youtube.com/watch?v=${videoId}\n\n`;
     txt += `> 🚩 *${textbot}*`;
 
-    await conn.sendFile(m.chat, image, 'thumbnail.jpg', txt, m, null, rcanal);
+    await conn.sendFile(
+      m.chat,
+      searchJson.items[0].snippet.thumbnails.default.url,
+      'thumbnail.jpg',
+      txt,
+      m,
+      null,
+      rcanal
+    );
     await conn.sendMessage(
       m.chat,
-      { audio: audio, fileName: `${json[0].title}.mp3`, mimetype: 'audio/mpeg' },
+      { audio: audio, fileName: `${searchJson.items[0].snippet.title}.mp3`, mimetype: 'audio/mpeg' },
       { quoted: m }
     );
 
@@ -58,9 +76,9 @@ let handler = async (m, { conn, command, args, text, usedPrefix }) => {
   }
 };
 
-handler.help = ['soundcloud *<búsqueda>*'];
+handler.help = ['soundcloud *<búsqueda>*', 'ytmusic *<búsqueda>*'];
 handler.tags = ['downloader'];
-handler.command = ['soundcloud', 'sound', 'play'];
+handler.command = ['soundcloud', 'sound', 'play', 'ytmusic'];
 
 export default handler;
 
@@ -85,14 +103,14 @@ const getBuffer = async (url, options) => {
 /*
 //Instalar la dependencia Node-id3 🙃
 //Use math por problemas de que algunos audios no se envian
-//La segunda url si descarga los datos de la cancion para eso tienes que ingresar a Souncloud la musica que quieres descargar ingresas y copias el link y lo pegas en la segunda url :) 
-//el buscador aun no tiene permisos para ir directamente a la cancion y obtener el link directamente a la cancion por eso es que algunos audios no son enviados
+//La segunda url si descarga los datos de la cancion para eso tienes que ingresar a Soundcloud o YouTube la música que quieres descargar e ingresar el enlace.
+//Aún falta mejorar la integración con el buscador.
 import axios from 'axios'
 import fs from 'fs'
 import nodeID3 from 'node-id3'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-if (!text) return conn.reply(m.chat, `🚩 Ingrese el nombre de la cancion de *Soundcloud.*`, m, rcanal)
+if (!text) return conn.reply(m.chat, `🚩 Ingrese el nombre de la canción de *Soundcloud o YouTube.*`, m, rcanal)
 await m.react('🕓')
 try {
 let { data: results } = await axios.get(`https://apis-starlights-team.koyeb.app/starlight/soundcloud-search?text=${text}`, { headers: { 'Content-Type': 'application/json' } })
@@ -111,7 +129,7 @@ nodeID3.write(tags, mp3)
 let txt = `*\`- S O U N C L O U D - M U S I C -\`*\n\n`
 txt += `🍘• *Nombre:* ${randoms.title}\n`
 txt += `🍘• *Artista:* ${randoms.artist}\n`
-txt += `🍘• *Duracion:* ${randoms.duration}\n`
+txt += `🍘• *Duración:* ${randoms.duration}\n`
 txt += `🍘• *Reproducciones:* ${randoms.repro}\n`
 txt += `🍘• *Link:* ${randoms.url}\n\n`
 txt += `🚩 Powered By Starlights Team`
@@ -122,9 +140,9 @@ await m.react('✅')
 } catch {
 await m.react('✖️')
 }}
-handler.help = ['soundcloud *<búsqueda>*']
+handler.help = ['soundcloud *<búsqueda>*', 'ytmusic *<búsqueda>*']
 handler.tags = ['downloader']
-handler.command = ['soundcloud', 'sound', 'play']
+handler.command = ['soundcloud', 'sound', 'play', 'ytmusic']
 handler.register = true
 //handler.limit = 3
 export default handler*/

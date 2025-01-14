@@ -60,11 +60,11 @@ Hola *%name* soy *TECNO*
 ┗━━━━━━━━━━━━━━
 %readmore
 ┏━━━━━━━━━ INFO - USER
-┃  ☑ Bot: ©Tecno-Bot-Plus®
-┃  ☑ Modo Público
-┃  ☑ Baileys: Multi Device
-┃  ☑ Tiempo Activo: %muptime
-┃  ☑ Usuarios: %totalreg 
+┃  ✎ Bot: ©Tecno-Bot-Plus®
+┃  ✎ Modo Público
+┃  ✎ Baileys: Multi Device
+┃  ✎ Tiempo Activo: %muptime
+┃  ☣ Usuarios: %totalreg 
 ┗━━━━━━━━━━━━━━
 %readmore
 *─ׄ─ׄ─⭒─ׄ─ׅ─ׄ⭒─ׄ─ׄ─⭒─ׄ─ׄ─⭒─ׄ─ׅ─*

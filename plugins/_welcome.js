@@ -16,13 +16,7 @@ export async function before(m, {conn, participants, groupMetadata}) {
         .replace('@desc', () => groupMetadata.desc || 'sin descripción');
       await conn.sendAi(m.chat, botname, textbot, welcome, img, img, canal)
     } else {
-      let bienvenida = `        𝑻𝒆𝒄𝒏𝒐-𝑷𝒍𝒖𝒔-𝑩𝒐𝒕
-        「 𝔹𝕚𝕖𝕟𝕧𝕖𝕟𝕚𝕕𝕠 」
-        「 @${user} 」
-        「 𝔹𝕚𝕖𝕟𝕧𝕖𝕟𝕚𝕕𝕠/𝔸 」
-        「 ${groupMetadata.subject} 」
-        
-        > 𝕯𝖊𝖞𝖑𝖎𝖓`
+      let bienvenida = `┌─✦〘 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕 〙\n│「 🄱🄸🄴🄽🅅🄴🄽🄸🄳🄾 」\n└┬✎ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │✎  🄱🄸🄴🄽🅅🄴🄽🄸🄳🄾 🄰\n   │✎  ${groupMetadata.subject}\n> 𝑼𝒏𝒆𝒕𝒆 𝒂𝒎𝒊 𝒄𝒂𝒏𝒂𝒍\n ${chanel}\n      └───────────────┈ ⳹`
       await conn.sendAi(m.chat, botname, textbot, bienvenida, img, img)
     }
   }
@@ -36,13 +30,7 @@ export async function before(m, {conn, participants, groupMetadata}) {
         .replace('@desc', () => groupMetadata.desc || 'sin descripción');
       await conn.sendAi(m.chat, botname, textbot, bye, img, img)
     } else {
-      let bye = `        𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕-𝑷𝒍𝒖𝒔
-        「 𝔸𝕕𝕚𝕠𝕤 」
-        「 @${user} 」
-        「 𝕊𝕖 𝔽𝕦𝕖 」
-        「 ℕ𝕦𝕟𝕔𝕒 𝕋𝕖 ℚ𝕦𝕚𝕤𝕚𝕞𝕠𝕤 𝔸𝕢𝕦𝕚 」
-        
-        > 𝕯𝖊𝖞𝖑𝖎𝖓`
+      let bye = `┌─✦ 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕  \n│「 BAYY 👋 」\n└┬✎ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │✎  Largate\n   │✎ Jamás te quisimos aquí\n   └───────────────┈ ⳹`
       await conn.sendAi(m.chat, botname, textbot, bye, img, img)
     }
   }
@@ -56,13 +44,7 @@ export async function before(m, {conn, participants, groupMetadata}) {
         .replace('@desc', () => groupMetadata.desc || 'sin descripción');
       await conn.sendAi(m.chat, botname, textbot, bye, img, img)
     } else {
-      let kick = `        𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕-𝑷𝒍𝒖𝒔
-        「 𝔸𝕕𝕚𝕠𝕤 」
-        「 @${user} 」
-        「 𝕊𝕖 𝔽𝕦𝕖 」
-        「 ℕ𝕦𝕟𝕔𝕒 𝕋𝕖 ℚ𝕦𝕚𝕤𝕚𝕞𝕠𝕤 𝔸𝕢𝕦𝕚 」
-        
-        > 𝕯𝖊𝖞𝖑𝖎𝖓`
+      let kick = `┌─✦ 𝑻𝒆𝒄𝒏𝒐-𝑩𝒐𝒕  \n│「 BAYY 👋 」\n└┬✎ 「 @${m.messageStubParameters[0].split`@`[0]} 」\n   │  Largate\n   │✎ Jamás te quisimos aquí\n   └───────────────┈ ⳹`
       await conn.sendAi(m.chat, botname, textbot, kick, img, img)
     }
 }}

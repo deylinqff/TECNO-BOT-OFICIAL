@@ -10,7 +10,7 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
   let pp = await conn.profilePictureUrl(who).catch(_ => 'https://files.catbox.moe/3kbbok.jpg')
 
   // Obtener biografía de la persona y el bot
-  let biografia = await conn.fetchStatus('584120346669' + '@s.whatsapp.net').catch(_ => 'Sin Biografía')
+  let biografia = await conn.fetchStatus('50488198573' + '@s.whatsapp.net').catch(_ => 'Sin Biografía')
   let biografiaBot = await conn.fetchStatus(`${conn.user.jid.split('@')[0]}` + '@s.whatsapp.net').catch(_ => 'Sin Biografía')
 
   // Extrae la biografía o usa un valor por defecto si no existe
@@ -22,12 +22,12 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
 
   // Definir variables para el propietario y el bot
   let nomorown = '50488198573' // Número del propietario
-  let dev = 'TheKingDestroy' // Nombre del propietario
+  let dev = 'Deyin' // Nombre del propietario
 
   // Llamar a la función para enviar la información de contacto
   await sendContactArray(conn, m.chat, [
-    [`${nomorown}`, `👑 Propietario`, `☁️ 𝑫𝒆𝒚𝒍𝒊𝒏`, dev, 'deylibaquedano801@gmail.com', `🇭🇳  Honduras`, `https://github.com/Deylinel`, bio],
-    [`${conn.user.jid.split('@')[0]}`, `Es Un Bot 🍬`, `${packname}`, `📵 No Hacer Spam`, 'moisesmusic04@gmail.com', `Hondura 🇭🇳`, `https://github.com/Deylinel/TECNO-BOT-OFICIAL`, biobot]
+    [`${nomorown}`, `👑 Propietario`, `🚀 𝑫𝒆𝒚𝒍𝒊𝒏`, dev, 'Deylibaqudano40@gmail.com', ` 𝑯𝒐𝒏𝒅𝒖𝒓𝒂𝒔 🇭🇳`, `https://github.com/Deylinel`, bio],
+    [`${conn.user.jid.split('@')[0]}`, `Es Un Bot 🍬`, `${packname}`, `📵 No Hacer Spam`, 'moisesmusic04@gmail.com', `🇨🇴 Colombia`, `https://github.com/Deylinel/TECNO-BOT-OFICIAL`, biobot]
   ], m)
 }
 

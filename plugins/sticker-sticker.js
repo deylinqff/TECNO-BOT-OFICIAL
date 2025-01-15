@@ -6,8 +6,8 @@ import { webp2png } from '../lib/webp2mp4.js';
 let handler = async (m, { conn, args, usedPrefix, command }) => {
   let stiker = false;
   const usser = conn.getName(m.sender);
-  const h = ` ㌹ CrowBot`;
-  const i = `By Staff De StarCore-Allisanse`;
+  const h = ` 🚀 TECNO-BOT `;
+  const i = `By Deylin`;
 
   try {
     let q = m.quoted ? m.quoted : m;
@@ -48,12 +48,14 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     m.reply('🚀 Y el video o la imagen o gif.');
   } finally {
     if (stiker) {
-      conn.sendFile(m.chat, stiker, 'sticker.webp', '', m);
+      const encabezado = `【 ✯ TEAM ✯ DARK - OFICIAL ✯ 】\nDarkCore - Ai\n`; // Personaliza aquí el texto
+      conn.sendFile(m.chat, stiker, 'sticker.webp', encabezado, m);
     } else {
       m.reply('❌ No se pudo generar el sticker.');
     }
   }
 };
+
 handler.help = ['sticker'];
 handler.tags = ['sticker'];
 handler.command = ['s', 'sticker'];

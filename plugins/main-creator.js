@@ -8,7 +8,7 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
     // VCARD del creador
     let creatorContact = {
         displayName: "𝑫𝒆𝒚𝒍𝒊𝒏 ☆",
-        vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:𝑫𝒆𝒚𝒍𝒊𝒏 🚀\nitem1.TEL;waid=50488198573:50488198573\nitem1.X-ABLabel:Número\nitem2.EMAIL;type=INTERNET:deylibaquedano801@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://github.com/Deylinel/TECNO-BOT-OFICIAL:;; Honduras 🇭🇳 ;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`,
+        vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:𝑫𝒆𝒚𝒍𝒊𝒏 🚀\nitem1.TEL;waid=50488198573:50488198573\nitem1.X-ABLabel:Número\nitem2.EMAIL;type=INTERNET:deylibaquedano801@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://github.com/Deylinel/TECNO-BOT-OFICIAL.ADR:;; Honduras 🇭🇳 ;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`,
     };
 
     // VCARD del bot

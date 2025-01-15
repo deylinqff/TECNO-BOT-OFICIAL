@@ -1,69 +1,59 @@
-import PhoneNumber from 'awesome-phonenumber';
+import fetch from 'node-fetch';
 
-let handler = async (m, { conn }) => {
-  // Información del bot
-  let botName = await conn.getName(conn.user.jid); // Obtiene el nombre del bot
-  let botNumber = conn.user.jid.split('@')[0]; // Número del bot
-  let botDescription = 'Soy un bot';
-  let botLabel = 'Siempre activo';
-  let botEmail = 'bot@example.com';
-  let botLocation = '🌌 Internet';
-  let botWebsite = 'https://github.com/Deylinel/TECNO-BOT-OFICIAL';
-  let botBio = '"Siempre listo para ayudarte 🤖"';
+let handler = async (m, { conn, usedPrefix, text, args, command }) => {
+    await m.react('🎩');
 
-    // Información del creador
-  let creatorName = '𝑫𝒆𝒚𝒍𝒊𝒏';
-  let creatorNumber = '50488198573'; // Número del creador sin símbolos
-  let creatorDescription = 'Creador del bot';
-  let creatorLabel = 'No hacer spam';
-  let creatorEmail = 'soporte@example.com';
-  let creatorLocation = '🌍 Planeta Vegeta';
-  let creatorWebsite = 'https://youtube.com/@kakaroto-bot';
-  let creatorBio = '"La vida es fea 🚀"';
-  // Mensaje inicial
-  
-  // Crear las tarjetas vCard
-  let creatorVcard = `
-BEGIN:VCARD
-VERSION:3.0
-N:;${creatorName};;;
-FN:${creatorName}
-ORG:${creatorDescription}
-TEL;type=CELL;waid=${creatorNumber}:${PhoneNumber('+' + creatorNumber).getNumber('international')}
-EMAIL:${creatorEmail}
-ADR:;;${creatorLocation};;;;
-URL:${creatorWebsite}
-NOTE:${creatorBio}
-END:VCARD`;
+    let username = conn.getName(m.sender);
 
-  let botVcard = `
-BEGIN:VCARD
-VERSION:3.0
-N:;${botName};;;
-FN:${botName}
-ORG:${botDescription}
-TEL;type=CELL;waid=${botNumber}:${PhoneNumber('+' + botNumber).getNumber('international')}
-EMAIL:${botEmail}
-ADR:;;${botLocation};;;;
-URL:${botWebsite}
-NOTE:${botBio}
-END:VCARD`;
+    // VCARD del creador
+    let creatorContact = {
+        displayName: "WillZek 🎩",
+        vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:WillZek-Oficial🍭\nitem1.TEL;waid=50557865603:50557865603\nitem1.X-ABLabel:Número\nitem2.EMAIL;type=INTERNET:ninopina10@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://www.instagram.com/crowbot_wa\nitem3.X-ABLabel:Internet\nitem4.ADR:;; Nicaragua;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`,
+    };
 
-  // Enviar el mensaje y los contactos
-  await conn.sendMessage(m.chat, { text: txt }, { quoted: m });
-  await conn.sendMessage(m.chat, {
-    contacts: {
-      displayName: 'Contactos',
-      contacts: [
-        { vcard: creatorVcard },
-        { vcard: botVcard },
-      ],
-    },
-  });
+    // VCARD del bot
+    let botContact = {
+        displayName: "Bot Oficial 🤖",
+        vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:${await conn.getName(conn.user.jid)}\nitem1.TEL;waid=${conn.user.jid.split('@')[0]}:${conn.user.jid.split('@')[0]}\nitem1.X-ABLabel:Número\nitem2.EMAIL;type=INTERNET:bot@example.com\nitem2.X-ABLabel:Email\nitem3.URL:https://github.com/The-King-Destroy/Yuki_Suou-Bot\nitem3.X-ABLabel:Internet\nitem4.ADR:;; 🌌 Internet;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`,
+    };
+
+    // Lista de contactos
+    let contactList = [creatorContact, botContact];
+
+    // Enviar contactos
+    await conn.sendMessage(m.chat, {
+        contacts: {
+            displayName: `${contactList.length} Contactos`,
+            contacts: contactList
+        },
+        contextInfo: {
+            externalAdReply: {
+                showAdAttribution: true,
+                title: 'һ᥆ᥣᥲ, soy ᥕіᥣᥣzᥱk-᥆𝖿ᥴ ᥱᥣ mᥱȷ᥆r',
+                body: 'Creador oficial',
+                thumbnailUrl: 'https://files.catbox.moe/185de7.jpg',
+                sourceUrl: 'https://youtube.com/@kakaroto-bot',
+                mediaType: 1,
+                renderLargerThumbnail: true
+            }
+        }
+    }, {
+        quoted: m
+    });
+
+    // Mensaje adicional
+    let txt = `👋 *Hola \`${username}\` este es*\n*el contacto de mi creador y del bot*`;
+
+    await conn.sendMessage(m.chat, {
+        text: txt,
+        footer: '© ᥴrᥱᥲძ᥆r ᥕіᥣᥣzᥱk & Bot Oficial',
+        viewOnce: true,
+        headerType: 1
+    }, { quoted: m });
 };
 
-handler.help = ['owner', 'creator', 'creador', 'dueño'];
-handler.tags = ['info'];
-handler.command = ['owner', 'creator', 'creador', 'dueño'];
+handler.help = ['owner', 'creator'];
+handler.tags = ['main'];
+handler.command = /^(owner|creator|creador|dueño)$/i;
 
 export default handler;

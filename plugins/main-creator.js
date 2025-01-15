@@ -1,7 +1,10 @@
 import PhoneNumber from 'awesome-phonenumber'
 
 let handler = async (m, { conn, usedPrefix, text, args, command }) => {
-  m.react('☁️')
+  m.react('👑')
+
+let handler = async (m, { conn, usedPrefix, text, args, command }) => {
+  m.react('🚀')
 
   // Verifica si el mensaje menciona a alguien, de lo contrario, usa el emisor del mensaje
   let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
@@ -21,13 +24,13 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
   let name = await conn.getName(who)
 
   // Definir variables para el propietario y el bot
-  let nomorown = '584120346669' // Número del propietario
+  let nomorown = '50488198573' // Número del propietario
   let dev = 'TheKingDestroy' // Nombre del propietario
 
   // Llamar a la función para enviar la información de contacto
   await sendContactArray(conn, m.chat, [
-    [`${nomorown}`, `👑 Propietario`, `☁️ ⁱᵃᵐ|𝔇ĕ𝐬†𝓻⊙γ𒆜`, dev, 'thekingdestroy507@gmail.com', `🇻🇪 Venezuela`, `https://github.com/The-King-Destroy`, bio],
-    [`${conn.user.jid.split('@')[0]}`, `Es Un Bot 🍬`, `${packname}`, `📵 No Hacer Spam`, 'moisesmusic04@gmail.com', `🇨🇴 Colombia`, `https://github.com/The-King-Destroy/Yuki_Suou-Bot`, biobot]
+    [`${nomorown}`, `👑 Propietario`, `☁️ 𝑫𝒆𝒚𝒍𝒊𝒏`, dev, 'deylibaquedano801@gmail.com', `🇭🇳  Honduras`, `https://github.com/Deylinel`, bio],
+    [`${conn.user.jid.split('@')[0]}`, `Es Un Bot 🍬`, `${packname}`, `📵 No Hacer Spam`, 'moisesmusic04@gmail.com', `🇨🇴 Colombia`, `https://github.com/Deylinel/TECNO-BOT-OFICIAL`, biobot]
   ], m)
 }
 

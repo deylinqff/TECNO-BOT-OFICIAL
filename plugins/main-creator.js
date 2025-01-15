@@ -2,21 +2,36 @@ import PhoneNumber from 'awesome-phonenumber'
 
 let handler = async (m, { conn, usedPrefix, text, args, command }) => {
   m.react('☁️')
+
+  // Verifica si el mensaje menciona a alguien, de lo contrario, usa el emisor del mensaje
   let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+
+  // Obtener la foto de perfil
   let pp = await conn.profilePictureUrl(who).catch(_ => 'https://files.catbox.moe/3kbbok.jpg')
-  let biografia = await conn.fetchStatus('584120346669' +'@s.whatsapp.net').catch(_ => 'Sin Biografía')
-  let biografiaBot = await conn.fetchStatus(`${conn.user.jid.split('@')[0]}` +'@s.whatsapp.net').catch(_ => 'Sin Biografía')
+
+  // Obtener biografía de la persona y el bot
+  let biografia = await conn.fetchStatus('584120346669' + '@s.whatsapp.net').catch(_ => 'Sin Biografía')
+  let biografiaBot = await conn.fetchStatus(`${conn.user.jid.split('@')[0]}` + '@s.whatsapp.net').catch(_ => 'Sin Biografía')
+
+  // Extrae la biografía o usa un valor por defecto si no existe
   let bio = biografia.status?.toString() || 'Sin Biografía'
   let biobot = biografiaBot.status?.toString() || 'Sin Biografía'
+
+  // Obtener nombre del contacto mencionado
   let name = await conn.getName(who)
 
+  // Definir variables para el propietario y el bot
+  let nomorown = '584120346669' // Número del propietario
+  let dev = 'TheKingDestroy' // Nombre del propietario
+
+  // Llamar a la función para enviar la información de contacto
   await sendContactArray(conn, m.chat, [
     [`${nomorown}`, `👑 Propietario`, `☁️ ⁱᵃᵐ|𝔇ĕ𝐬†𝓻⊙γ𒆜`, dev, 'thekingdestroy507@gmail.com', `🇻🇪 Venezuela`, `https://github.com/The-King-Destroy`, bio],
     [`${conn.user.jid.split('@')[0]}`, `Es Un Bot 🍬`, `${packname}`, `📵 No Hacer Spam`, 'moisesmusic04@gmail.com', `🇨🇴 Colombia`, `https://github.com/The-King-Destroy/Yuki_Suou-Bot`, biobot]
   ], m)
-} 
+}
 
-handler.help = ["creador","owner"]
+handler.help = ["creador", "owner"]
 handler.tags = ["info"]
 handler.command = ['creador', 'owner']
 

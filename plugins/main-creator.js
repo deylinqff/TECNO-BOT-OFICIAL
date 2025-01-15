@@ -1,14 +1,14 @@
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn, usedPrefix, text, args, command }) => {
-    await m.react('🎩');
+    await m.react('♛');
 
     let username = conn.getName(m.sender);
 
     // VCARD del creador
     let creatorContact = {
-        displayName: "WillZek 🎩",
-        vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:WillZek-Oficial🍭\nitem1.TEL;waid=50557865603:50557865603\nitem1.X-ABLabel:Número\nitem2.EMAIL;type=INTERNET:ninopina10@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://www.instagram.com/crowbot_wa\nitem3.X-ABLabel:Internet\nitem4.ADR:;; Nicaragua;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`,
+        displayName: "𝑫𝒆𝒚𝒍𝒊𝒏 ☆",
+        vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:𝑫𝒆𝒚𝒍𝒊𝒏 🚀\nitem1.TEL;waid=50488198573:50488198573\nitem1.X-ABLabel:Número\nitem2.EMAIL;type=INTERNET:deylibaquedano801@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://github.com/Deylinel/TECNO-BOT-OFICIAL:;; Honduras 🇭🇳 ;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`,
     };
 
     // VCARD del bot

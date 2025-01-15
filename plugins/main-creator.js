@@ -17,7 +17,7 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
         vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:${await conn.getName(conn.user.jid)}\nitem1.TEL;waid=${conn.user.jid.split('@')[0]}:${conn.user.jid.split('@')[0]}\nitem1.X-ABLabel:Número\nitem2.EMAIL;type=INTERNET:bot@example.com\nitem2.X-ABLabel:Email\nitem3.URL:https://github.com/The-King-Destroy/Yuki_Suou-Bot\nitem3.X-ABLabel:Internet\nitem4.ADR:;; 🌌 Internet;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`,
     };
 
-    // Lista de contactos
+    // Lista de contactos (el creador primero, el bot después)
     let contactList = [creatorContact, botContact];
 
     // Enviar contactos

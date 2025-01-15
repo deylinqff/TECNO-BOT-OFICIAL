@@ -5,15 +5,15 @@ import { webp2png } from '../lib/webp2mp4.js';
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
   let stiker = false;
-  const h = `  TECNO-BOT`;
-  const i = `By Deylin`;
+  const h = ` ㌹ TECNO-BOT`;
+  const i = `By Deyin`;
 
   try {
     let q = m.quoted ? m.quoted : m;
     let mime = (q.msg || q).mimetype || q.mediaType || '';
     if (/webp|image|video/g.test(mime)) {
       if (/video/g.test(mime) && (q.msg || q).seconds > 11)
-        return m.reply('Máximo 10 segundos');
+        return conn.sendMessage(m.chat, { text: 'Máximo 10 segundos', ...global.rcanal });
       let img = await q.download?.();
       if (!img) throw `🚀 Responde a una imagen o video con *${usedPrefix + command}*`;
 
@@ -39,18 +39,18 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       if (isUrl(args[0])) {
         stiker = await sticker(false, args[0], h, i);
       } else {
-        return m.reply('URL inválido');
+        return conn.sendMessage(m.chat, { text: 'URL inválido', ...global.rcanal });
       }
     }
   } catch (e) {
     console.error('Error general:', e);
-    m.reply('🚀 Y el video o la imagen o gif.');
+    return conn.sendMessage(m.chat, { text: '🚀 Y el video o la imagen o gif.', ...global.rcanal });
   } finally {
     if (stiker) {
       const textoEncabezado = `【 ✯ TEAM ✯ DARK - OFICIAL ✯ 】\nDarkCore - Ai\n`; // Personaliza el encabezado aquí
-      conn.sendFile(m.chat, stiker, 'sticker.webp', textoEncabezado, m, false, global.rcanal); // Usamos global.rcanal aquí
+      conn.sendFile(m.chat, stiker, 'sticker.webp', textoEncabezado, m, false, global.rcanal);
     } else {
-      m.reply('🚀 Responde a una imagen o video con.');
+      conn.sendMessage(m.chat, { text: '🚀 Responde a una imagen o video.', ...global.rcanal });
     }
   }
 };

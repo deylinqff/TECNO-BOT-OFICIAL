@@ -50,7 +50,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       const textoEncabezado = `【 ✯ TEAM ✯ DARK - OFICIAL ✯ 】\nDarkCore - Ai\n`; // Personaliza el encabezado aquí
       conn.sendFile(m.chat, stiker, 'sticker.webp', textoEncabezado, m, false, global.rcanal); // Usamos global.rcanal aquí
     } else {
-      m.reply('🚀 Responde a una imagen o video con *${usedPrefix + command}.');
+      m.reply('🚀 Responde a una imagen o video con.');
     }
   }
 };

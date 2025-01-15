@@ -1,6 +1,7 @@
 import PhoneNumber from 'awesome-phonenumber';
 
-// Información del bot
+let handler = async (m, { conn }) => {
+  // Información del bot
   let botName = await conn.getName(conn.user.jid); // Obtiene el nombre del bot
   let botNumber = conn.user.jid.split('@')[0]; // Número del bot
   let botDescription = 'Soy un bot';
@@ -10,8 +11,7 @@ import PhoneNumber from 'awesome-phonenumber';
   let botWebsite = 'https://github.com/Deylinel/TECNO-BOT-OFICIAL';
   let botBio = '"Siempre listo para ayudarte 🤖"';
 
-  let handler = async (m, { conn }) => {
-  // Información del creador
+    // Información del creador
   let creatorName = '𝑫𝒆𝒚𝒍𝒊𝒏';
   let creatorNumber = '50488198573'; // Número del creador sin símbolos
   let creatorDescription = 'Creador del bot';
@@ -20,8 +20,8 @@ import PhoneNumber from 'awesome-phonenumber';
   let creatorLocation = '🌍 Planeta Vegeta';
   let creatorWebsite = 'https://youtube.com/@kakaroto-bot';
   let creatorBio = '"La vida es fea 🚀"';
-
- 
+  // Mensaje inicial
+  
   // Crear las tarjetas vCard
   let creatorVcard = `
 BEGIN:VCARD

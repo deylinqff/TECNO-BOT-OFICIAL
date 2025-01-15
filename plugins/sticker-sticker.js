@@ -5,8 +5,7 @@ import { webp2png } from '../lib/webp2mp4.js';
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
   let stiker = false;
-  const usser = conn.getName(m.sender);
-  const h = ` 🚀 TECNO-BOT `;
+  const h = `  TECNO-BOT`;
   const i = `By Deylin`;
 
   try {
@@ -48,8 +47,8 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     m.reply('🚀 Y el video o la imagen o gif.');
   } finally {
     if (stiker) {
-      const encabezado = `【 ✯ TEAM ✯ DARK - OFICIAL ✯ 】\nDarkCore - Ai\n`; // Personaliza aquí el texto
-      conn.sendFile(m.chat, stiker, 'sticker.webp', encabezado, m);
+      const textoEncabezado = `【 ✯ TEAM ✯ DARK - OFICIAL ✯ 】\nDarkCore - Ai\n`; // Personaliza el encabezado aquí
+      conn.sendFile(m.chat, stiker, 'sticker.webp', textoEncabezado, m, false, global.rcanal); // Usamos global.rcanal aquí
     } else {
       m.reply('❌ No se pudo generar el sticker.');
     }

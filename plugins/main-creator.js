@@ -11,18 +11,18 @@ let handler = async (m, { conn }) => {
   let creatorWebsite = 'https://youtube.com/@kakaroto-bot';
   let creatorBio = '"La vida es fea 🌹"';
 
-  // Información del usuario que usa el bot
-  let userName = await conn.getName(m.sender); // Obtiene el nombre del usuario
-  let userNumber = m.sender.split('@')[0]; // Número del usuario
-  let userDescription = 'Usuario del bot';
-  let userLabel = 'Confía en mí';
-  let userEmail = 'no_disponible@example.com';
-  let userLocation = 'Desconocido';
-  let userWebsite = 'https://github.com/';
-  let userBio = '"Viviendo la vida con el bot 🌟"';
+  // Información del bot
+  let botName = await conn.getName(conn.user.jid); // Obtiene el nombre del bot
+  let botNumber = conn.user.jid.split('@')[0]; // Número del bot
+  let botDescription = 'Soy un bot';
+  let botLabel = 'Siempre activo';
+  let botEmail = 'bot@example.com';
+  let botLocation = '🌌 Internet';
+  let botWebsite = 'https://github.com/The-King-Destroy/Yuki_Suou-Bot';
+  let botBio = '"Siempre listo para ayudarte 🤖"';
 
   // Mensaje inicial
-  let txt = `> _*Hola, este es el contacto de mi creador. Si tienes alguna duda o problema, puedes escribirle directamente.*_\n\n⚡ Información adicional incluida.`;
+  let txt = `> _*Hola, este es el contacto de mi creador y del bot. Si tienes alguna duda o problema, puedes escribirle directamente al creador o consultar con el bot.*_\n\n⚡ Información adicional incluida.`;
 
   // Crear las tarjetas vCard
   let creatorVcard = `
@@ -38,17 +38,17 @@ URL:${creatorWebsite}
 NOTE:${creatorBio}
 END:VCARD`;
 
-  let userVcard = `
+  let botVcard = `
 BEGIN:VCARD
 VERSION:3.0
-N:;${userName};;;
-FN:${userName}
-ORG:${userDescription}
-TEL;type=CELL;waid=${userNumber}:${PhoneNumber('+' + userNumber).getNumber('international')}
-EMAIL:${userEmail}
-ADR:;;${userLocation};;;;
-URL:${userWebsite}
-NOTE:${userBio}
+N:;${botName};;;
+FN:${botName}
+ORG:${botDescription}
+TEL;type=CELL;waid=${botNumber}:${PhoneNumber('+' + botNumber).getNumber('international')}
+EMAIL:${botEmail}
+ADR:;;${botLocation};;;;
+URL:${botWebsite}
+NOTE:${botBio}
 END:VCARD`;
 
   // Enviar el mensaje y los contactos
@@ -58,7 +58,7 @@ END:VCARD`;
       displayName: 'Contactos',
       contacts: [
         { vcard: creatorVcard },
-        { vcard: userVcard },
+        { vcard: botVcard },
       ],
     },
   });

@@ -16,7 +16,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       if (/video/g.test(mime) && (q.msg || q).seconds > 11)
         return m.reply('Máximo 10 segundos');
       let img = await q.download?.();
-      if (!img) throw `✳️ Responde a una imagen o video con *${usedPrefix + command}*`;
+      if (!img) throw `🚀 Responde a una imagen o video con *${usedPrefix + command}*`;
 
       let out;
       try {
@@ -45,7 +45,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     }
   } catch (e) {
     console.error('Error general:', e);
-    m.reply('⚠️ Hubo un error al generar el sticker.');
+    m.reply('🚀 Y el video o la imagen o gif.');
   } finally {
     if (stiker) {
       conn.sendFile(m.chat, stiker, 'sticker.webp', '', m);

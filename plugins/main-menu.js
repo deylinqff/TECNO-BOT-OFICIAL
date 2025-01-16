@@ -47,7 +47,7 @@ let tags = {
 const let MenuText = {
   before:  `*⌬━━━━━▣━━◤⌬◢━━▣━━━━━━⌬*
 
-Hola *〘〙ッ𝑫𝒆𝒚𝒍𝒊𝒏ッ〘〙* soy *TECNO*
+Hola *gggッ𝑫𝒆𝒚𝒍𝒊𝒏ッ* soy *TECNO*
 
 ╔════⌬══◤𝑪𝑹𝑬𝑨𝑫𝑶𝑹◢
 ║  ♛ 𝑫𝒆𝒚𝒍𝒊𝒏

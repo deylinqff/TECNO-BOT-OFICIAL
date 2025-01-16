@@ -114,8 +114,8 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     );
 
     let images = [
-      'https://i.ibb.co/CPVcnqH/file.jpg',
-      'https://i.ibb.co/9WrytGt/file.jpg',
+      'https://i.ibb.co/vvTfkcm/file.jpg',
+      'https://i.ibb.co/5FKWwY4/file.jpg',
       'https://i.ibb.co/JmcS3kv/Sylph.jpg',
     ];
     let randomImage = images[Math.floor(Math.random() * images.length)];

@@ -44,7 +44,7 @@ let tags = {
   'advanced': '🗝️ ADVANCED 🎮',
 }
 
-const defaultMenu = {
+const let MenuText = {
   before:  `*⌬━━━━━▣━━◤⌬◢━━▣━━━━━━⌬*
 
 Hola *%name* soy *TECNO*

@@ -1,47 +1,62 @@
-const { MessageType } = require('@adiwajshing/baileys');
+// Código creado por Deyin
+const { default: makeWASocket, useSingleFileAuthState } = require('@adiwajshing/baileys');
+const { state, saveState } = useSingleFileAuthState('./auth_info.json');
 
-// Función principal del bot
-conn.on('chat-update', async (chat) => {
-    try {
-        if (!chat.hasNewMessage) return;
-        const m = chat.messages.all()[0];
-        if (!m.message) return;
+async function startBot() {
+    const sock = makeWASocket({
+        auth: state,
+        printQRInTerminal: true,
+    });
 
-        const sender = m.key.remoteJid;
-        const message = m.message.conversation || m.message.extendedTextMessage?.text;
+    sock.ev.on('messages.upsert', async ({ messages }) => {
+        const message = messages[0];
+        if (!message.message || message.key.fromMe) return;
 
-        // Comando .menu
-        if (message === '.menu') {
-            const menuText = `
-            🌟 *Menú Principal* 🌟
+        const from = message.key.remoteJid;
+        const text = message.message.conversation || '';
 
-            📋 *Opciones disponibles*:
-            1️⃣ Opción 1 - Descripción aquí
-            2️⃣ Opción 2 - Descripción aquí
-            3️⃣ Opción 3 - Descripción aquí
+        // Menú principal
+        if (text.toLowerCase() === 'menu') {
+            const menu = `🌟 *Bienvenido a 𝑻𝑬𝑪𝑵𝑶-𝑩𝑶𝑻® ©*  
+📱 *Tu asistente digital confiable.*
 
-            Usa el comando correspondiente para más detalles.
-            `;
+🔹 *Opciones disponibles:*  
+1️⃣ *Información*  
+2️⃣ *Soporte técnico*  
+3️⃣ *Novedades*  
+4️⃣ *Configuraciones*  
+5️⃣ *Contacto humano*
 
-            // URLs de las imágenes
-            const imageUrls = [
-                'https://url-de-imagen1.com/imagen.jpg', // Cambia por tus URLs
-                'https://url-de-imagen2.com/imagen.jpg',
-                'https://url-de-imagen3.com/imagen.jpg'
-            ];
+*Escribe el número de la opción que deseas.*`;
 
-            // Elegir una imagen al azar
-            const randomImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
-
-            // Enviar el mensaje con la imagen
-            const buffer = await fetch(randomImage).then(res => res.buffer()); // Descargar la imagen
-            await conn.sendMessage(
-                sender,
-                { image: buffer, caption: menuText },
-                MessageType.image
-            );
+            await sock.sendMessage(from, { text: menu });
         }
-    } catch (err) {
-        console.error('Error procesando mensaje:', err);
-    }
-});
+
+        // Respuesta a las opciones del menú
+        if (text === '1') {
+            await sock.sendMessage(from, { text: '📝 *Información:* Aquí tienes los detalles sobre nuestros servicios...' });
+        } else if (text === '2') {
+            await sock.sendMessage(from, { text: '🔧 *Soporte técnico:* Cuéntanos tu problema y te ayudaremos.' });
+        } else if (text === '3') {
+            await sock.sendMessage(from, { text: '📰 *Novedades:* Estas son las últimas actualizaciones...' });
+        } else if (text === '4') {
+            await sock.sendMessage(from, { text: '⚙️ *Configuraciones:* Aquí puedes personalizar tu experiencia.' });
+        } else if (text === '5') {
+            await sock.sendMessage(from, { text: '📞 *Contacto humano:* Un agente estará contigo en breve.' });
+        }
+    });
+
+    sock.ev.on('connection.update', (update) => {
+        const { connection, lastDisconnect } = update;
+        if (connection === 'close') {
+            const shouldReconnect = lastDisconnect.error?.output?.statusCode !== 401;
+            if (shouldReconnect) startBot();
+        } else if (connection === 'open') {
+            console.log('✅ Bot conectado exitosamente.');
+        }
+    });
+
+    sock.ev.on('creds.update', saveState);
+}
+
+startBot();

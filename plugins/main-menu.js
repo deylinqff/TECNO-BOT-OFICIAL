@@ -1,536 +1,532 @@
-import { xpRange } from '../lib/levelling.js'
-const { levelling } = '../lib/levelling.js'
-import PhoneNumber from 'awesome-phonenumber'
-import { promises } from 'fs'
-import { join } from 'path'
-let handler = async (m, { conn, usedPrefix, usedPrefix: _p, __dirname, text }) => {
-try {
-let vn = './media/menu.mp3'
-let pp = './Menu2.jpg'
-let _package = JSON.parse(await promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
-let { exp, limit, level, role } = global.db.data.users[m.sender]
-let { min, xp, max } = xpRange(level, global.multiplier)
-let name = await conn.getName(m.sender)
-let d = new Date(new Date + 3600000)
-let locale = 'es'
-let weton = ['Pahing', 'Pon', 'Wage', 'Kliwon', 'Legi'][Math.floor(d / 84600000) % 5]
-let week = d.toLocaleDateString(locale, { weekday: 'long' })
-let date = d.toLocaleDateString(locale, {
-day: 'numeric',
-month: 'long',
-year: 'numeric'
-})
-let dateIslamic = Intl.DateTimeFormat(locale + '-TN-u-ca-islamic', {
-day: 'numeric',
-month: 'long',
-year: 'numeric'
-}).format(d)
-let time = d.toLocaleTimeString(locale, {
-hour: 'numeric',
-minute: 'numeric',
-second: 'numeric'
-})
-let _uptime = process.uptime() * 1000
-let _muptime
-if (process.send) {
-process.send('uptime')
-_muptime = await new Promise(resolve => {
-process.once('message', resolve)
-setTimeout(resolve, 1000)
-}) * 1000
+import moment from 'moment-timezone';
+
+let handler = async (m, { conn, args }) => {
+  let userId = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.sender;
+  let user = global.db.data.users[userId];
+
+  let name = conn.getName(userId);
+  let estatus = user.description || 'No especificado';
+  let genero = user.genre || 'No especificado';
+  let pareja = user.marry || 'No especificado';
+  let banco = user.bank || 0;
+  let nivel = user.level || 0;
+  let coins = user.coin || 0;
+
+  let perfil = await conn.profilePictureUrl(userId, 'image').catch(_ => 'https://qu.ax/QGAVS.jpg');
+
+let MenuText = `╭┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰➤
+𝄄 𝐇𝐨𝐥𝐚! 𝐒𝐨𝐲 ${botname}
+𝄄 ᴀǫᴜɪ ᴛɪᴇɴᴇs ʟᴀ ʟɪsᴛᴀ ᴅᴇ ᴄᴏᴍᴀɴᴅᴏs
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ *Cliente* » @${userId.split('@')[0]}
+││ *Banco* » ${banco}
+││ *${moneda}* » ${coins}
+││ *Género* » ${genero}
+││ *Pareja* » ${pareja}
+││ *Estado* » ${estatus}
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+𝄄 ✧ → ᴘᴀʀᴀ ᴄʀᴇᴀʀ ᴜɴ sᴜʙ-ʙᴏᴛ ᴄᴏɴ ᴛᴜ ɴᴜᴍᴇʀᴏ ᴜᴛɪʟɪᴢᴀ *!serbot* o *!serbot code*
+𝄄
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ ✧ *Menú de Comandos* ✧
+││ » De ${botname}
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ \`『 Info Sockets 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!token • !gettoken*
+││ ➣ Obtén el token del socket.
+││
+││ ✐ *!socket • !bots*
+││ ➣ Ver todos los sockets activos.
+││
+││ ✐ *!serbot • !serbot code • !serbot --code*
+││ ➣ Convierte en un socket.
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ \`『 Info User 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!reg • !verificar • !register*
+││ ➣ Registra tu nombre y edad en ${botname}.
+││
+││ ✐ *!unreg*
+││ ➣ Elimina tu registro de ${botname}.
+││
+││ ✐ *!setgenre • !setgenero*
+││ ➣ Establece tu género en el perfil de ${botname}.
+││
+││ ✐ *!delgenre • !delgenero*
+││ ➣ Elimina tu género del perfil de ${botname}.
+││
+││ ✐ *!setbirth • !setnacimiento*
+││ ➣ Establece tu fecha de nacimiento en el perfil de ${botname}.
+││
+││ ✐ *!delbirth • !delnacimiento*
+││ ➣ Elimina tu fecha de nacimiento del perfil de  ${botname}.
+││
+││ ✐ *!setdescription • !setdesc*
+││ ➣ Establece una descripción en tu perfil de ${botname}.
+││
+││ ✐ *!deldescription • !deldesc*
+││ ➣ Elimina la descripción de tu perfil de ${botname}.
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ \`『 Info Creador 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!setname*
+││ ➣ Cambia el name de ${botname}.
+││
+││ ✐ *!setmoneda*
+││ ➣ Cambia la moneda de ${botname}.
+││
+││ ✐ *!setenlace*
+││ ➣ Cambia el enlace de ${botname}.
+││
+││ ✐ *!setbanner*
+││ ➣ Cambia la imagen del menú de ${botname}.
+││
+││ ✐ *!setcreador*
+││ ➣ Cambia el owner de ${botname}.
+││
+││ ✐ *!addowner* [mension / etiquetar]
+││ ➣ Agrega un numero como owner.
+││
+││ ✐ *!delowner* [mension / etiquetar]
+││ ➣ Elimina un numero como owner.
+││
+││ ✐ *!bcgc*
+││ ➣ El bot enviara la notificación que el dueño escribió.
+││
+││ ✐ *!banuser* [mension / etiquetar]
+││ ➣ El bot ya no responde a los mensajes del usuario mencionando.
+││
+││ ✐ *!unbanuser* [mension / etiquetar]
+││ ➣ El bot responde a los mensajes del usuario mencionando.
+││
+││ ✐ *!leave • !salir*
+││ ➣ El bot sale del grupo.
+││
+││ ✐ *!enviarmsg • !enviarmsgcanal*
+││ ➣ El bot envia mensaje a un canal de WhatsApp.
+││
+││ ✐ *!resetuser • !borrardatos* [mension / etiquetar]
+││ ➣ Reestablese los datos del usuario mencionando.
+││
+││ ✐ *!creargc • !newgc*
+││ ➣ El bot crea un grupo.
+││
+││ ✐ *!setcatalogo*
+││ ➣ Cambia la imagen del catalogo.
+││
+││ ✐ *!settexto*
+││ ➣ Cambia el texto del bot.
+││
+││ ✐ *!setdev*
+││ ➣ cambia el dev del bot.
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ \`『 Descarga & Conversión 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!tourl*
+││ ➣ Convierte imagen en url https:qu.ax.
+││
+││ ✐ *!toibb*
+││ ➣ Convierte imagen en url https:ibb.co.
+││
+││ ✐ *!tocat*
+││ ➣ Convierte imagen en url en https:catbox.moe.
+││
+││ ✐ *!tiktok • !tt*
+││ ➣ Descarga videos de TikTok.
+││
+││ ✐ *!pinterest*
+││ ➣ Busca y descarga imágenes de Pinterest.
+││
+││ ✐ *!play • !play2*
+││ ➣ Descarga música/video de YouTube.
+││
+││ ✐ *!fb • !facebook*
+││ ➣ Descarga videos de Facebook.
+││
+││ ✐ *!ig • !instagram*
+││ ➣ Descarga contenido de Instagram.
+││
+││ ✐ *!imagen*
+││ ➣ Busca y descarga imágenes desde Internet.
+││
+││ ✐ *!s • !sticker*
+││ ➣ Realiza un sticker.
+││
+││ ✐ *!wm*
+││ ➣ Cambiar el nombre del sticker.
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ \`『 Info Ai 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!ia • @chatgpt*
+││ ➣ Habla con la V1 de ${botname}.
+││
+││ ✐ *!openai*
+││ ➣ Habla con la V2 de ${botname}.
+││
+││ ✐ *!gemini*
+││ ➣ Habla con gemini.
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ \`『 Buscadores 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!mercadolibre*
+││ ➣ Busca artículos en mercado libre.
+││
+││ ✐ *!githubsearch*
+││ ➣ Busca repositorios en github.
+││
+││ ✐ *!yts • !ytsearch*
+││ ➣ Busca contenido en YouTube.
+││
+││ ✐ *!tiktoksearch • !tiktoks*
+││ ➣ Busca contenido en tiktok.
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ \`『 Info Nsfw & +18 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!pack*
+││ ➣ Una imagen random de mujer.
+││
+││ ✐ *!pack2*
+││ ➣ Una imagen random de unos pechos de mujer.
+││
+││ ✐ *!pack3*
+││ ➣ Imagen random de un hombre.
+││
+││ ✐ *!rule34*
+││ ➣ contenido de rule34.
+││
+││ ✐ *!xnxxsearch*
+││ ➣ Busca contenido de xnxx.
+││
+││ ✐ *!videoxxxlesbi • !videolesbixxx*
+││ ➣ Video random de mujeres.
+││
+││ ✐ *!videoxxx*
+││ ➣ video random de porno.
+││
+││ ✐ *!xnxxdl*
+││ ➣ Descarga contenido de xnxx.
+││
+││ ✐ *!xvideosdl*
+││ ➣ Descarga contenido de xvideos.
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ \`『 Rpg & Gacha 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!marry* [mension / etiquetar]
+││ ➣ Propón matrimonio a otro usuario.
+││
+││ ✐ *!divorce*
+││ ➣ divorcio con el usuario 
+││
+││ ✐ *!profile* [mension / etiquetar]
+││ ➣ Muestra tu perfil de usuario o la de un usuario mencionando.
+││
+││ ✐ *!comprarpremium*
+││ ➣ Usar el bot sin limíte
+││
+││ ✐ *!daily*
+││ ➣ Pide recompensa diaria.
+││
+││ ✐ *!w*
+││ ➣ Trabaja y obtén ${moneda}.
+││
+││ ✐ *!slut*
+││ ➣ Protituirse y obtener ${moneda}.
+││
+││ ✐ *!crime*
+││ ➣ Roba y obtén ${moneda}.
+││
+││ ✐ *!cf*
+││ ➣ Apuesta y obtén ${moneda}.
+││
+││ ✐ *!rt*
+││ ➣ black Jack (ruleta) y obtén ${moneda}.
+││
+││ ✐ *!rob* [mension / etiquetar]
+││ ➣ Roba ${moneda} al usuario mencionando.
+││
+││ ✐ *!bank • !banco* [mension / etiquetar]
+││ ➣ Revisa tu cuenta del banco o la de un usuario mencionando.
+││
+││ ✐ *!cartera • !wallet* [mension / etiquetar]
+││ ➣ Revisa tu cartera o la de un usuario mencionando.
+││
+││ ✐ *!retirar • !wd* [cantidad(un número) / all]
+││ ➣ Retira tus ${moneda} del banco.
+││
+││ ✐ *!dep • !aguardar* [cantidad(un número) / all]
+││ ➣ Guarda tus ${moneda} en el banco.
+││
+││ ✐ *!mine • !minar*
+││ ➣ Menete a minar y obten ${moneda}.
+││
+││ ✐ *!afk*
+││ ➣ Si te mencionan el bot dara un breve mensaje.
+││
+││ ✐ *!rw*
+││ ➣ Para reclamar un personaje.
+││
+││ ✐ *!c*
+││ ➣ Reclama el personaje.
+││
+││ ✐ *!harem • !ob*
+││ ➣ Rebisa tus personajes obtenidos.
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+││
+││ \`『 Info Grupos 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!link*
+││ ➣ El bot envia el link del grupo.
+││
+││ ✐ *!mute* [mension / etiquetar]
+││ ➣ El bot elimina los mensajes del usuario.
+││
+││ ✐ *!unmute* [mension / etiquetar]
+││ ➣ El bot deja de eliminar los mensajes del usuario.
+││
+││ ✐ *!grupo • !group* [open / abrir]
+││ ➣ Cambia ajustes del grupo para que todos los usuarios envien mensaje.
+││
+││ ✐ *!grupo • !gruop* [close / cerrar]
+││ ➣ Cambia ajustes del grupo para que solo los administradores envien mensaje.
+││
+││ ✐ *!kick* [número / mension]
+││ ➣ Elimina un usuario de un grupo.
+││
+││ ✐ *!add* [número]
+││ ➣ Invita a un usuario a tu grupo.
+││
+││ ✐ *!promote* [mension / etiquetar]
+││ ➣ El bot dara administrador al usuario mencionando.
+││
+││ ✐ *!demote* [mension / etiquetar]
+││ ➣ El bot quitara administrador al usuario mencionando.
+││
+││ ✐ *!banchat*
+││ ➣ El administrador apsga a ${botname}.
+││
+││ ✐ *!unbanchat*
+││ ➣ Un administrador enciende a ${botname}.
+││
+││ ✐ *!poll • !encuesta*
+││ ➣ El bot crea una encuesta.
+││
+││ ✐ *!hidetag*
+││ ➣ Envia un mensaje mencionando a todos los usuarios
+││
+││ ✐ *!del • !delete*
+││ ➣Elimina un mensaje mencionando 
+││
+││ ✐ *!fantasmas*
+││ ➣ Revisión de usuarios sin enviar mensajes 
+││
+││ ✐ *!kickfantasmas*
+││ ➣ Elimina a los usuarios que no an enviando mensajes 
+││
+││ ✐ *!tangall*
+││ ➣ etiqueta a todos los usuarios 
+││
+││ ✐ *!kicknum* [+52/+54/+51]
+││ ➣ Elemina a los usuarios con un prefijo
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+││
+││ \`『 Info Games 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!cancion*
+││ ➣ Pide una canción responde y gana ${moneda}
+││
+││ ✐ *!pista • !hint*
+││ ➣ Pide pista para responder tu canción 
+││
+││ ✐ *!ppt* [piedra/papel/tijera]
+││ ➣ Juega ppt contra el bot y gana ${moneda}
+││
+││ ✐ *!acertijo*
+││ ➣ Pide un acertijo responde y gana ${moneda}
+││
+││ ✐ *!mates • !math*
+││ ➣ Responde a una pregunta matemática y gana ${moneda}
+││
+││ ✐ *!sopa • !soup*
+││ ➣ Pide una sopa de letras responde y gana ${moneda}
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ \`『 Info Tools 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!hd*
+││ ➣ Sube la calidad de tu imagen
+││
+││ ✐ *!read • !revelar*
+││ ➣ El bot reenvia la foto o video de una sola vista
+││
+││ ✐ *!toimg*
+││ ➣ El bot convierte un sticker a imagen
+││
+││ ✐ *!tomp4*
+││ ➣ El bot convierte un sticker con movimiento a video
+││
+││ ✐ *!quemusica • !whatmusic*
+││ ➣ Envia un audio o video y el bot investigara su información 
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ \`『 Info Audios 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ❀ No Hace Falta Poner El ! o ningun otro prefijo
+││
+││ ✐ \`*uwu • UwU*\`
+││ ➣ Envia audio de nestras ayudantes
+││
+││ ✐ \`*onichan • oni-chan*\`
+││ ➣ Envia audio de nuestras ayudantes
+││
+││ ✐ \`*fino señores*\`
+││ ➣ Envia audio de fino señores
+││
+││ ✐ \`*sad*\`
+││ ➣ Envia audio tristre
+││
+││ ✐ \`*buenos dias*\`
+││ ➣ Envia audio
+││
+││ ✐ \`*buenas tardes*\`
+││ ➣ Envia audio 
+││
+││ ✐ \`*buenas noches*\`
+││ ➣ Envia audio
+││
+││ ✐ \`*bot puto • bot malpatido*\`
+││ ➣ Envia audio
+││
+││ ✐ \`*rawr • rarw*\`
+││ ➣ Envia audio
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+││╭╴╴╴╴╴╴
+││ \`『 Info Bot 』\`
+│╞═════𖠁☄︎𖠁═════
+││
+││ ✐ *!tyc*
+││ ➣ Términos y condiciones de ${botname}.
+││
+││ ✐ *!script*
+││ ➣ Datos del bot original.
+││
+││ ✐ *!hostingpy • !skyplus • !tk-host • !Hosting • !host*
+││ ➣ Los hosts oficiales de ${botname}.
+││
+││ ✐ *!ping • !p*
+││ ➣ La velocidad de ${botname}.
+││
+││ ✐ *!staff*
+││ ➣ El equipo de desarrollo de ${botname}.
+││
+││ ✐ *!addprem* [mension / etiquetar]
+││ ➣ Un dueño da premium al usuario.
+││
+││ ✐ *!delprem* [mension / etiquetar]
+││ ➣ Un dueño le quitara premium al usuario.
+││
+││ ✐ *!autoadmin*
+││ ➣ El bot dara administrador al dueño.
+││
+│╰╴╴╴╴╴╴
+╰┉꙰╾‌━ٜ͙͙͙͙͙┅ٜ͙͙͙͙┉ٜ͙͙͙͙͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙•●᪱•ٜ┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙┄ٜ͙͙͙͙͙┉ٜ͙͙͙͙͙͙┅ٜ͙͙͙͙͙━͙͙͙͙╾‌ࣩ┉꙰╮
+╭─‌┈‌ׅ┉‌ׁ‌┈┉ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ┉‌ׁ‌┈‌ׅ─‌╯
+│╭╴╴╴╴╴╴
+││ *✰ ${dev}*
+│╞═════𖠁☄︎𖠁═════
+││ *» ${pickRandom(global.piropo)}*
+│╰╴╴╴╴╴╴
+╰─┈➤ ${botname}
+  `.trim();
+
+  await conn.sendMessage(m.chat, { 
+    text: MenuText,
+    contextInfo: {
+      mentionedJid: [userId],
+      externalAdReply: {
+        title: botname,
+        body: textbot,
+        thumbnailUrl: banner,
+        sourceUrl: enlace,
+        mediaType: 1,
+        showAdAttribution: true,
+        renderLargerThumbnail: true
+      }
+    }
+  }, { quoted: m })
+};
+
+handler.help = ['menu'];
+handler.tags = ['main'];
+handler.command = ['menu', 'allmenu', 'menú', 'help'];
+
+export default handler;
+
+function pickRandom(list) {
+return list[Math.floor(Math.random() * list.length)]
 }
-let muptime = clockString(_muptime)
-let uptime = clockString(_uptime)
-let totalreg = Object.keys(global.db.data.users).length
-let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered == true).length
-let replace = {
-'%': '%',
-p: _p, uptime, muptime,
-me: conn.getName(conn.user.jid),
-npmname: _package.name,
-npmdesc: _package.description,
-version: _package.version,
-exp: exp - min,
-maxexp: xp,
-totalexp: exp,
-xp4levelup: max - exp,
-github: _package.homepage ? _package.homepage.url || _package.homepage : '[unknown github url]',
-level, limit, name, weton, week, date, dateIslamic, time, totalreg, rtotalreg, role,
-readmore: readMore
-}
-text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
-
-
-
-let str = `
-*ミ💖 𝙷𝙾𝙻𝙰 ✨${name}✨, 𝙰𝚀𝚄𝙸 𝙴𝚂𝚃𝙰 𝙴𝙻 𝙼𝙴𝙽𝚄 𝙲𝙾𝙼𝙿𝙻𝙴𝚃𝙾 𝙳𝙴 𝚃𝙷𝙴 𝙼𝚈𝚂𝚃𝙸𝙲 - 𝙱𝙾𝚃 💖彡*
-
-*📅 𝙵𝙴𝙲𝙷𝙰: ${week}, ${date}*
-*📈 𝚃𝙸𝙴𝙼𝙿𝙾 𝙰𝙲𝚃𝙸𝚅𝙾: ${uptime}*
-*📊 𝚄𝚂𝚄𝙰𝚁𝙸𝙾𝚂: ${rtotalreg}*
-
-*<𝕀ℕ𝔽𝕆ℝ𝕄𝔸ℂ𝕀𝕆ℕ 𝔻𝔼𝕃 𝔹𝕆𝕋/>*
-
-° ඬ ⃟ 💟 _${usedPrefix}grupos_
-° ඬ ⃟ 💟 _${usedPrefix}estado_
-° ඬ ⃟ 💟 _${usedPrefix}infobot_
-° ඬ ⃟ 💟 _${usedPrefix}donar_
-° ඬ ⃟ 💟 _${usedPrefix}grouplist_
-° ඬ ⃟ 💟 _${usedPrefix}owner_
-° ඬ ⃟ 💟 _${usedPrefix}script_
-° ඬ ⃟ 💟 _Bot_ (𝑢𝑠𝑜 𝑠𝑖𝑛 𝑝𝑟𝑒𝑓𝑖𝑗𝑜)
-
-*<𝕌ℕ𝔼 𝕌ℕ 𝔹𝕆𝕋 𝔸 𝕋𝕌 𝔾ℝ𝕌ℙ𝕆/>*
-
-° ඬ⃟👽 _${usedPrefix}join *<enlace / link / url>*_
-
-*<𝕁𝕌𝔼𝔾𝕆𝕊/>*
-
-° ඬ⃟🎖️ _${usedPrefix}mates *<noob / easy / medium / hard / extreme /impossible /impossible2>*_
-° ඬ⃟🎖️ _${usedPrefix}ppt *<papel / tijera /piedra>*_
-° ඬ⃟🎖️ _${usedPrefix}prostituto *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}prostituta *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}gay2 *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}lesbiana *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}pajero *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}pajera *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}puto *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}puta *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}manco *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}manca *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}rata *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}love *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}doxear *<nombre / @tag>*_
-° ඬ⃟🎖️ _${usedPrefix}pregunta *<texto>*_
-° ඬ⃟🎖️ _${usedPrefix}suitpvp *<@tag>*_
-° ඬ⃟🎖️ _${usedPrefix}slot *<apuesta>*_
-° ඬ⃟🎖️ _${usedPrefix}ttt *<nombre sala>*_
-° ඬ⃟🎖️ _${usedPrefix}delttt_
-° ඬ⃟🎖️ _${usedPrefix}simi *<texto>*_
-° ඬ⃟🎖️ _${usedPrefix}top *<texto>*_
-° ඬ⃟🎖️ _${usedPrefix}topgays_
-° ඬ⃟🎖️ _${usedPrefix}topotakus_
-° ඬ⃟🎖️ _${usedPrefix}formarpareja_
-° ඬ⃟🎖️ _${usedPrefix}verdad_
-° ඬ⃟🎖️ _${usedPrefix}reto_
-° ඬ⃟🎖️ _${usedPrefix}cancion_
-° ඬ⃟🎖️ _${usedPrefix}pista_
-
-*<𝔸ℂ𝕋𝕀𝕍𝔸ℝ 𝕆 𝔻𝔼𝕊𝔸ℂ𝕋𝕀𝕍𝔸ℝ/>*
-
-° ඬ⃟☑️ _${usedPrefix}enable *welcome*_
-° ඬ⃟☑️ _${usedPrefix}disable *welcome*_
-° ඬ⃟☑️ _${usedPrefix}enable *modohorny*_
-° ඬ⃟☑️ _${usedPrefix}disable *modohorny*_
-° ඬ⃟☑️ _${usedPrefix}enable *antilink*_
-° ඬ⃟☑️ _${usedPrefix}disable *antilink*_
-° ඬ⃟☑️ _${usedPrefix}enable *antilink2*_
-° ඬ⃟☑️ _${usedPrefix}disable *antilink2*_
-° ඬ⃟☑️ _${usedPrefix}enable *detect*_
-° ඬ⃟☑️ _${usedPrefix}disable *detect*_
-° ඬ⃟☑️ _${usedPrefix}enable *audios*_
-° ඬ⃟☑️ _${usedPrefix}disable *audios*_
-° ඬ⃟☑️ _${usedPrefix}enable *autosticker*_
-° ඬ⃟☑️ _${usedPrefix}disable *autosticker*_
-° ඬ⃟☑️ _${usedPrefix}enable *antiviewonce*_
-° ඬ⃟☑️ _${usedPrefix}disable *antiviewonce*_
-° ඬ⃟☑️ _${usedPrefix}enable *antitoxic*_
-° ඬ⃟☑️ _${usedPrefix}disable *antitoxic*_
-° ඬ⃟☑️ _${usedPrefix}enable *antitraba*_
-° ඬ⃟☑️ _${usedPrefix}disable *antitraba*_
-
-*<ℝ𝔼ℙ𝕆ℝ𝕋𝔼𝕊 𝔻𝔼 𝔽𝔸𝕃𝕃𝕆𝕊/>*
-
-° ඬ⃟🔰 _${usedPrefix}reporte *<texto>*_
-
-*<𝔻𝔼𝕊ℂ𝔸ℝ𝔾𝔸𝕊/>*
-
-° ඬ⃟📥 _${usedPrefix}facebook *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}instagram *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}mediafire *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}instagram *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}gitclone *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}stickerpack *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}gdrive *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}tiktok *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}xnxxdl *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}xvideosdl *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}ytmp3 *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}ytmp4 *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}ytmp3doc *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}ytmp4doc *<enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}play.1 *<texto / enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}play.2 *<texto / enlace / link / url>*_
-° ඬ⃟📥 _${usedPrefix}play *<texto>*_
-° ඬ⃟📥 _${usedPrefix}playdoc *<texto>*_
-° ඬ⃟📥 _${usedPrefix}playlist *<texto>*_
-° ඬ⃟📥 _${usedPrefix}playlist2 *<texto>*_
-° ඬ⃟📥 _${usedPrefix}spotify *<texto>*_
-° ඬ⃟📥 _${usedPrefix}ringtone *<texto>*_
-° ඬ⃟📥 _${usedPrefix}soundcloud *<texto>*_
-° ඬ⃟📥 _${usedPrefix}imagen *<texto>*_
-° ඬ⃟📥 _${usedPrefix}pinteret *<texto>*_
-° ඬ⃟📥 _${usedPrefix}wallpaper *<texto>*_
-° ඬ⃟📥 _${usedPrefix}wallpaper2 *<texto>*_
-° ඬ⃟📥 _${usedPrefix}pptiktok *<nombre de usuario>*_
-° ඬ⃟📥 _${usedPrefix}igstalk *<nombre de usuario>*_
-° ඬ⃟📥 _${usedPrefix}igstory *<nombre de usuario>*_
-° ඬ⃟📥 _${usedPrefix}tiktokstalk *<nombre de usuario>*_
-
-*<𝔾ℝ𝕌ℙ𝕆𝕊/>* 
-
-° ඬ⃟💎 _${usedPrefix}add *<numero>*_
-° ඬ⃟💎 _${usedPrefix}kick *<@tag>*_
-° ඬ⃟💎 _${usedPrefix}grupo *<abrir / cerrar>*_
-° ඬ⃟💎 _${usedPrefix}promote *<@tag>*_
-° ඬ⃟💎 _${usedPrefix}demote *<@tag>*_
-° ඬ⃟💎 _admins *<texto>*_ (𝑢𝑠𝑜 𝑠𝑖𝑛 𝑝𝑟𝑒𝑓𝑖𝑗𝑜)
-° ඬ⃟💎 _${usedPrefix}demote *<@tag>*_
-° ඬ⃟💎 _${usedPrefix}infogroup_
-° ඬ⃟💎 _${usedPrefix}link_
-° ඬ⃟💎 _${usedPrefix}setname *<texto>*_
-° ඬ⃟💎 _${usedPrefix}setdesc *<texto>*_
-° ඬ⃟💎 _${usedPrefix}invocar *<texto>*_
-° ඬ⃟💎 _${usedPrefix}setwelcome *<texto>*_
-° ඬ⃟💎 _${usedPrefix}setbye *<texto>*_
-° ඬ⃟💎 _${usedPrefix}hidetag *<texto>*_
-° ඬ⃟💎 _${usedPrefix}fantasmas_
-° ඬ⃟💎 _${usedPrefix}destraba_
-
-*<ℂ𝕆ℕ𝕍𝔼ℝ𝕋𝕀𝔻𝕆ℝ𝔼𝕊/>*
-
-° ඬ⃟🧧 _${usedPrefix}togifaud *<responde a un video>*_
-° ඬ⃟🧧 _${usedPrefix}toimg *<responde a un sticker>*_
-° ඬ⃟🧧 _${usedPrefix}tomp3 *<responde a un video / nota de voz>*_
-° ඬ⃟🧧 _${usedPrefix}toptt *<responde a un video / audio>*_
-° ඬ⃟🧧 _${usedPrefix}tovideo *<responde a un sticker>*_
-° ඬ⃟🧧 _${usedPrefix}tourl *<responde a un video / imagen / audio>*_
-° ඬ⃟🧧 _${usedPrefix}tts es *<texto>*_
-
-*<𝔼𝔽𝔼ℂ𝕋𝕆𝕊 𝕐 𝕃𝕆𝔾𝕆𝕊/>*
-
-° ඬ⃟🖍️ _${usedPrefix}logos *<efecto> <texto>*_
-° ඬ⃟🖍️ _${usedPrefix}logocorazon *<texto>*_
-° ඬ⃟🖍️ _${usedPrefix}logochristmas *<texto>*_
-° ඬ⃟🖍️ _${usedPrefix}simpcard *<@tag>*_
-° ඬ⃟🖍️ _${usedPrefix}hornycard *<@tag>*_
-° ඬ⃟🖍️ _${usedPrefix}lolice *<@tag>*_
-° ඬ⃟🖍️ _${usedPrefix}ytcomment *<texto>*_
-° ඬ⃟🖍️ _${usedPrefix}phmaker *<opcion><responder a imagen>*_
-° ඬ⃟🖍️ _${usedPrefix}itssostupid_
-° ඬ⃟🖍️ _${usedPrefix}pixelar_
-° ඬ⃟🖍️ _${usedPrefix}blur_
-
-*<𝔽ℝ𝔸𝕊𝔼𝕊 𝕐 𝕋𝔼𝕏𝕋𝕆𝕊/>*
-
-° ඬ⃟🥀 _${usedPrefix}consejo_
-° ඬ⃟🥀 _${usedPrefix}fraseromantica_
-° ඬ⃟🥀 _${usedPrefix}historiaromantica_
-
-*<ℝ𝔸ℕ𝔻𝕆𝕄/>*
-
-° ඬ⃟👾 _${usedPrefix}cristianoronaldo_
-° ඬ⃟👾 _${usedPrefix}messi_
-° ඬ⃟👾 _${usedPrefix}meme_
-° ඬ⃟👾 _${usedPrefix}itzy_
-° ඬ⃟👾 _${usedPrefix}blackpink_
-° ඬ⃟👾 _${usedPrefix}kpop *<blackpink / exo / bts>*_
-° ඬ⃟👾 _${usedPrefix}lolivid_
-° ඬ⃟👾 _${usedPrefix}loli_
-° ඬ⃟👾 _${usedPrefix}navidad_
-° ඬ⃟👾 _${usedPrefix}ppcouple_
-° ඬ⃟👾 _${usedPrefix}wpmontaña_
-° ඬ⃟👾 _${usedPrefix}pubg_
-° ඬ⃟👾 _${usedPrefix}wpgaming_
-° ඬ⃟👾 _${usedPrefix}wpaesthetic_
-° ඬ⃟👾 _${usedPrefix}wpaesthetic2_
-° ඬ⃟👾 _${usedPrefix}wprandom_
-° ඬ⃟👾 _${usedPrefix}wallhp_
-° ඬ⃟👾 _${usedPrefix}wpvehiculo_
-° ඬ⃟👾 _${usedPrefix}wpmoto_
-° ඬ⃟👾 _${usedPrefix}coffee_
-° ඬ⃟👾 _${usedPrefix}pentol_
-° ඬ⃟👾 _${usedPrefix}caricatura_
-° ඬ⃟👾 _${usedPrefix}ciberespacio_
-° ඬ⃟👾 _${usedPrefix}technology_
-° ඬ⃟👾 _${usedPrefix}doraemon_
-° ඬ⃟👾 _${usedPrefix}hacker_
-° ඬ⃟👾 _${usedPrefix}planeta_
-° ඬ⃟👾 _${usedPrefix}randomprofile_
-° ඬ⃟👾 _${usedPrefix}neko_
-° ඬ⃟👾 _${usedPrefix}waifu_
-° ඬ⃟👾 _${usedPrefix}akira_
-° ඬ⃟👾 _${usedPrefix}akiyama_
-° ඬ⃟👾 _${usedPrefix}anna_
-° ඬ⃟👾 _${usedPrefix}asuna_
-° ඬ⃟👾 _${usedPrefix}ayuzawa_
-° ඬ⃟👾 _${usedPrefix}boruto_
-° ඬ⃟👾 _${usedPrefix}chiho_
-° ඬ⃟👾 _${usedPrefix}chitoge_
-° ඬ⃟👾 _${usedPrefix}deidara_
-° ඬ⃟👾 _${usedPrefix}erza_
-° ඬ⃟👾 _${usedPrefix}elaina_
-° ඬ⃟👾 _${usedPrefix}eba_
-° ඬ⃟👾 _${usedPrefix}emilia_
-° ඬ⃟👾 _${usedPrefix}hestia_
-° ඬ⃟👾 _${usedPrefix}hinata_
-° ඬ⃟👾 _${usedPrefix}inori_
-° ඬ⃟👾 _${usedPrefix}isuzu_
-° ඬ⃟👾 _${usedPrefix}itachi_
-° ඬ⃟👾 _${usedPrefix}itori_
-° ඬ⃟👾 _${usedPrefix}kaga_
-° ඬ⃟👾 _${usedPrefix}kagura_
-° ඬ⃟👾 _${usedPrefix}kaori_
-° ඬ⃟👾 _${usedPrefix}keneki_
-° ඬ⃟👾 _${usedPrefix}kotori_
-° ඬ⃟👾 _${usedPrefix}kurumi_
-° ඬ⃟👾 _${usedPrefix}madara_
-° ඬ⃟👾 _${usedPrefix}mikasa_
-° ඬ⃟👾 _${usedPrefix}miku_
-° ඬ⃟👾 _${usedPrefix}minato_
-° ඬ⃟👾 _${usedPrefix}naruto_
-° ඬ⃟👾 _${usedPrefix}nezuko_
-° ඬ⃟👾 _${usedPrefix}sagiri_
-° ඬ⃟👾 _${usedPrefix}sasuke_
-° ඬ⃟👾 _${usedPrefix}sakura_
-° ඬ⃟👾 _${usedPrefix}cosplay_
-
-*<ℂ𝕆𝕄𝔸ℕ𝔻𝕆𝕊 +𝟙𝟠/>*
-
-° ඬ⃟🔞 _${usedPrefix}pack_
-° ඬ⃟🔞 _${usedPrefix}pack2_
-° ඬ⃟🔞 _${usedPrefix}pack3_
-° ඬ⃟🔞 _${usedPrefix}videoxxx_
-° ඬ⃟🔞 _${usedPrefix}tiktokxxx_
-° ඬ⃟🔞 _${usedPrefix}tetas_
-° ඬ⃟🔞 _${usedPrefix}booty_
-° ඬ⃟🔞 _${usedPrefix}ecchi_
-° ඬ⃟🔞 _${usedPrefix}furro_
-° ඬ⃟🔞 _${usedPrefix}imagenlesbians_
-° ඬ⃟🔞 _${usedPrefix}panties_
-° ඬ⃟🔞 _${usedPrefix}pene_
-° ඬ⃟🔞 _${usedPrefix}porno_
-° ඬ⃟🔞 _${usedPrefix}porno2_
-° ඬ⃟🔞 _${usedPrefix}randomxxx_
-° ඬ⃟🔞 _${usedPrefix}pechos_
-° ඬ⃟🔞 _${usedPrefix}yaoi_
-° ඬ⃟🔞 _${usedPrefix}yaoi2_
-° ඬ⃟🔞 _${usedPrefix}yuri_
-° ඬ⃟🔞 _${usedPrefix}yuri2_
-° ඬ⃟🔞 _${usedPrefix}trapito_
-° ඬ⃟🔞 _${usedPrefix}hentai_
-° ඬ⃟🔞 _${usedPrefix}nsfwloli_
-° ඬ⃟🔞 _${usedPrefix}nsfworgy_
-° ඬ⃟🔞 _${usedPrefix}nsfwfoot_
-° ඬ⃟🔞 _${usedPrefix}nsfwass_
-° ඬ⃟🔞 _${usedPrefix}nsfwbdsm_
-° ඬ⃟🔞 _${usedPrefix}nsfwcum_
-° ඬ⃟🔞 _${usedPrefix}nsfwero_
-° ඬ⃟🔞 _${usedPrefix}nsfwfemdom_
-° ඬ⃟🔞 _${usedPrefix}nsfwglass_
-
-*<𝔼𝔽𝔼ℂ𝕋𝕆𝕊 𝔻𝔼 𝔸𝕌𝔻𝕀𝕆𝕊/>*
-*- 𝚁𝙴𝚂𝙿𝙾𝙽𝙳𝙴 𝙰 𝚄𝙽 𝙰𝚄𝙳𝙸𝙾 𝙾 𝙽𝙾𝚃𝙰 𝙳𝙴 𝚅𝙾𝚉*
-
-° ඬ⃟🎤 _${usedPrefix}bass_
-° ඬ⃟🎤 _${usedPrefix}blown_
-° ඬ⃟🎤 _${usedPrefix}deep_
-° ඬ⃟🎤 _${usedPrefix}earrape_
-° ඬ⃟🎤 _${usedPrefix}fast_
-° ඬ⃟🎤 _${usedPrefix}fat_
-° ඬ⃟🎤 _${usedPrefix}nightcore_
-° ඬ⃟🎤 _${usedPrefix}reverse_
-° ඬ⃟🎤 _${usedPrefix}robot_
-° ඬ⃟🎤 _${usedPrefix}slow_
-° ඬ⃟🎤 _${usedPrefix}smooth_
-° ඬ⃟🎤 _${usedPrefix}tupai_
-
-*<ℂℍ𝔸𝕋 𝔸ℕ𝕆ℕ𝕀𝕄𝕆/>*
-
-° ඬ⃟📳 _${usedPrefix}start_
-° ඬ⃟📳 _${usedPrefix}next_
-° ඬ⃟📳 _${usedPrefix}leave_
-
-*<𝔹𝕌𝕊ℂ𝔸𝔻𝕆ℝ𝔼𝕊/>*
-
-° ඬ⃟🔍 _${usedPrefix}stickersearch *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}xnxxsearch *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}animeinfo *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}google *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}letra *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}wikipedia *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}ytsearch *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}apkdone *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}apkgoogle *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}apkmody *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}apkshub *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}happymod *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}hostapk *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}revdl *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}toraccino *<texto>*_
-° ඬ⃟🔍 _${usedPrefix}uapkpro *<texto>*_
-
-*<𝔸𝕌𝔻𝕀𝕆𝕊/>* 
-*- 𝙴𝚂𝙲𝚁𝙸𝙱𝙴 𝙻𝙰𝚂 𝚂𝙸𝙶𝚄𝙸𝙴𝙽𝚃𝙴𝚂 𝙿𝙰𝙻𝙰𝙱𝚁𝙰𝚂 𝙾 𝙵𝚁𝙰𝚂𝙴𝚂 𝚂𝙸𝙽 𝙽𝙸𝙽𝙶𝚄𝙽 𝙿𝚁𝙴𝙵𝙸𝙹𝙾 (#, /, *, .)* 
-_(𝑢𝑠𝑜 𝑠𝑖𝑛 𝑝𝑟𝑒𝑓𝑖𝑗𝑜)_
-
-° ඬ⃟🔊 _Quien es tu sempai botsito 7w7_
-° ඬ⃟🔊 _Te diagnostico con gay_
-° ඬ⃟🔊 _A nadie le importa_
-° ඬ⃟🔊 _Fiesta del admin_
-° ඬ⃟🔊 _Fiesta del administrador_ 
-° ඬ⃟🔊 _Vivan los novios_
-° ඬ⃟🔊 _Feliz cumpleaños_
-° ඬ⃟🔊 _Noche de paz_
-° ඬ⃟🔊 _Buenos dias_
-° ඬ⃟🔊 _Buenos tardes_
-° ඬ⃟🔊 _Buenos noches_
-° ඬ⃟🔊 _Audio hentai_
-° ඬ⃟🔊 _Chica lgante_
-° ඬ⃟🔊 _Feliz navidad_
-° ඬ⃟🔊 _Vete a la vrg_
-° ඬ⃟🔊 _Pasa pack Bot_
-° ඬ⃟🔊 _Atencion grupo_
-° ඬ⃟🔊 _Marica quien_
-° ඬ⃟🔊 _Murio el grupo_
-° ඬ⃟🔊 _Oh me vengo_
-° ඬ⃟🔊 _tio que rico_
-° ඬ⃟🔊 _Viernes_
-° ඬ⃟🔊 _Baneado_
-° ඬ⃟🔊 _Sexo_
-° ඬ⃟🔊 _Hola_
-° ඬ⃟🔊 _Un pato_
-° ඬ⃟🔊 _Nyanpasu_
-° ඬ⃟🔊 _Te amo_
-° ඬ⃟🔊 _Yamete_
-° ඬ⃟🔊 _Bañate_
-° ඬ⃟🔊 _Es puto_
-° ඬ⃟🔊 _La biblia_
-° ඬ⃟🔊 _Onichan_
-° ඬ⃟🔊 _Mierda de Bot_
-° ඬ⃟🔊 _Siuuu_
-° ඬ⃟🔊 _Epico_
-° ඬ⃟🔊 _Shitpost_
-° ඬ⃟🔊 _Rawr_
-° ඬ⃟🔊 _UwU_
-° ඬ⃟🔊 _:c_
-° ඬ⃟🔊 _a_
-
-*<ℍ𝔼ℝℝ𝔸𝕄𝕀𝔼ℕ𝕋𝔸𝕊/>*
-
-° ඬ⃟🛠️ _${usedPrefix}afk *<motivo>*_
-° ඬ⃟🛠️ _${usedPrefix}ocr *<responde a imagen>*_
-° ඬ⃟🛠️ _${usedPrefix}acortar *<enlace / link / url>*_
-° ඬ⃟🛠️ _${usedPrefix}calc *<operacion math>*_
-° ඬ⃟🛠️ _${usedPrefix}del *<respondre a mensaje del Bot>*_
-° ඬ⃟🛠️ _${usedPrefix}whatmusic *<responde a un audio>*_
-° ඬ⃟🛠️ _${usedPrefix}qrcode *<texto>*_
-° ඬ⃟🛠️ _${usedPrefix}readmore *<texto1| texto2>*_
-° ඬ⃟🛠️ _${usedPrefix}spamwa *<numero|texto|cantidad>*_
-° ඬ⃟🛠️ _${usedPrefix}styletext *<texto>*_
-° ඬ⃟🛠️ _${usedPrefix}traducir *<texto>*_
-° ඬ⃟🛠️ _${usedPrefix}nowa *<numero>*_
-
-*<ℝℙ𝔾 - 𝕃𝕀𝕄𝕀𝕋𝔼𝕊 - 𝔼ℂ𝕆ℕ𝕆𝕄𝕀𝔸/>*
-
-° ඬ⃟💵 _${usedPrefix}balance_
-° ඬ⃟💵 _${usedPrefix}claim_
-° ඬ⃟💵 _${usedPrefix}lb_
-° ඬ⃟💵 _${usedPrefix}levelup_
-° ඬ⃟💵 _${usedPrefix}myns_
-° ඬ⃟💵 _${usedPrefix}perfil_
-° ඬ⃟💵 _${usedPrefix}work_
-° ඬ⃟💵 _${usedPrefix}minar_
-° ඬ⃟💵 _${usedPrefix}buy_
-° ඬ⃟💵 _${usedPrefix}buyall_
-° ඬ⃟💵 _${usedPrefix}transfer *<tipo> <cantidad> <@tag>*_
-° ඬ⃟💵 _${usedPrefix}verificar_
-° ඬ⃟💵 _${usedPrefix}unreg *<numero de serie>*_
-
-*<𝕊𝕋𝕀ℂ𝕂𝔼ℝ𝕊/>*
-
-° ඬ⃟👽 _${usedPrefix}sticker *<responder a imagen o video>*_
-° ඬ⃟👽 _${usedPrefix}sticker *<enlace / link / url>*_
-° ඬ⃟👽 _${usedPrefix}s *<responder a imagen o video>*_
-° ඬ⃟👽 _${usedPrefix}s *<enlace / link / url>*_
-° ඬ⃟👽 _${usedPrefix}emojimix *<emoji 1>&<emoji 2>*_
-° ඬ⃟👽 _${usedPrefix}scircle *<responder a imagen>*_
-° ඬ⃟👽 _${usedPrefix}sremovebg *<responder a imagen>*_
-° ඬ⃟👽 _${usedPrefix}semoji *<tipo> <emoji>*_
-° ඬ⃟👽 _${usedPrefix}attp *<texto>*_
-° ඬ⃟👽 _${usedPrefix}attp2 *<texto>*_
-° ඬ⃟👽 _${usedPrefix}attp3 *<texto>*_
-° ඬ⃟👽 _${usedPrefix}ttp *<texto>*_
-° ඬ⃟👽 _${usedPrefix}ttp2 *<texto>*_
-° ඬ⃟👽 _${usedPrefix}ttp3 *<texto>*_
-° ඬ⃟👽 _${usedPrefix}ttp4 *<texto>*_
-° ඬ⃟👽 _${usedPrefix}ttp5 *<texto>*_
-° ඬ⃟👽 _${usedPrefix}pat *<@tag>*_
-° ඬ⃟👽 _${usedPrefix}slap *<@tag>*_
-° ඬ⃟👽 _${usedPrefix}kiss *<@tag>*_
-° ඬ⃟👽 _${usedPrefix}dado_
-° ඬ⃟👽 _${usedPrefix}wm *<packname> <author>*_
-° ඬ⃟👽 _${usedPrefix}stickermarker *<efecto> <responder a imagen>*_
-° ඬ⃟👽 _${usedPrefix}stickerfilter *<efecto> <responder a imagen>*_
-
-*<𝕆𝕎ℕ𝔼ℝ 𝕐 𝕄𝕆𝔻𝔼ℝ𝔸𝔻𝕆ℝ𝔼𝕊/>*
-
-° ඬ⃟👑 > *<funcion>*
-° ඬ⃟👑 => *<funcion>*
-° ඬ⃟👑 $ *<funcion>*
-° ඬ⃟👑 _${usedPrefix}cajafuerte_
-° ඬ⃟👑 _${usedPrefix}enable *restrict*_
-° ඬ⃟👑 _${usedPrefix}disable *restrict*_
-° ඬ⃟👑 _${usedPrefix}enable *autoread*_
-° ඬ⃟👑 _${usedPrefix}disable *autoread*_
-° ඬ⃟👑 _${usedPrefix}enable *public*_
-° ඬ⃟👑 _${usedPrefix}disable *public*_
-° ඬ⃟👑 _${usedPrefix}enable *pconly*_
-° ඬ⃟👑 _${usedPrefix}disable *pconly*_
-° ඬ⃟👑 _${usedPrefix}enable *gconly*_
-° ඬ⃟👑 _${usedPrefix}disable *gconly*_
-° ඬ⃟👑 _${usedPrefix}enable *anticall*_
-° ඬ⃟👑 _${usedPrefix}disable *anticall*_
-° ඬ⃟👑 _${usedPrefix}enable *antiprivado*_
-° ඬ⃟👑 _${usedPrefix}disable *antiprivado*_
-° ඬ⃟👑 _${usedPrefix}msg *<texto>*_
-° ඬ⃟👑 _${usedPrefix}banchat_
-° ඬ⃟👑 _${usedPrefix}unbanchat_
-° ඬ⃟👑 _${usedPrefix}banuser *<@tag>*_
-° ඬ⃟👑 _${usedPrefix}unbanuser *<@tag>*_
-° ඬ⃟👑 _${usedPrefix}banuser *<@tag>*_
-° ඬ⃟👑 _${usedPrefix}bc *<texto>*_
-° ඬ⃟👑 _${usedPrefix}bcchats *<texto>*_
-° ඬ⃟👑 _${usedPrefix}bcgc *<texto>*_
-° ඬ⃟👑 _${usedPrefix}cleartpm_
-° ඬ⃟👑 _${usedPrefix}restart_
-° ඬ⃟👑 _${usedPrefix}update_
-° ඬ⃟👑 _${usedPrefix}traba1_ 
-° ඬ⃟👑 _${usedPrefix}addprem *<@tag>*_
-° ඬ⃟👑 _${usedPrefix}delprem *<@tag>*_
-° ඬ⃟👑 _${usedPrefix}listprem_
-`.trim()
-conn.sendHydrated2(m.chat, str, wm, pp, 'https://www.paypal.me/TheShadowBrokers133', '𝙿𝙰𝚈𝙿𝙰𝙻', 'https://github.com/BrunoSobrino/TheMystic-Bot-MD', '𝙶𝙸𝚃𝙷𝚄𝙱', [
-['📮 𝙳𝙾𝙽𝙰𝚁 📮', '/donasi'],
-['🌹 𝙾𝚆𝙽𝙴𝚁 🌹', '/owner'],
-['🐾 𝙸𝙽𝙵𝙾𝙱𝙾𝚃 🐾', '/infobot']
-], m,)
-//await conn.sendFile(m.chat, vn, 'menu.mp3', null, m, true, {
-//type: 'audioMessage', 
-//ptt: true})
-} catch (e) {
-conn.reply(m.chat, '*[❗𝐈𝐍𝐅𝐎❗] 𝙴𝙻 𝙼𝙴𝙽𝚄 𝚃𝙸𝙴𝙽𝙴 𝚄𝙽 𝙴𝚁𝚁𝙾𝚁 𝚈 𝙽𝙾 𝙵𝚄𝙴 𝙿𝙾𝚂𝙸𝙱𝙻𝙴 𝙴𝙽𝚅𝙸𝙰𝚁𝙻𝙾, 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙻𝙾 𝙰𝙻 𝙿𝚁𝙾𝙿𝙸𝙴𝚃𝙰𝚁𝙸𝙾 𝙳𝙴𝙻 𝙱𝙾𝚃*', m)
-throw e
-}}
-handler.command = /^(menu|menú|memu|memú|help|info|comandos|allmenu|2help|menu1.2|ayuda|commands|commandos|cmd)$/i
-handler.exp = 50
-handler.fail = null
-export default handler
-
-const more = String.fromCharCode(8206)
-const readMore = more.repeat(4001)
-function clockString(ms) {
-let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000)
-let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
-let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
-return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')}
+global.piropo = ["Si tu cuerpo fuera cárcel y tus labios cadena, qué bonito lugar para pasar mi condena.", "!Lo tuyo es un dos por uno, además de guapa eres simpática!", "Fíjate como es la ciencia que ahora hasta hacen bombones que andan.", "Por la luna daría un beso, daría todo por el sol, pero por la luz de tu mirada, doy mi vida y corazón.", "Si yo fuera un avión y tu un aeropuerto, me la pasaría aterrizando por tu hermoso cuerpo.", "Tantas estrellas en el espacio y ninguna brilla como tú.", "Me gusta el café, pero prefiero tener-té.", "No eres Google, pero tienes todo lo que yo busco.", "Mis ganas de ti no se quitan, se acumulan.",  "Te regalo esta flor, aunque ninguna será jamás tan bella como tú.", "Cuando te multen por exceso de belleza, yo pagaré tu fianza.", "Si cada gota de agua sobre tu cuerpo es un beso, entonces quiero convertirme en aguacero.", "Estás como para invitarte a dormir, y no dormir.", "Si tu cuerpo fuera cárcel y tus brazos cadenas, ese sería el lugar perfecto para cumplir condena.",  " Cómo podría querer irme a dormir si estás tú al otro lado de la pantalla?", "Quisiera ser hormiguita para subir por tu balcón y decirte al oído: guapa, bonita, bombón.", "En mi vida falta vida, en mi vida falta luz, en mi vida falta alguien y ese alguien eres tú.", "Señorita, si supiera nadar, me tiraría en la piscina de tus ojos desde el trampolín de sus pestañas.", "Señorita disculpe, pero la llaman de la caja... –Qué caja?... –De la caja de bombones que te escapaste", "Eres tan hermosa que te regalaría un millón de besos y si no te gustasen te los aceptaría de regreso.", "Eres tan bonita que Dios bajaría a la tierra tan solo para verte pasar.", "¡Eres como una cámara Sony! Cada vez que la miro no puedo evitar sonreir.", "En una isla desierta me gustaría estar y sólo de tus besos poderme alimentar.", "Si fueras lluvia de invierno, yo cerraría el paraguas para sentirte en mi cuerpo.", "Me gustas tanto, tanto, que hasta me gusta estar preso, en las redes de tu encanto.", "Si te pellizco seguro que te enojas pero si me pellizcas tu, seguro que me despierto.", "No son palabras de oro ni tampoco de rubí, son palabras de cariño que compongo para usted.", "Te invito a ser feliz yo pago.", "Cuando caminas no pisas el suelo, lo acaricias.", "Nos veríamos lindo en un pastel de boda juntos.", "Tantas formas de vida y yo solo vivo en sus ojos.", "¿A qué numero llamo si quiero marcarte de por vida?", "Me gustas tanto que no se por donde empezar a decírtelo.", "Todos se quedan con tu físico, pero yo prefiero tu corazón.", "Hola si te gustan los idiomas cuando quieras te enseño mi lengua.", "Dime por donde paseas para besar el suelo que pisas, preciosidad!", "Tu belleza me enciega porque viene desde su corazón y se refleja en tus ojos.", "Eres de esa clase de personas, por las cuales a las estrellas se les piden deseos.", "Si alguna vez te han dicho que eres bella te mintieron, no eres bella eres hermosa.", "Celeste es el cielo, amarilla la nata y negros son los ojos de la chica que me mata.", "Si yo fuera Colón navegaría día y noche para llegar a lo más profundo de tu corazón.", "Cinco calles he cruzado, seis con el callejón, sólo me falta una para llegar a tu corazón.", "Si fueras mi novia me volvería ateo ¿ Por que? Porque no tendría nada más que pedirle a Dios.", "A una hermosa niña acompañada de la madre: ¡Que linda flor, lástima que venga con la maceta!", "Si me dedicas una sonrisa pasas de ser linda a perfecta.", "¿Qué pasó en el cielo que se están cayendo los ángeles?", "¡Te voy a poner una multa!. ¿Por qué? Por exceso de belleza.", "Como se habrán querido tus padres... por haberte hecho tan bonita.", "Por qué el cielo está nublado? Porque todo el azul está en tus ojos.", "¿Tienes alguna herida, guapa ? Tiene que ser duro caerse del cielo.", "Tus ojos son verdes los míos café, los míos te quieren los tuyos no sé.", "Cuando el día se nubla, no extraño al sol, porque lo tengo en tu sonrisa.", "Pasa una mujer y dice adiós... -a DIOS lo vi cuando me miraron tus ojos!", "En otras partes del mundo se están quejando, porque el sol está acá nada mas.", "Aprovecha que estoy en rebaja guapa y te dejo dos besos por el precio de uno. Dios se pasó al crearte a ti.", "Al amor y a ti los conocí al mismo tiempo.", "Si la belleza fuese tiempo, tú serías 24 horas.", "Si algún día te pierdes, búscate en mis pensamientos!", "Si amarte fuera pecado, tendría el infierno asegurado.", "Eres lo único que le falta a mi vida para ser perfecto.", "Eres la única estrella que falta en el cielo de mi vida!", "Ahora que te conozco, no tengo nada mas que pedirle a la vida!", "Voy a tener que cobrarte alquiler, porque desde que te vi no has dejado de vivir en mis sueños.", "Me gustaría ser tu almohada, para que me abraces todas las mañanas.", "No te digo palabras bonitas, sino un verso sincero: mi amor por ti es infinito y mi corazón es verdadero.", "Lo que siento por ti es tan inmenso que, para guardarlo, me haría falta otro universo.", "Las matemáticas siempre dicen la verdad: tú y yo juntos hasta la eternidad.", "Que fácil sería cumplir una condena si tu cuerpo fuera cárcel y tus brazos cadenas.", "Mi madre me dijo que no debía pecar, pero por ti estoy dispuesta a confesarme.", "No se trata del whisky ni la cerveza, eres tú quien se me ha subido a la cabeza.", "De noche brilla la luna, y de día brilla el sol, pero tus ojos bonitos alumbran mi corazón.", "No me busques, prefiero seguir perdido en tu mirada.", "Unos quieren el mundo, otros quieren el sol, pero yo solo quiero un rincón en tu corazón.", "Te dejaré de amar a partir del día que encuentre el alfiler que ahora tiro al mar.", "Bienaventurados los borrachos, porque ellos te verán dos veces.", "Como avanza la ciencia si ya las flores caminan.", "Tanta curva y yo sin frenos.", "Si Adán por Eva se comió una manzana, yo por Ti me comería una frutería.", "Si yo fuera astronauta te llevaría a Plutón, pero como no lo soy te llevo siempre en mi corazón.", "Tú debes ser atea, porque estás como quieres y no como Dios manda.", "Si que está avanzada la ciencia; que hasta los bombones caminan.", "¿De qué juguetería te escapaste?, ¡muñeca!", "Ayer pasé por tu casa y me tiraste un ladrillo … mañana pasaré de nuevo para construirte un castillo.", "¿Te dolió caer del cielo… angelito?", "Tu madre debía de ser pastelera porque un bombón como tú no lo hace cualquiera.", "Tu papá debe ser un pirata, porque tú eres un tesoro!", "Siempre escucho decir a las personas que Disneyland es el lugar más feliz del mundo. Pero me pregunto ¿si han estado alguna vez a tu lado?", "Por algún motivo, hoy me sentía un poco mal. Pero cuando te vi llegar, me excitaste y se me fue todo el malestar.", "¿Sabes si hay un aeropuerto por aquí cerca o mi corazón está despegando?", "¿Tu papá era boxeador? ¿NO? ¡Porque maldita sea tengo que decírtelo!, eres un nocaut (K.O.)!", "¡Ohh Dios mío! ¿Tienes un corazón extra?. Por que el mío acaba de ser robado.", "Aparte de ser increíblemente sexy, ¿a qué te dedicas?", "¿Acaba de salir el sol o simplemente me sonreíste?", "Tienes que besarme si me equivoco, ¿los dinosaurios todavía existen?", "Oye, eres linda y yo lindo. Juntos seríamos bastante lindos.", "Estoy seguro que tu nombre debe ser Google. ¿Sabes porque? Por que tienes absolutamente todo lo que estaba buscando!", "Estoy seguro que tu padre es extraterrestre ¡Porque no he visto nada como tú en la Tierra!", "Por favor no te asustes con esta pregunta pero… ¿Tu padre era un ladrón? Porque alguien robó las estrellas del cielo y las puso en tus ojos bebota.", "¿Tienes un lápiz y una goma? Porque quiero borrar tu pasado y escribir nuestro futuro.", "No necesitas llaves para volverme loco.", "Lo siento, pero me debes un trago. [¿Por qué?] Porque cuando te miré, me dejaste hipnotizado y tire mi trago!", "Debes ser una escoba, porque acabas de derribarme.", "Adelante, siente mi camisa. ¡Está hecho de material de novio!", "¿Crees en el amor a primera vista? ¿O tendría pasar frente a ti de nuevo?", "Estoy estudiando sobre fechas importantes en la historia. ¿Quieres ser una de ellas?", "Discúlpame pero.. Tu ¿Eres un préstamo? ¡Porque tienes todo mi interés!", "Si soy vinagre, entonces debes ser bicarbonato de sodio. ¡Porque me haces sentir burbujeante por dentro!", "Por un segundo pensé que estaba muerto y me ido al cielo. Ahora veo que todavía vivo, pero el cielo me ha sido traído.", "¿Puedo pedirte un beso? Te juro que te lo devolveré.", "Por favor deja de ser tan dulce! Me estás dando dolor de muelas!", "¡Eres como mi taza de café favorita, caliente y para relamerse los labios!", "¿Eres una cámara? Porque cada vez que te miro, sonrío.", "¿Sabes qué te quedaría realmente bien? Yo.", "No necesito Twitter, ya te estoy siguiendo.", "Tiene que darme tu nombre para saber qué gritar esta noche.", "Es un hecho!. Ya te encuentras en mi lista de cosas por hacer esta noche imposible de que te me escapes!", "¿Sabes qué hay en el menú de rico? Bueno, Tu y yo baby!", "Tus labios se ven muy solitarios y secos. Permíteme presentarte los míos.", "Si nada dura para siempre, ¿serás mi nada?", "¿Tienes un nombre? ¿O puedo llamarte mía?", "¿Has estado cubierta de abejas recientemente? Solo lo asumí, porque te ves más dulce que la miel.", "Debe haber algo mal en mis ojos. No puedo dejar de mirarte.", "Eres como el fuego. Porque estás súper caliente.", "Con mis amigos apostamos a que no podría entablar una conversación con la mujer más guapa del bar. Bueno y ahora ¿Qué deberíamos hacer con su dinero?", "Bueno, aquí estoy tu deseo fue cumplido. Ahora bien.. ¿Cuáles son tus otros 2 deseos para el genio de la lampara?", "Mira… no soy matemático, pero soy bastante bueno con los números. Por que no me das tu numero y te enseño lo que puedo hacer con él.", "¿Eres una viajera en el tiempo? ¡Porque te veo en mi futuro!", "Si tú y yo fuéramos calcetines, ¡haríamos un gran par!", "Aparte de ser increíblemente hermosa, ¿a qué te dedicas?", "¿Quieres una pasa? ¿No? Bueno, ¿Qué tal una cita?", "Puede que no sea fotógrafo. Pero puedo imaginarnos totalmente juntos.", "Tu debes ser una maga. ¿No? Es raro porque cada vez que te miro, mágicamente todos desaparecen!", "Quiero que nuestro amor sea como el número Pi: irracional y sin fin.", "Estoy escribiendo un libro sobre todas las cosas buenas de la vida y tu estas en la primera pagina.", "Tú eres la razón por la que incluso Santa tiene una lista traviesa.", "¿Dónde te he visto antes? Oh sí, ahora lo recuerdo. ¡Estaba en el diccionario junto a la palabra MAGNÍFICO!", "No siempre fui religioso. Pero lo soy ahora, porque eres la respuesta a todas mis oraciones.", "Debes de estar exhausto. Has estado corriendo por mi mente todo el día.", "Hay algún problema con mi teléfono. No tiene tu número en él.", "Soy nuevo en la ciudad. ¿Podría darme indicaciones para llegar a su apartamento?", "¿Eres mi cargador de teléfono? Porque sin ti me moriría.", "Disculpe, ¿sabe cuánto pesa un oso polar? ¿No? Yo tampoco pero rompe el hielo.", "Imagina esto unos segundos: ¿No crees que nos veríamos tiernos en un pastel de bodas con nuestras caras en el?", "Solamente una cosa cambiaria de ti, y ese es tu apellido por el nuestro.", "Lo siento! Pero tengo que pedirte que te vayas de aquí!. Estás haciendo quedar mal a las otras chicas ¿No te da vergüenza?", "Perdona pero, ¿Podrías sostener mi brazo? Así puedo decirles a mis amigos que me ha tocado un ángel en la tierra!", "Hola, estoy escribiendo una guía telefónica, ¿puedo darme su número?", "Hola ¿Te conozco? Porque te pareces demasiado a mi futura novia.", "Entonces, cuando nuestros amigos nos pregunten cómo nos conocimos, ¿Qué les diremos?", "¿Cuáles son tus prioridades el domingo?: ¿Dormir, ejercitarte o una avalancha de mimos?", "Mie@»!# Creo que he perdido mi número, ¿Puedo tener tu número?", "Si Internet Explorer es tan valiente como para pedirme que sea mi navegador predeterminado, yo también soy lo suficientemente valiente para invitarte a salir.", "¿Ves a mi amigo allá? El pregunta si crees que soy lindo.", "¡Dios!!! Eres tan hermosa que lograste que me olvidara lo que iba a decirte.", "Hola, mi nombre es [tu nombre], pero puedes llamarme esta noche.", "Oye, ¿tienes un par de minutos para que ligue contigo?", "¿Eres un punto de acceso Wi-Fi? Porque siento una conexión.", "No busques mas!. En una escala del 1 al 10, eres un 9…seguro y yo soy el 1 que necesitas para el 10.", "No se que esta pasando ¿Hubo un terremoto o simplemente sacudiste mi mundo?", "¿De casualidad eres religiosa? Porque eres la respuesta a todas mis oraciones.", "¿Eres Netflix? Porque podría quedarme despierto observándote cuatro horas.", "Tengo que decírtelo tu te pareces mucho a mi próxima alma gemela.", "¿Puedo tener tu foto para mi lista de navidad de regalos que pediré a Santa?", "Si tú y yo fuéramos calcetines seguro que haríamos un gran par.", "¿Espero que no te moleste si te sigo? Mi madre siempre me dijo que siguiera mis sueños.", "Acabas de dejar caer algo … mi mandíbula.", "He estado mirando tu foto de perfil durante años. Todavía no puedo parar.", "¿Eres una obra de arte? Porque me gustaría clavarte en mi pared. ¡Guauu!", "Después de mirarte durante 0,7 segundos, me duele la cabeza. Puede tener dolor de cabeza al mirar algo tan brillante.", "Eres el tipo de chica que mi mamá me dijo que le trajera. ¿Te gustaría ir a verla conmigo?", "Hola mi nombre es Will…soy la gran voluntad de Dios solo para ti.", "Tu rostro es perfecto… como una obra de arte bien armada. Dios hizo un gran trabajo contigo.", "Te miro y solo puedo imaginar lo feliz que será mi vida, despertando a tu lado cada mañana.", "Tus ojos son hermosos. ¿Llevas lentes de contacto? (Solo diga esto siempre y cuando no use lentes de contacto).", "¿Puedo compartir una historia con ustedes? (Adelante, cuéntele la historia de un hombre que dio todo para que una mujer se enamorara de él, dígale que usted es ese hombre y ella esa mujer).", "¿Me estaba sonriendo o acababa de salir el sol?", "Tus ojos me han dicho muchas cosas. Pero lo que no me dicen es tu nombre.", "Vi un jardín esta mañana y pensé que era el más hermoso hasta que te conocí.", "¡Debo estar en el cielo porque estoy mirando a un ángel!", "Debe haber algo mal en mis ojos, no puedo quitárselos.", "Nunca jugaría al escondite contigo porque alguien como tú es imposible de encontrar.", "Puedes caer del cielo, puedes caer de un árbol, pero la mejor manera de caer… es enamorado de mí.", "¿Tienes un nombre o simplemente puedo llamarte mía?", "Me voy a quejar a Spotify porque no eres el single más popular de esta semana.", "Las rosas son rojas como mi cara pero eso solo pasa cuando estoy cerca de ti.", "Me gustaría invitarte al cine pero no permiten bocadillos!" ]

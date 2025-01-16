@@ -3,29 +3,6 @@ import { join } from 'path';
 import fetch from 'node-fetch';
 import { xpRange } from '../lib/levelling.js';
 
-let tags = {
-  'anime': '🧧 ANIME 🎐',
-  'main': '❗ INFO ❕',
-  'search': '🔎 SEARCH 🔍',
-  'game': '🕹️ GAME 🎮',
-  'serbot': '⚙️ SUB BOTS 🤖',
-  'rpg': '🌐 RPG 🥇',
-  'rg': '🎑 REGISTRO 🎟️',
-  'sticker': '💟 STICKER 🏷️',
-  'img': '🖼️ IMAGE 🎇',
-  'group': '👥 GROUPS 📢',
-  'nable': '🎛️ ON / OFF 🔌', 
-  'premium': '💎 PREMIUM 👑',
-  'downloader': '📥 DOWNLOAD 📤',
-  'tools': '🔧 TOOLS 🛠️',
-  'fun': '🎉 FUN 🎊',
-  'nsfw': '🔞 NSFW 📛', 
-  'cmd': '🧮 DATABASE 🖥️',
-  'owner': '👤 OWNER 👁️', 
-  'audio': '📣 AUDIOS 🔊', 
-  'advanced': '🗝️ ADVANCED 🎮',
-};
-
 const defaultMenu = {
   before: `*⌬━━━━━▣━━◤⌬◢━━▣━━━━━━⌬*
 
@@ -53,7 +30,7 @@ Hola *%name* soy *TECNO*
  %readmore
 \t\t\t⚙_*𝑳𝑰𝑺𝑻𝑨 𝑫𝑬 𝑪𝑶𝑴𝑨𝑵𝑫𝑶𝑺*_ 
 `.trimStart(),
-  header: '*┏━━━━▣━━⌬〘 %category 〙*',
+  header: '*┏━━━━▣━━⌬〘 %category 〙*', // Aquí se usa %category
   body: '┃✎›〘 %cmd %islimit %isPremium\n',
   footer: '*┗━━━▣━━⌬⌨⌬━━▣━━━━⌬*',
   after: `© Tecno-Bot-Plus`,
@@ -87,24 +64,26 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
     let text = [
       before,
-      ...Object.keys(tags).map(tag => {
-        return header.replace(/%category/g, tags[tag]) + '\n' + [
-          ...help
-            .filter(menu => menu.tags && menu.tags.includes(tag) && menu.help)
-            .map(menu =>
-              menu.help
-                .map(help =>
-                  body
-                    .replace(/%cmd/g, menu.prefix ? help : '%p' + help)
-                    .replace(/%islimit/g, menu.limit ? '◜⭐◞' : '')
-                    .replace(/%isPremium/g, menu.premium ? '◜🪪◞' : '')
-                    .trim()
-                )
-                .join('\n')
-            ),
-          footer,
-        ].join('\n');
-      }),
+      ...Object.keys(global.plugins)
+        .filter(tag => global.plugins[tag].enabled) // Filtramos por los plugins habilitados
+        .map(tag => {
+          return header.replace(/%category/g, tag) + '\n' + [
+            ...help
+              .filter(menu => menu.tags && menu.tags.includes(tag) && menu.help)
+              .map(menu =>
+                menu.help
+                  .map(help =>
+                    body
+                      .replace(/%cmd/g, menu.prefix ? help : '%p' + help)
+                      .replace(/%islimit/g, menu.limit ? '◜⭐◞' : '')
+                      .replace(/%isPremium/g, menu.premium ? '◜🪪◞' : '')
+                      .trim()
+                  )
+                  .join('\n')
+              ),
+            footer,
+          ].join('\n');
+        }),
       after,
     ].join('\n');
 

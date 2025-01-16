@@ -41,7 +41,7 @@ let tags = {
   'cmd': '🧮 DATABASE 🖥️',
   'owner': '👤 OWNER 👁️', 
   'audio': '📣 AUDIOS 🔊', 
-  'advanced': '🗝️ ADVANCED 📍',
+  'advanced': '🗝️ ADVANCED 🎮',
 }
 
 const defaultMenu = {

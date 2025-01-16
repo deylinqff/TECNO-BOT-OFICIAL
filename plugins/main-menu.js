@@ -1,62 +1,111 @@
-// Código creado por Deyin
-const { default: makeWASocket, useSingleFileAuthState } = require('@adiwajshing/baileys');
-const { state, saveState } = useSingleFileAuthState('./auth_info.json');
+import { promises } from 'fs'
+import { join } from 'path'
+import fetch from 'node-fetch'
+import { xpRange } from '../lib/levelling.js'
 
-async function startBot() {
-    const sock = makeWASocket({
-        auth: state,
-        printQRInTerminal: true,
+const defaultMenu = {
+  before: `*⌬━━━━━▣━━◤⌬◢━━▣━━━━━━⌬*
+
+Hola *%name* soy *TECNO*
+
+╔════⌬══◤𝑪𝑹𝑬𝑨𝑫𝑶𝑹◢
+║  ♛ 𝑫𝒆𝒚𝒍𝒊𝒏
+╚════⌬══◤✰✰✰✰✰◢
+
+╔══════⌬『 𝑰𝑵𝑭𝑶-𝑩𝑶𝑻 』
+║ ✎ 〘Cliente: %name
+║ ✎ 〘Exp: %exp
+║ ✎ 〘Nivel: %level
+╚══════ ♢.✰.♢ ══════
+
+╔═══════⌬『 𝑰𝑵𝑭𝑶-𝑼𝑺𝑬𝑹 』
+║ ✎ 〘Bot: ©Tecno-Bot-Plus®
+║ ✎ 〘Modo Público
+║ ✎ 〘Baileys: Multi Device
+║ ✎ 〘Tiempo Activo: %muptime
+║ ✎ 〘Usuarios: %totalreg 
+╚══════ ♢.✰.♢ ══════
+
+*◤━━━━━ ☆. ⌬ .☆ ━━━━━◥*
+%readmore
+\t\t\t⚙_*𝑳𝑰𝑺𝑻𝑨 𝑫𝑬 𝑪𝑶𝑴𝑨𝑵𝑫𝑶𝑺*_ 
+`.trimStart(),
+  header: '*┏━━━━▣━━⌬〘 %category 〙*',
+  body: '┃✎›〘 %cmd %islimit %isPremium\n',
+  footer: '*┗━━━▣━━⌬⌨⌬━━▣━━━━⌬*',
+  after: `© ${textbot}`,
+};
+
+let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
+  try {
+    let tag = `@${m.sender.split("@")[0]}`;
+    let mode = global.opts["self"] ? "Privado" : "Público";
+    let _package = JSON.parse(await promises.readFile(join(__dirname, '../package.json')).catch(() => ({}))) || {};
+    let { exp, limit, level } = global.db.data.users[m.sender];
+    let { min, xp, max } = xpRange(level, global.multiplier);
+    let name = await conn.getName(m.sender);
+    let d = new Date(new Date() + 3600000);
+    let locale = 'es';
+    let week = d.toLocaleDateString(locale, { weekday: 'long' });
+    let date = d.toLocaleDateString(locale, {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
     });
-
-    sock.ev.on('messages.upsert', async ({ messages }) => {
-        const message = messages[0];
-        if (!message.message || message.key.fromMe) return;
-
-        const from = message.key.remoteJid;
-        const text = message.message.conversation || '';
-
-        // Menú principal
-        if (text.toLowerCase() === 'menu') {
-            const menu = `🌟 *Bienvenido a 𝑻𝑬𝑪𝑵𝑶-𝑩𝑶𝑻® ©*  
-📱 *Tu asistente digital confiable.*
-
-🔹 *Opciones disponibles:*  
-1️⃣ *Información*  
-2️⃣ *Soporte técnico*  
-3️⃣ *Novedades*  
-4️⃣ *Configuraciones*  
-5️⃣ *Contacto humano*
-
-*Escribe el número de la opción que deseas.*`;
-
-            await sock.sendMessage(from, { text: menu });
-        }
-
-        // Respuesta a las opciones del menú
-        if (text === '1') {
-            await sock.sendMessage(from, { text: '📝 *Información:* Aquí tienes los detalles sobre nuestros servicios...' });
-        } else if (text === '2') {
-            await sock.sendMessage(from, { text: '🔧 *Soporte técnico:* Cuéntanos tu problema y te ayudaremos.' });
-        } else if (text === '3') {
-            await sock.sendMessage(from, { text: '📰 *Novedades:* Estas son las últimas actualizaciones...' });
-        } else if (text === '4') {
-            await sock.sendMessage(from, { text: '⚙️ *Configuraciones:* Aquí puedes personalizar tu experiencia.' });
-        } else if (text === '5') {
-            await sock.sendMessage(from, { text: '📞 *Contacto humano:* Un agente estará contigo en breve.' });
-        }
+    let time = d.toLocaleTimeString(locale, {
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
     });
+    let _uptime = process.uptime() * 1000;
+    let muptime = clockString(_uptime);
+    let totalreg = Object.keys(global.db.data.users).length;
 
-    sock.ev.on('connection.update', (update) => {
-        const { connection, lastDisconnect } = update;
-        if (connection === 'close') {
-            const shouldReconnect = lastDisconnect.error?.output?.statusCode !== 401;
-            if (shouldReconnect) startBot();
-        } else if (connection === 'open') {
-            console.log('✅ Bot conectado exitosamente.');
-        }
-    });
+    let replace = {
+      "%": "%",
+      p: _p,
+      uptime: muptime,
+      name,
+      exp,
+      level,
+      limit,
+      totalreg,
+      mode,
+      readmore: readMore,
+    };
 
-    sock.ev.on('creds.update', saveState);
+    let text = defaultMenu.before.replace(/%(\w+)/g, (_, name) => replace[name] || '');
+    text += defaultMenu.after;
+
+    // URLs para imágenes
+    const imageUrls = [
+      'https://i.ibb.co/CPVcnqH/file.jpg',
+      'https://i.ibb.co/9WrytGt/file.jpg',
+      'https://i.ibb.co/JmcS3kv/Sylph.jpg',
+    ];
+
+    // Selecciona una imagen aleatoria
+    const selectedImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+
+    // Enviar mensaje con imagen aleatoria
+    await conn.sendFile(m.chat, selectedImage, 'menu.jpg', text.trim(), m);
+  } catch (e) {
+    conn.reply(m.chat, '❎ Lo sentimos, el menú tiene un error.', m);
+    throw e;
+  }
+};
+
+handler.help = ['allmenu'];
+handler.tags = ['main'];
+handler.command = ['allmenu', 'menucompleto', 'menúcompleto', 'menú', 'menu'];
+handler.register = true;
+export default handler;
+
+const readMore = String.fromCharCode(8206).repeat(4001);
+
+function clockString(ms) {
+  let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000);
+  let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60;
+  let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60;
+  return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':');
 }
-
-startBot();

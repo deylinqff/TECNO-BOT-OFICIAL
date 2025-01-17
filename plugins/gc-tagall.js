@@ -21,7 +21,7 @@ const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, co
   teks += `╚═══════•| 🚀 |•═══════╝`;
 
   // URL de la imagen
-  const imageUrl = 'https://files.catbox.moe/i9zyaz.jpg';
+  const imageUrl = 'https://files.catbox.moe/c2p5sr.jpg';
 
   // Envía la imagen con el texto como pie de foto (caption) y menciones
   await conn.sendMessage(
